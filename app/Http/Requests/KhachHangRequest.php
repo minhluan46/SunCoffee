@@ -25,7 +25,7 @@ class KhachHangRequest extends FormRequest
     {
         return [
             'tenkhachhang' => 'required',
-            'sdt' => 'required|min:10',
+            'sdt' => 'required|min:10|unique:khach_hang,sdt,' . $this->id,
             'diachi' => 'required',
             'diemtichluy' => 'required|integer|between:0,1000000000',
         ];
@@ -36,6 +36,7 @@ class KhachHangRequest extends FormRequest
             'tenkhachhang.required' => 'Tên Khách Hàng Không Được Để Trống',
 
             'sdt.required' => 'Số Điện Thoại Không Được Để Trống',
+            'sdt.unique' => 'Số Điện Thoại Đã Tồn Tại',
             'sdt.min' => 'Số Điện Thoại không Đủ 10 số',
 
             'diachi.required' => 'Địa Chỉ Không Được Để Trống',

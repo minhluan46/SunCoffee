@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Sun Coffee</title>
 
-    {{-- <link rel="icon" href="{{ asset('/backend/img/mini_logo.png') }}" type="image/png"> --}}
+    <link rel="icon" href="{{ asset('/backend/img/mini_logo.png') }}" type="image/png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}" /> {{-- bootstrap --}}
     <!-- themefy CSS -->

@@ -1,72 +1,91 @@
-@extends('layouts.backend_layout')
-@section('content')
-    <div class="main_content_iner ">
-        <form class="add-form" method="POST" action="" enctype="multipart/form-data">
-            <div class="btn-pm">
-                <div class="mb-3 btn-1">
-                    <a class="btn btn-danger" href="{{ route('san-pham.index') }}"><span class="btn-label"><i
-                                class="fa fa-times"></i></span>Thoát</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="white_card">
-                        <div class="white_card_header">
-                            <div class="main-title">
-                                <h3 class="m-0">Thông Tin Sản Phẩm</h3>
-                            </div>
-                        </div>
-                        <div class="white_card_body">
-
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <img src="{{ asset('uploads/SanPham/' . $SanPham->hinhanh) }}"
-                                        style="width: 280px; height: 280px; border-radius: 5px; ">
-                                </div>
-                                <div class="col-lg-8">
-
-                                    <div class=" mb_5">
-                                        <label style="color: red">{{ $SanPham->tensanpham }}</label>
-                                    </div>
-
-                                    <div class=" mb_5">
-                                        <b>Mã Sản Phẩm: </b>
-                                        <label>{{ $SanPham->id }}</label>
-                                    </div>
-
-                                    <div class=" mb_5">
-                                        <b>Thẻ: </b>
-                                        <label>{{ $SanPham->the }}</label>
-                                    </div>
-
-                                    <div class=" mb_5">
-                                        <b>Loại Sản Phẩm: </b>
-                                        <label>
-                                            @if (isset($LoaiSanPham))
-                                                @foreach ($LoaiSanPham as $valuelsp)
-                                                    @if ($SanPham->id_loaisanpham == $valuelsp->id)
-                                                        {{ $valuelsp->tenloaisanpham }}
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </label>
-                                    </div>
-
-                                    <div class=" mb_5">
-                                        <b>Trạng Thái: </b>
-                                        <label>{{ $SanPham->trangthai == 1 ? 'Đang Bán' : 'Ngừng Bán' }}</label>
-                                    </div>
-
-                                    <div class=" mb_5">
-                                        <b>Mô Tả: </b>
-                                        <label>{{ $SanPham->mota }}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+@isset($KhuyenMai)
+    <div class="row">
+        <div class="col-sm-12">
+            <h4><b>{{ $KhuyenMai->tenkhuyenmai }} </b> <span>({{ $KhuyenMai->id }})</span></h4>
+            <h4><b>Thời Gian Bắt Đầu: </b> <span>{{ $KhuyenMai->thoigianbatdau }}</span></h4>
+            <h4><b>Thời Gian Kết Thúc: </b> <span>{{ $KhuyenMai->thoigianketthuc }}</span></h4>
+            <h4><b>Mức Khuyến Mãi Tối Đa: </b> <span>{{ $KhuyenMai->muckhuyenmaitoida . '%' }}</span></h4>
+            <h4><b>Trạng Thái: </b> <span>{{ $KhuyenMai->trangthai == 1 ? 'Còn Khuyến Mãi' : 'Đã Hết' }}</span></h4>
+            <h4><b>Mô Tả: </b> <span>{{ $KhuyenMai->mota }}</span></h4>
+        </div>
     </div>
-@endsection
+    <hr>
+    {{-- chi tiết sảm phẩm --}}
+    @isset($ChiTietKhuyenMai)
+        <table class="table" style="text-align: center">
+            <thead>
+                <tr>
+                    <th scope="col" style="text-align: left">Sản Phẩm</th>
+                    <th scope="col">Kích Thước</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Mức Khuyến Mãi</th>
+                    <th scope="col">Giá Khuyến Mãi</th>
+                    <th scope="col">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($ChiTietKhuyenMai as $valuectkm)
+                    <tr>
+                        <td style="text-align: left">
+                            @isset($ChiTietSanPham)
+                                @foreach ($ChiTietSanPham as $itemCTSP)
+                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
+                                        @isset($SanPham)
+                                            @foreach ($SanPham as $itemSP)
+                                                @if ($itemCTSP->id_sanpham == $itemSP->id)
+                                                    {{ $itemSP->tensanpham }}
+                                                @endif
+                                            @endforeach
+                                        @endisset
+                                    @endif
+                                @endforeach
+                            @endisset
+                        </td>
+                        <td>
+                            @isset($ChiTietSanPham)
+                                @foreach ($ChiTietSanPham as $itemCTSP)
+                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
+                                        {{ $itemCTSP->kichthuoc }}
+                                    @endif
+                                @endforeach
+                            @endisset
+                        </td>
+                        <td>
+                            @isset($ChiTietSanPham)
+                                @foreach ($ChiTietSanPham as $itemCTSP)
+                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
+                                        @isset($SanPham)
+                                            @foreach ($SanPham as $itemSP)
+                                                @if ($itemCTSP->id_sanpham == $itemSP->id)
+                                                    @isset($LoaiSanPham)
+                                                        @foreach ($LoaiSanPham as $itemLSP)
+                                                            @if ($itemSP->id_loaisanpham == $itemLSP->id)
+                                                                {{ $itemLSP->tenloaisanpham }}
+                                                            @endif
+                                                        @endforeach
+
+                                                    @endisset
+                                                @endif
+                                            @endforeach
+                                        @endisset
+                                    @endif
+                                @endforeach
+                            @endisset
+                        </td>
+                        <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
+                        <td>{{ number_format($valuectkm->giakhuyenmai) . 'VNĐ' }}</td>
+                        <td>
+                            <a href="javascript:(0)" class="action_btn mr_10 view-edit-CTKM"
+                                data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
+                                <i class="fas fa-edit"></i></a>
+
+                            <a href="javascript:(0)" class="action_btn mr_10 form-delete-CTKM"
+                                data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
+                                <i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endisset
+@endisset

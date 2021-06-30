@@ -1,23 +1,25 @@
 @extends('layouts.backend_layout')
 @section('content')
     <div class="main_content_iner ">
-        <div class="btn-pm">
+        {{-- header --}}
+        <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" href="{{ route('loai-nhan-vien.create') }}"><span class="btn-label"><i
-                            class="fa fa-plus"></i></span>Thêm Mới</a>
+                <a onclick="Create('{{ route('loai-nhan-vien.create') }}')" class="btn btn-success"
+                    href="javascript:(0)">Thêm Mới</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
-                    <form action="#">
+                    <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Search">
+                            <input type="text" placeholder="Tìm..." name="search">
                         </div>
-                        <button type="submit"> <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt="">
-                        </button>
+                        <button id="form-search" data-url="{{ route('loai-nhan-vien.search') }}" type="submit">
+                            <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
                     </form>
                 </div>
             </div>
         </div>
+        {{-- content --}}
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
@@ -28,27 +30,22 @@
                             </div>
                         </div>
                         <div class="white_card_body">
-                            @if (session('messsge'))
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    <strong>{{ session('messsge') }}</strong>
-                                </div>
-                            @endif
+                            {{-- data sheet --}}
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
+                                            <th scope="col" style="text-align: left">#</th>
                                             <th scope="col">Tên Loại Nhân Viên</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="dataSheet">
                                         @if (isset($LoaiNhanVien))
                                             @foreach ($LoaiNhanVien as $value)
-                                                <tr>
-                                                    <td>{{ $value->id }}</td>
+                                                <tr id="{{ $value->id }}">
+                                                    <td style="text-align: left">{{ $value->id }}</td>
                                                     <td>{{ $value->tenloainhanvien }}</td>
                                                     <td>
                                                         <span
@@ -56,12 +53,14 @@
                                                             {{ $value->trangthai == 1 ? 'Hoạt Động' : 'Tạm Dừng' }}</span>
                                                     </td>
                                                     <td>
-                                                        <div class="action_btns d-flex">
-                                                            <a href="{{ route('loai-nhan-vien.edit', $value->id) }}"
-                                                                class="action_btn mr_10"><i class="far fa-edit"></i></a>
-                                                            <a href="{{ route('loai-nhan-vien.destroy', $value->id) }}"
-                                                                class="action_btn"><i class="fas fa-trash"></i></a>
-                                                        </div>
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit"
+                                                            data-url="{{ route('loai-nhan-vien.edit', $value->id) }}">
+                                                            <i class="fas fa-edit"></i></a>
+
+                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete"
+                                                            data-url="{{ route('loai-nhan-vien.destroy', $value->id) }}"
+                                                            data-id="{{ $value->id }}">
+                                                            <i class="fas fa-trash-alt"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -69,10 +68,194 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @if (isset($LoaiNhanVien))
+                                {{-- pagination --}}
+                                <div class='col-12 d-flex justify-content-center' style='padding: 15px'>
+                                    {{ $LoaiNhanVien->links() }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('modal')
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('css')
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
+@endsection
+@section('script')
+    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script type="text/javascript">
+        function loadData() { // tải lại.
+            $.ajax({
+                url: "{{ route('loai-nhan-vien.load') }}",
+                method: 'GET',
+                success: function(response) {
+                    $('#dataSheet').html(response);
+                }
+            });
+        }
+        $('#form-search').on('click', function(e) { //tìm
+            e.preventDefault(); // dừng  sự kiện submit.
+            if ($("input[name='search']").val().length > 0) {
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'GET',
+                    data: {
+                        search: $("input[name='search']").val()
+                    },
+                    success: function(response) {
+                        $('.pagination').hide();
+                        $("input[name='search']").val("");
+                        $('#dataSheet').html(response);
+                        alertify.success("Đã Tìm");
+                    },
+                    error: function(response) {
+                        alertify.error("Lỗi");
+                    }
+                })
+            } else {
+                location.reload();
+            }
+        });
+
+        function Create(url) { // trang thêm.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+
+                    $('.modal-body').html(response);
+                    $("#exampleModalLabel").text("Thêm Loại Nhân Viên");
+                    $("#exampleModal").modal('show');
+                    Store();
+                },
+                error: function(response) {
+
+                    alertify.error("Có Lỗi");
+                }
+            })
+        };
+
+        function Store() { // thêm.
+            $('#form-create').on('click', function(e) {
+                e.preventDefault(); // dừng  sự kiện submit.
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'POST',
+                    data: {
+                        _token: $("input[name='_token']").val(),
+                        trangthai: $('input[name = "trangthai"]:checked').length,
+                        tenloainhanvien: $("input[name='tenloainhanvien']").val()
+                    },
+                    success: function(response) {
+                        if (response.errors) {
+                            alert(response.errors);
+                        } else {
+                            $("#exampleModal").modal('hide');
+                            alertify.success(response.success);
+                            loadData();
+                        }
+                    },
+                    error: function(response) {
+
+                        alertify.error("Có Lỗi");
+                    }
+                })
+            })
+        };
+
+        function Edit(url) { // trang cập nhật.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+
+                    $('.modal-body').html(response);
+                    $("#exampleModalLabel").text("Sửa Loại Nhân Viên");
+                    $("#exampleModal").modal('show');
+                    Update();
+                },
+                error: function(response) {
+
+                    alertify.error("Có Lỗi");
+                }
+            })
+        };
+
+        function Update() { // cập nhật.
+            $('#form-edit').on('click', function(e) {
+                e.preventDefault(); // dừng  sự kiện submit.
+
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'PUT',
+                    data: {
+                        _token: $("input[name='_token']").val(),
+                        trangthai: $('input[name = "trangthai"]:checked').length,
+                        tenloainhanvien: $("input[name='tenloainhanvien']").val()
+                    },
+                    success: function(response) {
+                        if (response.errors) {
+                            alert(response.errors);
+                        } else {
+                            $("#exampleModal").modal('hide');
+                            alertify.success(response.success);
+                            loadData();
+                        }
+                    },
+                    error: function(response) {
+
+                        alertify.error("Lỗi");
+                    }
+                })
+            })
+        };
+        $(document).on('click', '.view-edit', function() { // gọi edit.
+            Edit($(this).data('url'));
+        });
+
+        function Delete(url, id) { // xóa.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#' + id).html("");
+                    alertify.success(response.success);
+                },
+                error: function(response) {
+
+                    alertify.error("Có Lỗi");
+                }
+            })
+        };
+        $(document).on('click', '.form-delete', function() { // gọi xóa.
+            if (confirm("Đồng Ý Để Xóa?")) {
+                Delete($(this).data('url'), $(this).data('id'));
+            }
+        });
+    </script>
 @endsection

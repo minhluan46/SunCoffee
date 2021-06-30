@@ -7,10 +7,8 @@
             @method('PUT')
             <div class="btn-pm">
                 <div class="mb-3 btn-1">
-                    <button type="submit" class="btn btn-success"><span class="btn-label"><i
-                                class="fa fa-plus"></i></span>Lưu</button>
-                    <a class="btn btn-danger" href="{{ route('nhan-vien.index') }}"><span class="btn-label"><i
-                                class="fa fa-times"></i></span>Thoát</a>
+                    <button type="submit" class="btn btn-success">Lưu</button>
+                    <a class="btn btn-danger" href="{{ route('nhan-vien.index') }}">Thoát</a>
                 </div>
             </div>
             <div class="row">
@@ -25,7 +23,7 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <label>Trạng Thái</label>
-                                    <input type="checkbox" name="trangthai" value='1'
+                                    <input type="checkbox" name="trangthai" value='1' class="form-check-input"
                                         {{ $NhanVien->trangthai == 1 ? 'checked' : '' }}>
                                 </div>
                             </div>
@@ -48,11 +46,11 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Mật Khẩu<b style="color:red"> *</b></label>
-                                                <input type="password" class='@error(' matkhau') is-invalid @enderror
-                                                    form-control' maxlength="200" name="matkhau" required
-                                                    value="{{ $NhanVien->matkhau }}">
+                                                <input type="password" class='@error(' password') is-invalid @enderror
+                                                    form-control' maxlength="200" name="password" required
+                                                    value="{{ $NhanVien->password }}">
                                             </div>
-                                            @error('matkhau')
+                                            @error('password')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -74,7 +72,7 @@
                                                 <label>Nhập Lại Mật Khẩu<b style="color:red"> *</b></label>
                                                 <input type="password" class='@error(' password_confirm') is-invalid
                                                     @enderror form-control' maxlength="200" name="password_confirm" required
-                                                    value="{{ $NhanVien->matkhau }}">
+                                                    value="{{ $NhanVien->password }}">
                                             </div>
                                             @error('password_confirm')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -201,6 +199,5 @@
                 }
             })
         });
-
     </script>
 @endsection

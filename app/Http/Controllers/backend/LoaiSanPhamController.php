@@ -7,25 +7,51 @@ use Illuminate\Http\Request;
 use App\Models\LoaiSanPham;
 use App\http\Requests\LoaiSanPhamRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class LoaiSanPhamController extends Controller
 {
 
-    public function index()
+    public function index() //danh sách.
     {
         $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->get(),
+            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(5),
         ];
         return view('backend.LoaiSanPham.index', $viewData);
     }
 
-    public function create()
+    public function load() // tải lại.
+    {
+        $viewData = [
+            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(5),
+        ];
+        return view('backend.LoaiSanPham.load_LoaiSanPham', $viewData);
+    }
+
+    public function search(Request $request) //tìm.
+    {
+        $viewData = [
+            'LoaiSanPham' => LoaiSanPham::where('tenLoaiSanPham', 'like', '%' . $request->search . '%')->orderBy('created_at', 'desc')->get(),
+        ];
+        return view('backend.LoaiSanPham.load_LoaiSanPham', $viewData);
+    }
+
+    public function create() //trang thêm.
     {
         return view('backend.LoaiSanPham.create_LoaiSanPham');
     }
 
-    public function store(LoaiSanPhamRequest $request)
+    public function store(Request $request) //thêm.
     {
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            ['tenloaisanpham' => 'required'],
+            ['tenloaisanpham.required' => "Tên Loại Sản Phẩm Không Được Để Trống"]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return Response()->json(['errors' => $validator->errors()->all()]);
+        }
+
         $iddate = "LSP" . Carbon::now('Asia/Ho_Chi_Minh');
         $exp = explode("-", $iddate);
         $imp = implode('', $exp);
@@ -34,52 +60,64 @@ class LoaiSanPhamController extends Controller
         $exp = explode(":", $imp);
         $imp = implode('', $exp);
         $data['id'] = $imp;
-        $data['tenloaisanpham'] = ucwords($request->tenloaisanpham);
+        $data['tenloaisanpham'] = $request->tenloaisanpham;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
             $data['trangthai'] = 0;
         }
         LoaiSanPham::create($data);
-        $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-san-pham.index', $viewData)->with('messsge', "Thêm Thành Công");
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
+    public function edit($id) //trang cập nhật.
     {
         $viewData = [
             'LoaiSanPham' => LoaiSanPham::find($id),
         ];
-        // dd($viewData);
         return view('backend.LoaiSanPham.edit_LoaiSanPham', $viewData);
     }
 
-    public function update(LoaiSanPhamRequest $request, $id)
+    public function loadUpdate($id) //tải cập nhật.
     {
-        $data['tenloaisanpham'] = ucwords($request->tenloaisanpham);
+        $LoaiSanPham = LoaiSanPham::find($id);
+        $trangthai = $LoaiSanPham->trangthai == 1 ? 'bg-success' : 'bg-danger';
+        $trangthaitext = $LoaiSanPham->trangthai == 1 ? 'Được Dùng' : 'Đã Khoá';
+        $output = "<td style='text-align: left'>" . $LoaiSanPham->id . "</td>
+        <td>" . $LoaiSanPham->tenloaisanpham . "</td>
+        <td><span class='badge rounded-pill " . $trangthai . "'> " . $trangthaitext . " </span>
+        </td>
+        <td>
+                <a href='javascript:(0)' class='action_btn mr_10 view-edit' data-url='" . route('loai-san-pham.edit', $LoaiSanPham->id) . "'>
+                    <i class='fas fa-edit'></i></a>
+                <a href='javascript:(0)' class='action_btn mr_10 form-delete' data-url='" . route('loai-san-pham.destroy', $LoaiSanPham->id) . "'
+                    data-id='" . $LoaiSanPham->id . "'> <i class='fas fa-trash-alt'></i></a>
+        </td>";
+        return $output;
+    }
+
+    public function update(Request $request, $id) //cập nhật.
+    {
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            ['tenloaisanpham' => 'required'],
+            ['tenloaisanpham.required' => "Tên Loại Sản Phẩm Không Được Để Trống"]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return Response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $data['tenloaisanpham'] = $request->tenloaisanpham;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
             $data['trangthai'] = 0;
         }
         LoaiSanPham::where('id', $id)->update($data);
-        $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-san-pham.index', $viewData)->with('messsge', "Cập Nhật Thành Công");
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 
-    public function destroy($id)
+    public function destroy($id) //xóa.
     {
         LoaiSanPham::where('id', $id)->delete();
-        $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-san-pham.index', $viewData)->with('messsge', "Xoá Thành Công");
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 }

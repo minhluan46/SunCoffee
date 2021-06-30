@@ -5,10 +5,8 @@
             @csrf
             <div class="btn-pm">
                 <div class="mb-3 btn-1">
-                    <button type="submit" class="btn btn-success"><span class="btn-label"><i
-                                class="fa fa-plus"></i></span>Lưu</button>
-                    <a class="btn btn-danger" href="{{ route('san-pham.index') }}"><span class="btn-label"><i
-                                class="fa fa-times"></i></span>Thoát</a>
+                    <button type="submit" class="btn btn-success">Lưu</button>
+                    <a class="btn btn-danger" href="{{ route('san-pham.index') }}">Thoát</a>
                 </div>
             </div>
             <div class="row">

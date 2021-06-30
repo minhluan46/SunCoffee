@@ -2,90 +2,163 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+//////////////////////////////      frontend      //////////////////////////////
 
 Route::get('/', function () {
     return view('welcome');
 });
-// admin
-Route::group(['namespace' => 'backend', 'prefix' => 'admin'], function () {
-    //--------------------------------- thống kê --------------------------------- //
-    Route::get('/', 'HomeController@index')->name('home.index');
-    //--------------------------------- quản lý đơn hàng --------------------------------- //
-    // hoá đơn
-    Route::group(['prefix' => 'hoa-don'], function () {
-        Route::get('/', 'HoaDonController@index')->name('hoa-don.index');
-        Route::get('/create-hoa-don', 'HoaDonController@create')->name('hoa-don.create');
-        Route::post('/store-hoa-don', 'HoaDonController@store')->name('hoa-don.store');
-        Route::get('/show-hoa-don/{id}', 'HoaDonController@show')->name('hoa-don.show');
-        Route::get('/edit-hoa-don/{id}', 'HoaDonController@edit')->name('hoa-don.edit');
-        Route::post('update-hoa-don/{id}', 'HoaDonController@update')->name('hoa-don.update');
-        Route::get('destroy-hoa-don/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy');
-        // Route::get('searchsanpham-hoa-don', 'HoaDonController@searchsanpham')->name('hoa-don.searchsanpham');
-        // Route::get('addProduct-hoa-don', 'HoaDonController@addProduct')->name('hoa-don.addProduct');
-        Route::get('priceProduct-hoa-don/{id}', 'HoaDonController@priceProduct')->name('hoa-don.priceProduct');
-        Route::get('discountProduct-hoa-don/{id}', 'HoaDonController@discountProduct')->name('hoa-don.discountProduct');
-        Route::get('searchProduct-hoa-don', 'HoaDonController@searchProduct')->name('hoa-don.searchProduct');
-        Route::get('addCart-hoa-don/{id}', 'HoaDonController@addCart')->name('hoa-don.addCart');
-        Route::get('deleteItemHoaDon-hoa-don/{id}', 'HoaDonController@deleteItemHoaDon')->name('hoa-don.deleteItemHoaDon');
-        Route::get('quantityChange-hoa-don/{id}/{quantity}', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange');
-        Route::get('payment-hoa-don', 'HoaDonController@payment')->name('hoa-don.payment');
-        Route::get('discountMember-hoa-don', 'HoaDonController@discountMember')->name('hoa-don.discountMember');
-        Route::get('in-hoa-don', 'HoaDonController@in')->name('hoa-don.in');
-        // 
-        // Route::get('deleteItemCart-hoa-don/{id}', 'HoaDonController@deleteItemCart')->name('hoa-don.deleteItemCart');
-        Route::get('searchCustomer-hoa-don', 'HoaDonController@searchCustomer')->name('hoa-don.searchCustomer');
+//////////////////////////////        Login       //////////////////////////////
+
+Route::group(['namespace' => 'Auth'], function () {
+    Route::get('/DangNhap', 'DangNhapController@index')->name('DangNhap.index'); // trang đăng nhập.
+    Route::post('/DangNhap', 'DangNhapController@DangNhap')->name('DangNhap'); // đăng nhập.
+    Route::post('/DangXuat', 'DangNhapController@DangXuat')->name('DangXuat');  // đăng xuất.
+});
+//////////////////////////////        admin       //////////////////////////////
+
+Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'auth'], function () {
+    // loại nhân viên
+
+    Route::group(['prefix' => 'loai-nhan-vien'], function () {
+
+        Route::get('/', 'LoaiNhanVienController@index')->name('loai-nhan-vien.index'); // danh sách.
+        Route::get('/create', 'LoaiNhanVienController@create')->name('loai-nhan-vien.create'); // trang thêm.
+        Route::post('/store', 'LoaiNhanVienController@store')->name('loai-nhan-vien.store'); //thêm.
+        Route::get('/{id}/edit', 'LoaiNhanVienController@edit')->name('loai-nhan-vien.edit'); // trang cập nhật.
+        Route::put('/{id}/update', 'LoaiNhanVienController@update')->name('loai-nhan-vien.update'); //cập nhật
+        Route::get('/{id}/destroy', 'LoaiNhanVienController@destroy')->name('loai-nhan-vien.destroy'); // xóa
+        Route::get('/load', 'LoaiNhanVienController@load')->name('loai-nhan-vien.load'); // tải lại.
+        Route::get('/search', 'LoaiNhanVienController@search')->name('loai-nhan-vien.search'); // tìm.
     });
-    // chi tiết hoá đơn
+    // nhân viên
+
+    Route::group(['prefix' => 'nhan-vien'], function () {
+
+        Route::get('/', 'NhanVienController@index')->name('nhan-vien.index'); // danh sách.
+        Route::get('/create', 'NhanVienController@create')->name('nhan-vien.create'); // trang thêm. (Chưa ajax)
+        Route::post('/store', 'NhanVienController@store')->name('nhan-vien.store'); //thêm. (Chưa ajax)
+        Route::get('/{id}/show', 'NhanVienController@show')->name('nhan-vien.show'); // trang chi tiết.
+        Route::get('/{id}/edit', 'NhanVienController@edit')->name('nhan-vien.edit'); // trang cập nhật. (Chưa ajax)
+        Route::put('/{id}/update', 'NhanVienController@update')->name('nhan-vien.update'); //cập nhật (Chưa ajax)
+        Route::get('/{id}/destroy', 'NhanVienController@destroy')->name('nhan-vien.destroy'); // xóa
+        Route::get('/search', 'NhanVienController@search')->name('nhan-vien.search'); // tìm.
+    });
+    // khách hàng
+
+    Route::group(['prefix' => 'khach-hang'], function () {
+
+        Route::get('/', 'KhachHangController@index')->name('khach-hang.index'); // danh sách.
+        Route::get('/create', 'KhachHangController@create')->name('khach-hang.create'); // trang thêm. 
+        Route::post('/store', 'KhachHangController@store')->name('khach-hang.store'); //thêm. 
+        Route::get('/{id}/edit', 'KhachHangController@edit')->name('khach-hang.edit'); // trang cập nhật. 
+        Route::put('/{id}/update', 'KhachHangController@update')->name('khach-hang.update'); //cập nhật 
+        Route::get('/{id}/destroy', 'KhachHangController@destroy')->name('khach-hang.destroy'); // xóa
+        Route::get('/load', 'KhachHangController@load')->name('khach-hang.load'); // tải lại.
+        Route::get('/{id}/loadUpdate', 'KhachHangController@loadUpdate')->name('khach-hang.loadUpdate'); // tải cập nhật.
+        Route::get('/search', 'KhachHangController@search')->name('khach-hang.search'); // tìm.
+    });
+    // loai san phẩm
+
+    Route::group(['prefix' => 'loai-san-pham'], function () {
+
+        Route::get('/', 'LoaiSanPhamController@index')->name('loai-san-pham.index'); // danh sách.
+        Route::get('/create', 'LoaiSanPhamController@create')->name('loai-san-pham.create'); // trang thêm.
+        Route::post('/store', 'LoaiSanPhamController@store')->name('loai-san-pham.store'); //thêm.
+        Route::get('/{id}/edit', 'LoaiSanPhamController@edit')->name('loai-san-pham.edit'); // trang cập nhật.
+        Route::put('/{id}/update', 'LoaiSanPhamController@update')->name('loai-san-pham.update'); //cập nhật
+        Route::get('/{id}/destroy', 'LoaiSanPhamController@destroy')->name('loai-san-pham.destroy'); // xóa
+        Route::get('/load', 'LoaiSanPhamController@load')->name('loai-san-pham.load'); // tải lại.
+        Route::get('/{id}/loadUpdate', 'LoaiSanPhamController@loadUpdate')->name('loai-san-pham.loadUpdate'); // tải cập nhật.
+        Route::get('/search', 'LoaiSanPhamController@search')->name('loai-san-pham.search'); // tìm.
+    });
+    // sản phẩm.
+
+    Route::group(['prefix' => 'san-pham'], function () {
+
+        Route::get('/', 'SanPhamController@index')->name('san-pham.index'); // danh sách.
+        Route::get('/create', 'SanPhamController@create')->name('san-pham.create'); // trang thêm. (chưa ajax)
+        Route::post('/store', 'SanPhamController@store')->name('san-pham.store'); //thêm. (chưa ajax)
+        Route::get('/{id}/show', 'SanPhamController@show')->name('san-pham.show'); // trang chi tiết.
+        Route::get('/{id}/edit', 'SanPhamController@edit')->name('san-pham.edit'); // trang cập nhật. (chưa ajax)
+        Route::put('/{id}/update', 'SanPhamController@update')->name('san-pham.update'); //cập nhật (chưa ajax)
+        Route::get('/{id}/destroy', 'SanPhamController@destroy')->name('san-pham.destroy'); // xóa.
+        Route::get('/search', 'SanPhamController@search')->name('san-pham.search'); // tìm.
+    });
+    // chi tiết san phẩm
+
+    Route::group(['prefix' => 'chi-tiet-san-pham'], function () {
+
+        Route::get('/{id}/create', 'ChiTietSanPhamController@create')->name('chi-tiet-san-pham.create'); // trang thêm chi tiết. 
+        Route::post('/store', 'ChiTietSanPhamController@store')->name('chi-tiet-san-pham.store'); // thêm chi tiết.
+        Route::get('/{id}/edit', 'ChiTietSanPhamController@edit')->name('chi-tiet-san-pham.edit'); // trang cập nhật chi tiết.
+        Route::put('/{id}/update', 'ChiTietSanPhamController@update')->name('chi-tiet-san-pham.update'); //cập nhật chi tiết.
+        Route::get('/{id}/delete', 'ChiTietSanPhamController@destroy')->name('chi-tiet-san-pham.destroy'); //xóa chi tiết.
+    });
+    // khuyến mãi
+
+    Route::group(['prefix' => 'khuyen-mai'], function () {
+
+        Route::get('/', 'KhuyenMaiController@index')->name('khuyen-mai.index'); // danh sách.
+        Route::get('/create', 'KhuyenMaiController@create')->name('khuyen-mai.create'); // trang thêm. 
+        Route::post('/store', 'KhuyenMaiController@store')->name('khuyen-mai.store'); //thêm. 
+        Route::get('/load', 'KhuyenMaiController@load')->name('khuyen-mai.load'); // tải lại.
+        Route::get('/{id}/show', 'KhuyenMaiController@show')->name('khuyen-mai.show'); // trang chi tiết.
+        Route::get('/{id}/edit', 'KhuyenMaiController@edit')->name('khuyen-mai.edit'); // trang cập nhật.
+        Route::put('/{id}/update', 'KhuyenMaiController@update')->name('khuyen-mai.update'); //cập nhật 
+        Route::get('/{id}/loadUpdate', 'KhuyenMaiController@loadUpdate')->name('khuyen-mai.loadUpdate'); // tải cập nhật.
+        Route::get('/{id}/destroy', 'KhuyenMaiController@destroy')->name('khuyen-mai.destroy'); // xóa.
+        Route::get('/search', 'KhuyenMaiController@search')->name('khuyen-mai.search'); // tìm.
+    });
+    // chi tiết khuyến mãi
+
+    Route::group(['prefix' => 'chi-tiet-khuyen-mai'], function () {
+
+        Route::get('/{id}/create', 'ChiTietKhuyenMaiController@create')->name('chi-tiet-khuyen-mai.create'); // trang thêm chi tiết.
+        Route::post('/store', 'ChiTietKhuyenMaiController@store')->name('chi-tiet-khuyen-mai.store'); // thêm chi tiết.
+        Route::get('/{idCTSP}/{idKM}/edit', 'ChiTietKhuyenMaiController@edit')->name('chi-tiet-khuyen-mai.edit'); // trang cập nhật chi tiết.
+        Route::put('/{idCTSP}/{idKM}/update', 'ChiTietKhuyenMaiController@update')->name('chi-tiet-khuyen-mai.update'); //cập nhật chi tiết.
+        Route::get('/{idCTSP}/{idKM}/delete', 'ChiTietKhuyenMaiController@destroy')->name('chi-tiet-khuyen-mai.destroy'); //xóa chi tiết.
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Thống kê.
+
+    Route::get('/', 'HomeController@index')->name('home.index');
+    // hóa đơn.
+
+    Route::group(['prefix' => 'hoa-don'], function () {
+        Route::get('/', 'HoaDonController@index')->name('hoa-don.index'); // đến trang danh sách.
+        Route::get('/create', 'HoaDonController@create')->name('hoa-don.create'); // đến trang thêm.
+        Route::post('/store', 'HoaDonController@store')->name('hoa-don.store'); // tạo.
+        Route::get('/show/{id}', 'HoaDonController@show')->name('hoa-don.show'); // hiện modal chi tiết.
+        Route::get('/edit/{id}', 'HoaDonController@edit')->name('hoa-don.edit');
+        Route::post('update/{id}', 'HoaDonController@update')->name('hoa-don.update');
+        Route::get('destroy/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy'); // xóa. (chưa có ajax)
+        Route::get('priceProduct/{id}', 'HoaDonController@priceProduct')->name('hoa-don.priceProduct'); // lấy giá sản phẩm. (nên tối ưu với giảm giá)
+        Route::get('discountProduct/{id}', 'HoaDonController@discountProduct')->name('hoa-don.discountProduct'); //lấy giảm giá khuyến mãi. (chưa sử lý ngày hết hạng)
+        Route::get('searchProduct', 'HoaDonController@searchProduct')->name('hoa-don.searchProduct'); // tìm sản phẩm. ()
+        Route::get('addCart/{id}', 'HoaDonController@addCart')->name('hoa-don.addCart'); // thêm vào GioHang.
+        Route::get('deleteItemHoaDon/{id}', 'HoaDonController@deleteItemHoaDon')->name('hoa-don.deleteItemHoaDon'); // xóa khổi GioHang.
+        Route::get('quantityChange/{id}/{quantity}', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange'); // thay đổi số lượng SP trong GioHang.
+        Route::get('payment', 'HoaDonController@payment')->name('hoa-don.payment'); // đến trang thanh toán.
+        Route::get('discountMember', 'HoaDonController@discountMember')->name('hoa-don.discountMember'); // lấy giảm giá thành viên.
+        Route::get('in', 'HoaDonController@in')->name('hoa-don.in'); // tạo hóa đơn. (nên chuyển về hoa-don.store)
+        Route::get('searchCustomer', 'HoaDonController@searchCustomer')->name('hoa-don.searchCustomer'); // tìm khách hàng.
+    });
+    //////////////////////////////        chưa sử lý       //////////////////////////////
+    // chi tiết hóa đơn.
+
     Route::resource('chi-tiet-hoa-don', 'ChiTietHoaDonController')->except(['destroy']);
     Route::get('chi-tiet-hoa-don/{id}/delete', 'ChiTietHoaDonController@destroy')->name('chi-tiet-hoa-don.destroy');
-    //--------------------------------- quản lý sản phẩm --------------------------------- //
-    // san phẩm
-    Route::resource('san-pham', 'SanPhamController')->except(['destroy']);
-    Route::get('san-pham/{id}/delete', 'SanPhamController@destroy')->name('san-pham.destroy');
-    // loai san phẩm
-    Route::resource('loai-san-pham', 'LoaiSanPhamController')->except(['destroy']);
-    Route::get('loai-san-pham/{id}/delete', 'LoaiSanPhamController@destroy')->name('loai-san-pham.destroy');
-    // chi tiết san phẩm
-    Route::group(['prefix' => 'chi-tiet-san-pham'], function () {
-        Route::get('/', 'ChiTietSanPhamController@index')->name('chi-tiet-san-pham.index');
-        Route::get('/{id}', 'ChiTietSanPhamController@create')->name('chi-tiet-san-pham.create');
-        Route::post('/store', 'ChiTietSanPhamController@store')->name('chi-tiet-san-pham.store');
-        Route::get('/{id}/edit', 'ChiTietSanPhamController@edit')->name('chi-tiet-san-pham.edit');
-        Route::put('/{id}/update', 'ChiTietSanPhamController@update')->name('chi-tiet-san-pham.update');
-        Route::get('/{id}/delete', 'ChiTietSanPhamController@destroy')->name('chi-tiet-san-pham.destroy');
-    });
-    //--------------------------------- quản lý khuyến mãi --------------------------------- //
-    // khuyến mãi
-    Route::resource('khuyen-mai', 'KhuyenMaiController')->except(['destroy']);
-    Route::get('khuyen-mai/{id}/delete', 'KhuyenMaiController@destroy')->name('khuyen-mai.destroy');
-    // chi tiết khuyến mãi
-    Route::resource('chi-tiet-khuyen-mai', 'ChiTietKhuyenMaiController')->except(['destroy']);
-    Route::get('chi-tiet-khuyen-mai/{id}/delete', 'ChiTietKhuyenMaiController@destroy')->name('chi-tiet-khuyen-mai.destroy');
-    //--------------------------------- quản lý nhân viên --------------------------------- //
-    // nhân viên
-    Route::resource('nhan-vien', 'NhanVienController')->except(['destroy']);
-    Route::get('nhan-vien/{id}/delete', 'NhanVienController@destroy')->name('nhan-vien.destroy');
-    // loại nhân viên
-    Route::resource('loai-nhan-vien', 'LoaiNhanVienController')->except(['destroy']);
-    Route::get('loai-nhan-vien/{id}/delete', 'LoaiNhanVienController@destroy')->name('loai-nhan-vien.destroy');
-    //--------------------------------- quản lý khách hàng --------------------------------- //
-    // khách hàng
-    Route::resource('khach-hang', 'KhachHangController')->except(['destroy']);
-    Route::get('khach-hang/{id}/delete', 'KhachHangController@destroy')->name('khach-hang.destroy');
-    //--------------------------------- khác --------------------------------- //
-
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
