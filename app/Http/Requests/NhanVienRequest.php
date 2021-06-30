@@ -25,15 +25,15 @@ class NhanVienRequest extends FormRequest
     {
         return [
             'tennhanvien' => 'required',
-            'sdt' => 'required|min:10',
+            'sdt' => 'required|min:10|unique:nhan_vien,sdt,' . $this->id,
             'diachi' => 'required',
             'ngaysinh' => 'required',
             'gioitinh' => 'required',
             'hinhanh' => 'image|max:2048',
             'luong' => 'required|integer|between:0,1000000000',
             'tentaikhoan' => 'required|min:2',
-            'matkhau' => 'required|min:5',
-            'password_confirm' => 'required|same:matkhau',
+            'password' => 'required|min:5',
+            'password_confirm' => 'required|same:password',
             'id_loainhanvien' => 'required',
         ];
     }
@@ -43,6 +43,7 @@ class NhanVienRequest extends FormRequest
             'tennhanvien.required' => 'Tên Nhân Viên Không Được Để Trống',
 
             'sdt.required' => 'Số Điện Thoại Không Được Bỏ Trống',
+            'sdt.unique' => 'Số Điện Thoại Đã Tồ Tại',
             'sdt.min' => 'Số Điện Thoại Không Đủ 10 Số',
 
             'diachi.required' => 'Địa Chỉ Không Được Để Trống',
@@ -61,12 +62,12 @@ class NhanVienRequest extends FormRequest
             'tentaikhoan.required' => 'Tên Tài Khoản Không Được Để Trống',
             'tentaikhoan.min' => 'Tên Tài Khoản Phải Nhỏ Hơn 2 Ký Tự',
 
-            'matkhau.required' => 'Mật Khẩu Không Được Để Trống',
-            'matkhau.min' => 'Mật Khẩu Phải Lớn Hơn 5 Ký Tự',
+            'password.required' => 'Mật Khẩu Không Được Để Trống',
+            'password.min' => 'Mật Khẩu Phải Lớn Hơn 5 Ký Tự',
 
             'password_confirm.required' => 'Mật Khẩu Không Được Để Trống',
             'password_confirm.same' => 'Mật Khẩu Không Trùng Khớp',
-            
+
             'id_loainhanvien.required' => 'Mã Nhân Viên Không Được Để Trống',
         ];
     }

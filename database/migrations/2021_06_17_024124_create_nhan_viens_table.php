@@ -23,7 +23,7 @@ class CreateNhanViensTable extends Migration
             $table->char('hinhanh', 25);
             $table->integer('luong');
             $table->string('tentaikhoan', 30);
-            $table->char('matkhau', 200);
+            $table->char('password', 200);
             $table->char('id_loainhanvien', 18);
             $table->boolean('trangthai');
             $table->timestamps();

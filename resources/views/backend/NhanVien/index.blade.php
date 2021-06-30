@@ -1,23 +1,24 @@
 @extends('layouts.backend_layout')
 @section('content')
     <div class="main_content_iner ">
-        <div class="btn-pm">
+        {{-- header --}}
+        <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" href="{{ route('nhan-vien.create') }}"><span class="btn-label"><i
-                            class="fa fa-plus"></i></span>Thêm Mới</a>
+                <a class="btn btn-success" href="{{ route('nhan-vien.create') }}">Thêm Mới</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
-                    <form action="#">
+                    <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Search">
+                            <input type="text" placeholder="Tìm..." name="search">
                         </div>
-                        <button type="submit"> <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt="">
-                        </button>
+                        <button id="form-search" data-url="{{ route('nhan-vien.search') }}" type="submit">
+                            <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
                     </form>
                 </div>
             </div>
         </div>
+        {{-- content --}}
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
@@ -35,11 +36,12 @@
                                     <strong>{{ session('messsge') }}</strong>
                                 </div>
                             @endif
+                            {{-- data sheet --}}
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
+                                            <th scope="col" style="text-align: left">#</th>
                                             <th scope="col">Hình Ảnh</th>
                                             <th scope="col">Tên Nhân Viên</th>
                                             <th scope="col">Số điện thoại</th>
@@ -48,11 +50,11 @@
                                             <th scope="col">Thao Tác</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="dataSheet">
                                         @if (isset($NhanVien))
                                             @foreach ($NhanVien as $value)
-                                                <tr>
-                                                    <td>{{ $value->id }}</td>
+                                                <tr id="{{ $value->id }}">
+                                                    <td style="text-align: left">{{ $value->id }}</td>
                                                     <td><img src="{{ asset('uploads/NhanVien/' . $value->hinhanh) }}"
                                                             style="width: 100px; height: 100px; border-radius: 5px;"></td>
                                                     <td>{{ $value->tennhanvien }}</td>
@@ -72,14 +74,15 @@
                                                             {{ $value->trangthai == 1 ? 'Còn Làm' : 'Đã Nghỉ' }}</span>
                                                     </td>
                                                     <td>
-                                                        <div class="action_btns d-flex">
-                                                            <a href="{{ route('nhan-vien.show', $value->id) }}"
-                                                                class="action_btn mr_10"><i class="far fa-eye"></i></a>
-                                                            <a href="{{ route('nhan-vien.edit', $value->id) }}"
-                                                                class="action_btn mr_10"><i class="far fa-edit"></i></a>
-                                                            <a href="{{ route('nhan-vien.destroy', $value->id) }}"
-                                                                class="action_btn"><i class="fas fa-trash"></i></a>
-                                                        </div>
+                                                        <a onclick="Show('{{ route('nhan-vien.show', $value->id) }}')"
+                                                            href="javascript:(0)" class="action_btn mr_10"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a href="{{ route('nhan-vien.edit', $value->id) }}"
+                                                            class="action_btn mr_10"><i class="fas fa-edit"></i></a>
+                                                        <a data-url="{{ route('nhan-vien.destroy', $value->id) }}"
+                                                            data-id="{{ $value->id }}" href="javascript:(0)"
+                                                            class="action_btn form-delete"><i
+                                                                class="fas fa-trash-alt"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -87,10 +90,105 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @if (isset($NhanVien))
+                                {{-- pagination --}}
+                                <div class='col-12 d-flex justify-content-center' style='padding: 15px'>
+                                    {{ $NhanVien->links() }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+@section('modal')
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('css')
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
+@endsection
+@section('script')
+    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script type="text/javascript">
+        $('#form-search').on('click', function(e) { //tìm
+            e.preventDefault(); // dừng  sự kiện submit.
+            if ($("input[name='search']").val().length > 0) {
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'GET',
+                    data: {
+                        search: $("input[name='search']").val()
+                    },
+                    success: function(response) {
+                        $('.pagination').hide();
+                        $("input[name='search']").val("");
+                        $('#dataSheet').html(response);
+                        alertify.success("Đã Tìm");
+                    },
+                    error: function(response) {
+                        alertify.error("Lỗi");
+                    }
+                })
+            } else {
+                location.reload();
+            }
+        });
+
+        function Show(url) { // trang chi tiết.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('.modal-body').html(response);
+                    $("#exampleModalLabel").text("Chi tiết Nhân Viên");
+                    $("#exampleModal").modal('show');
+                },
+                error: function(response) {
+
+                    alertify.error("Có Lỗi");
+                }
+            })
+        };
+
+        function Delete(url, id) { // xóa.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('#' + id).html("");
+                    alertify.success(response.success);
+                },
+                error: function(response) {
+
+                    alertify.error("Có Lỗi");
+                }
+            })
+        };
+        $(document).on('click', '.form-delete', function() { // gọi xóa.
+            if (confirm("Đồng Ý Để Xóa?")) {
+                Delete($(this).data('url'), $(this).data('id'));
+            }
+        });
+    </script>
 @endsection

@@ -6,26 +6,54 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LoaiNhanVien;
 use App\http\Requests\LoaiNhanVienRequest;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 class LoaiNhanVienController extends Controller
 {
 
-    public function index()
+    public function index() //danh sách.
     {
         $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::orderBy('created_at', 'desc')->get(),
+            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(5),
         ];
         return view('backend.LoaiNhanVien.index', $viewData);
     }
 
-    public function create()
+    public function load() //tải lại.
+    {
+        $viewData = [
+            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(5),
+        ];
+        return view('backend.LoaiNhanVien.load_LoaiNhanVien', $viewData);
+    }
+
+    public function search(Request $request) //tìm.
+    {
+        $viewData = [
+            'LoaiNhanVien' => LoaiNhanVien::where(
+                [['id', '!=', "LNV00000000000000"], ['tenloainhanvien', 'like', '%' . $request->search . '%']]
+            )->orderBy('created_at', 'desc')->get(),
+        ];
+        return view('backend.LoaiNhanVien.load_LoaiNhanVien', $viewData);
+    }
+
+    public function create() // trang thêm.
     {
         return view('backend.LoaiNhanVien.create_LoaiNhanVien');
     }
 
-    public function store(LoaiNhanVienRequest $request)
+    public function store(Request $request) // thêm.
     {
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            ['tenloainhanvien' => 'required'],
+            ['tenloainhanvien.required' => "Tên Loại Nhân Viên Không Được Để Trống"]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return Response()->json(['errors' => $validator->errors()->all()]);
+        }
+
         $iddate = "LNV" . Carbon::now('Asia/Ho_Chi_Minh');
         $exp = explode("-", $iddate);
         $imp = implode('', $exp);
@@ -34,24 +62,16 @@ class LoaiNhanVienController extends Controller
         $exp = explode(":", $imp);
         $imp = implode('', $exp);
         $data['id'] = $imp;
-        $data['tenloainhanvien'] = ucwords($request->tenloainhanvien);
+        $data['tenloainhanvien'] = $request->tenloainhanvien;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
             $data['trangthai'] = 0;
         }
         LoaiNhanVien::create($data);
-        $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-nhan-vien.index', $viewData)->with('messsge', "Thêm Thành Công");
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
+    public function edit($id) //trang cập nhật.
     {
         $viewData = [
             'LoaiNhanVien' => LoaiNhanVien::find($id)
@@ -59,26 +79,31 @@ class LoaiNhanVienController extends Controller
         return view('backend.LoaiNhanVien.edit_LoaiNhanVien', $viewData);
     }
 
-    public function update(LoaiNhanVienRequest $request, $id)
+    public function update(Request $request, $id) //cập nhật.
     {
-        $data['tenloainhanvien'] = ucwords($request->tenloainhanvien);
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            ['tenloainhanvien' => 'required'],
+            ['tenloainhanvien.required' => "Tên Loại Nhân Viên Không Được Để Trống"]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return Response()->json(['errors' => $validator->errors()->all()]);
+        }
+
+        $data['tenloainhanvien'] = $request->tenloainhanvien;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
             $data['trangthai'] = 0;
         }
-        LoaiNhanVien::where('id',$id)->update($data);
-        $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-nhan-vien.index', $viewData)->with('messsge', "Cập Nhật Thành Công");
+        LoaiNhanVien::where('id', $id)->update($data);
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 
-    public function destroy($id)
+    public function destroy($id) //xóa.
     {
-        LoaiNhanVien::where('id',$id)->delete();
-        $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::orderBy('created_at', 'desc')->get(),
-        ];
-        return redirect()->route('loai-nhan-vien.index', $viewData)->with('messsge', "Xoá Thành Công");
+        LoaiNhanVien::where(
+            [['id', '!=', "LNV00000000000000"], ['id', $id]]
+        )->delete();
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 }
