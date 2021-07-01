@@ -16,6 +16,26 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+//user
+Route::group(['namespace' => 'frontend', 'prefix' => 'SunCoffee'], function(){
+    Route::get('/', 'HomeController@index')->name('home_user.index');
+    Route::get('/service', 'ServiceController@index')->name('service_user.index');
+    Route::get('/blog', 'BlogController@index')->name('blog_user.index');
+    Route::get('/about', 'AboutController@index')->name('about_user.index');
+    Route::get('/product', 'ProductController@index')->name('product_user.index');
+    Route::get('/contact', 'ContactController@index')->name('contact_user.index');
+    Route::get('/cart', 'CartController@index')->name('cart_user.index');
+
+
+
+    
+
+
+});
+
+
+
+
 // admin
 Route::group(['namespace' => 'backend', 'prefix' => 'admin'], function () {
     //--------------------------------- thống kê --------------------------------- //
