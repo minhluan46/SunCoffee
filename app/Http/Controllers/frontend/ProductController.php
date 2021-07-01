@@ -18,6 +18,8 @@ class ProductController extends Controller
     {
         //
         $product = SanPham::where('trangthai',1)->get();
+        $product = SanPham::where('trangthai',1)->where('','')->get();
+        $product = SanPham::where('trangthai',1)->where('','')->get();
 
 
         $viewData = [
