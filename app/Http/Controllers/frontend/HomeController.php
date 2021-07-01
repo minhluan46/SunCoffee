@@ -17,11 +17,19 @@ class HomeController extends Controller
     public function index()
     {
 
-        $product = SanPham::where('trangthai',1)->get();
-
+        $product = SanPham::where('trangthai',1)->orderBy('id')->where('the','BÁN CHẠY NHẤT')->get();
+        // @if(count($product)){
+        //     foreach($product as $value){
+        //         $test.push(SanPham::where('trangthai',1)->loaisanpham->get();)
+        //     }
+        // }
+        $test = SanPham::where('trangthai',1)->orderBy('id')->get();
+        // $test = App\Models\SanPham::all()->LoaiSanPham->toArray();
+        // $test = $product->tenloaisanpham;
 
         $viewData = [
             'product' => $product,
+            'test' => $test,
         ];
         //
         return view('frontend.home.index', $viewData);

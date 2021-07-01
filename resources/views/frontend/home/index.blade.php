@@ -28,7 +28,10 @@
                 </div>
             </div>
         </section>
-
+{{-- 
+        <div>
+            <p></p>
+        </div> --}}
         {{-- Cac mon ban chay --}}
         <section class="ftco-section">
             <div class="container">
@@ -48,8 +51,9 @@
                                 style="background-image: url({{ asset('uploads/SanPham/'.$item->hinhanh) }});"></a>
                             <div class="text text-center pt-4">
                                 <h3><a href="#">{{$item->tensanpham}}</a></h3>
+                                <h4><p>{{$item->loaiSP->tenloaisanpham}}</p></h4>
                                 <p>{{$item->mota}}</p>
-                                <p class="price"><span>$5.90</span></p>
+                                <p class="price"><span></span></p>
                                 <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
                             </div>
                         </div>

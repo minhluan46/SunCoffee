@@ -9,4 +9,7 @@ class LoaiSanPham extends Model
     protected $table ='loai_san_pham';
     public $incrementing = false;
     protected $fillable = ['id', 'tenloaisanpham', 'trangthai'];
+    public function LoaiSanPham(){
+        return $this->belongsTo('App\Models\SanPham');
+    }
 }

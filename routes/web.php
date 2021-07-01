@@ -27,6 +27,14 @@ Route::group(['namespace' => 'frontend', 'prefix' => 'SunCoffee'], function(){
     Route::get('/cart', 'CartController@index')->name('cart_user.index');
 
 
+    Route::get('test',function(){
+        // $data = App\Models\SanPham::all()->loaisanpham->toArray();
+        $data1 = App\Models\SanPham::all()->loaisanpham->tenloaisanpham;
+
+        var_dump($data1);
+    });
+
+
 
     
 

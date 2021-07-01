@@ -8,13 +8,11 @@ class SanPham extends Model
 {
     protected $table ='san_pham';
 
-    // public function loaiSP(){
-    //     return $this->hasMany('App\LoaiSanPham','')
-    // }
-
-    public function ChiTietSP(){
-        return $this->hasMany('App\ChiTietSanPham','id_sanpham','id');
+    public function loaiSP(){
+        return $this->belongsTo('App\Models\LoaiSanPham','id_loaisanpham','id');
     }
+
     public $incrementing = false;
     protected $fillable = ['id', 'tensanpham', 'hinhanh', 'mota', 'the', 'id_loaisanpham', 'trangthai'];
+
 }
