@@ -28,7 +28,7 @@
                 <li class="nav-item {{(Route::currentRouteName('contact.index')== "contact.index") ? "active" : ""}}"><a href="{{ route('contact_user.index')}}" class="nav-link">Liên lạc</a></li>
                 <li class="nav-item cart"><a href="{{ route('cart_user.index')}}" class="nav-link"><span
                             class="icon icon-shopping_cart"></span><span
-                            class="bag d-flex justify-content-center align-items-center"><small>1</small></span></a>
+                            class="bag d-flex justify-content-center align-items-center"><small>{{Cart::count()}}</small></span></a>
                 </li>
             </ul>
         </div>

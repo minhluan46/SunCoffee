@@ -23,8 +23,15 @@ Route::group(['namespace' => 'frontend', 'prefix' => 'SunCoffee'], function(){
     Route::get('/blog', 'BlogController@index')->name('blog_user.index');
     Route::get('/about', 'AboutController@index')->name('about_user.index');
     Route::get('/product', 'ProductController@index')->name('product_user.index');
+    Route::get('/product_detail/{id}', 'ProductController@getProductDetail')->name('product_user.product_detail');
+    Route::post('/save_cart', 'CartController@saveCart')->name('product_user.save_cart');
+
+
+
     Route::get('/contact', 'ContactController@index')->name('contact_user.index');
     Route::get('/cart', 'CartController@index')->name('cart_user.index');
+    Route::get('/cart_delete/{rowId}', 'CartController@deleteToCart')->name('cart_user.delete_product');
+
 
 
     Route::get('test',function(){

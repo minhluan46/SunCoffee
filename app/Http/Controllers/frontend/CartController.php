@@ -4,6 +4,10 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\SanPham;
+use App\Models\ChiTietSanPham;
+use Cart;
 
 class CartController extends Controller
 {
@@ -16,6 +20,48 @@ class CartController extends Controller
     {
         //
         return view('frontend.cart.index');
+    }
+
+    public function saveCart(Request $request){
+        $product_id = $request->product_id_hidden;
+        $quantity = $request->quantity;
+        $detail_pro_id = $request->detail_pro_id_hidden;
+        $size = $request->size_pro_hidden;
+        $product = SanPham::where('id',$product_id)->first();
+        $detail_product = ChiTietSanPham::where('id',$detail_pro_id)->get();
+
+        $data['id'] = $product->id;        
+        $data['name'] = $product->tensanpham;
+        $data['qty'] = 1;
+        $data['price'] = 1;
+        $data['weight'] = 1;
+        $data['options']['image'] = $product->hinhanh;
+
+        Cart::add($data);
+
+        return Redirect::to(route('cart_user.index'));
+        // Cart::destroy();
+
+
+
+        // echo $product_id;
+        //  echo $quantity;
+        // echo $detail_pro_id;
+        // echo $size;
+    //    echo $product;
+    //    echo $detail_product;
+        // $viewData = [
+        //     'product' => $product,
+        // ];
+        // return view('frontend.cart.index', $viewData);
+    }
+
+    public function deleteToCart($rowId){
+        Cart::update($rowId,0);
+        return Redirect::to(route('cart_user.index'));
+
+        
+
     }
 
     /**

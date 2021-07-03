@@ -5,6 +5,9 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SanPham;
+use App\Models\ChiTietSanPham;
+
+
 
 
 class ProductController extends Controller
@@ -18,15 +21,32 @@ class ProductController extends Controller
     {
         //
         $product = SanPham::where('trangthai',1)->get();
-        $product = SanPham::where('trangthai',1)->where('','')->get();
-        $product = SanPham::where('trangthai',1)->where('','')->get();
+        // $dripPro = SanPham::where('trangthai',1)->where('loaiSP->tenloaisanpham','DRIP')->get();
+        // $product = SanPham::where('trangthai',1)->where('','')->get();
+        // $product = SanPham::where('trangthai',1)->where('','')->get();
 
 
         $viewData = [
             'product' => $product,
+            // 'drip' => $dripPro,
         ];
 
         return view('frontend.products.index', $viewData);
+    }
+
+    public function getProductDetail($id){
+        $product = SanPham::where('trangthai',1)->get();
+
+        $product_detail = SanPham::find($id);
+       $pro_detail = ChiTietSanPham::where('id_sanpham',$id)->get();
+       $get_detail_id = 0;
+       $viewData = [
+        'product' => $product,
+        'product_detail' => $product_detail,
+        'pro_detail' => $pro_detail,
+        'get_detail_id' => $get_detail_id,
+    ];
+        return view('frontend.products.product_detail', $viewData);
     }
 
     /**

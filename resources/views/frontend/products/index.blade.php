@@ -32,7 +32,8 @@
 
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
                         <h1 class="mb-3 mt-5 bread">Sản phẩm</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('home_user.index') }}">Trang chủ</a></span> <span>Sản phẩm</span></p>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('home_user.index') }}">Trang
+                                    chủ</a></span> <span>Sản phẩm</span></p>
                     </div>
 
                 </div>
@@ -92,6 +93,7 @@
     </section>
 
 
+
     <section class="ftco-menu mb-5 pb-5">
         <div class="container">
             <div class="row d-md-flex">
@@ -115,150 +117,49 @@
 
                             <div class="tab-content ftco-animate" id="v-pills-tabContent">
 
+                                {{-- tab cup coffee --}}
                                 <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel"
                                     aria-labelledby="v-pills-0-tab">
                                     <div class="row">
+                                        
+                                        @foreach($product as $item)
+                                        {{-- @if($item->loaiSP->tenloaisanpham == 'CUP') --}}
                                         <div class="col-md-3">
                                             <div class="menu-entry">
                                                 <a href="#" class="img"
-                                                    style="background-image: url(images/menu-1.jpg);"></a>
+                                                    style="background-image: url({{ asset('uploads/SanPham/'.$item->hinhanh) }});"></a>
                                                 <div class="text text-center pt-4">
-                                                    <h3><a href="product-single.html">Coffee Capuccino</a></h3>
-                                                    <p>A small river named Duden flows by their place and supplies</p>
-                                                    <p class="price"><span>$5.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to Cart</a></p>
+                                                    <h3><a href="#">{{$item->tensanpham }}- {{$item->loaiSP->tenloaisanpham}}</a></h3>
+                                                   
+                                                    <p>{{$item->mota}}</p>
+                                                    <p><a  href="{{ route('product_user.product_detail',$item->id)}}" class="btn btn-primary btn-outline-primary">Xem thêm</a></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="menu-entry">
-                                                <a href="#" class="img"
-                                                    style="background-image: url(images/menu-2.jpg);"></a>
-                                                <div class="text text-center pt-4">
-                                                    <h3><a href="product-single.html">Coffee Capuccino</a></h3>
-                                                    <p>A small river named Duden flows by their place and supplies</p>
-                                                    <p class="price"><span>$5.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="menu-entry">
-                                                <a href="#" class="img"
-                                                    style="background-image: url(images/menu-3.jpg);"></a>
-                                                <div class="text text-center pt-4">
-                                                    <h3><a href="product-single.html">Coffee Capuccino</a></h3>
-                                                    <p>A small river named Duden flows by their place and supplies</p>
-                                                    <p class="price"><span>$5.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="menu-entry">
-                                                <a href="#" class="img"
-                                                    style="background-image: url(images/menu-4.jpg);"></a>
-                                                <div class="text text-center pt-4">
-                                                    <h3><a href="product-single.html">Coffee Capuccino</a></h3>
-                                                    <p>A small river named Duden flows by their place and supplies</p>
-                                                    <p class="price"><span>$5.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
 
+                                {{-- tab drip coffee --}}
                                 <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
                                     <div class="row">
+                                        @foreach($product as $item)
                                         <div class="col-md-4 text-center">
                                             <div class="menu-wrap">
                                                 <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-1.jpg);"></a>
+                                                    style="background-image: url({{asset('uploads/SanPham/'.$item->hinhanh)}});"></a>
                                                 <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
+                                                    <h3><a href="product-single.html">{{$item->tensanpham}} - {{$item->loaiSP->tenloaisanpham}}</a></h3>
+                                                    <p>{{$item->mota}}</p>
+                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Xem thêm</a></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 text-center">
-                                            <div class="menu-wrap">
-                                                <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-2.jpg);"></a>
-                                                <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <div class="menu-wrap">
-                                                <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-3.jpg);"></a>
-                                                <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <div class="menu-wrap">
-                                                <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-4.jpg);"></a>
-                                                <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <div class="menu-wrap">
-                                                <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-5.jpg);"></a>
-                                                <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <div class="menu-wrap">
-                                                <a href="#" class="menu-img img mb-4"
-                                                    style="background-image: url(images/dish-6.jpg);"></a>
-                                                <div class="text">
-                                                    <h3><a href="product-single.html">Grilled Beef</a></h3>
-                                                    <p>Far far away, behind the word mountains, far from the countries
-                                                        Vokalia and Consonantia.</p>
-                                                    <p class="price"><span>$2.90</span></p>
-                                                    <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Add
-                                                            to cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
+
+
+
+
                                     </div>
                                 </div>
 

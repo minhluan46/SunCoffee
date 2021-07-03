@@ -51,10 +51,10 @@
                                 style="background-image: url({{ asset('uploads/SanPham/'.$item->hinhanh) }});"></a>
                             <div class="text text-center pt-4">
                                 <h3><a href="#">{{$item->tensanpham}}</a></h3>
-                                <h4><p>{{$item->loaiSP->tenloaisanpham}}</p></h4>
+                               
                                 <p>{{$item->mota}}</p>
-                                <p class="price"><span></span></p>
-                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
+                                <p class="price"><span> <h5><b>Coffee: {{$item->loaiSP->tenloaisanpham}}</b></h5></span></p>
+                                <p><a href="{{ route('product_user.product_detail',$item->id)}}" class="btn btn-primary btn-outline-primary">Xem thêm</a></p>
                             </div>
                         </div>
                     </div>
