@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    <title>Coffee</title>
+    <title> Sun Coffee</title>
+    <link rel="icon" href="{{ asset('frontend/images/logo_sun_coffee.png')}}" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -10,6 +11,11 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" type="text/javascript" charset="utf-8" async defer></script> --}}
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> --}}
+
 
     <link rel="stylesheet" href="{{ asset('frontend/css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/animate.css') }}">
@@ -36,7 +42,7 @@
 <body>
     @include('frontend.layout.header')
     @yield('content')
-    
+
     @include('frontend.layout.footer')
 
 
@@ -64,11 +70,14 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="{{ asset('frontend/js/google-map.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
-
-        {{-- Zalo chat --}}
-    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!" data-autopopup="600" data-width="350" data-height="420"></div>
-
+    @yield('javascript')
+    {{-- Zalo chat --}}
+    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!"
+        data-autopopup="600" data-width="350" data-height="420"></div>
     <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+
+
+
 </body>
 
 </html>

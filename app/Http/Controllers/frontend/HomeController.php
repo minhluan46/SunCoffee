@@ -6,6 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\SanPham;
+use App\Models\ChiTietHoaDon;
+use App\Models\ChiTietSanPham;
+use App\Models\HoaDon;
+use App\Models\KhachHang;
+use App\Models\KhuyenMai;
+use App\Models\LoaiNhanVien;
+use App\Models\LoaiSanPham;
+use App\Models\NhanVien;
+use Illuminate\Support\Facades\Redirect;
+use Cart;
+
 
 class HomeController extends Controller
 {
@@ -16,22 +27,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        $product = SanPham::where('trangthai',1)->orderBy('id')->where('the','BÁN CHẠY NHẤT')->get();
-        // @if(count($product)){
-        //     foreach($product as $value){
-        //         $test.push(SanPham::where('trangthai',1)->loaisanpham->get();)
-        //     }
-        // }
-        $test = SanPham::where('trangthai',1)->orderBy('id')->get();
-        // $test = App\Models\SanPham::all()->LoaiSanPham->toArray();
-        // $test = $product->tenloaisanpham;
+        $product = SanPham::where('trangthai',1)->limit(4)->get();
+        $type_product = LoaiSanPham::where('trangthai',1)->get();
+        $detail_product = ChiTietSanPham::where('trangthai',1);
 
         $viewData = [
             'product' => $product,
-            'test' => $test,
+            'type_product' => $type_product,
         ];
-        //
         return view('frontend.home.index', $viewData);
     }
 

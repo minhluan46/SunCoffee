@@ -57,7 +57,7 @@ article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, s
 body {
   margin: 0;
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1rem;
+  font-size: 1.8em !important;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
@@ -78,6 +78,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem; }
 
 p {
+  word-break: break-word;
   margin-top: 0;
   margin-bottom: 1rem; }
 
@@ -318,7 +319,7 @@ h3, .h3 {
   font-size: 1.75rem; }
 
 h4, .h4 {
-  font-size: 1.5rem; }
+  font-size: 1.6rem; }
 
 h5, .h5 {
   font-size: 1.25rem; }
@@ -7325,11 +7326,11 @@ h1, h2, h3, h4, h5,
       .ftco-navbar-light .navbar-brand {
         color: #fff; } }
   .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-    font-size: 13px;
+    font-size: 0.7em;
     padding-top: .9rem;
     padding-bottom: .9rem;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 400;
     position: relative;
@@ -7340,8 +7341,8 @@ h1, h2, h3, h4, h5,
       .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 0.7em;
+        padding-right: 0.7em;
         color: rgba(255, 255, 255, 0.9); } }
     .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover, .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:focus {
       color: #c49b63; }
@@ -7355,7 +7356,7 @@ h1, h2, h3, h4, h5,
     -moz-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
     box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41); }
     .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item {
-      font-size: 13px;
+      font-size: 1.2em;
       color: rgba(255, 255, 255, 0.5);
       background: #0d0d0d; }
       .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item:hover, .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item:focus {
@@ -7510,7 +7511,7 @@ h1, h2, h3, h4, h5,
       color: #fff; }
 
 .navbar-brand {
-  font-size: 22px;
+  font-size: 1em;
   line-height: 1;
   text-transform: uppercase;
   display: block;
@@ -7595,11 +7596,11 @@ h1, h2, h3, h4, h5,
             text-align: center; } }
         .owl-carousel.home-slider .slider-item .slider-text .subheading {
           font-family: "Great Vibes", cursive;
-          font-size: 30px;
+          font-size: 2em;
           color: #c49b63; }
         .owl-carousel.home-slider .slider-item .slider-text h1 {
           text-transform: uppercase;
-          font-size: 40px;
+          font-size: 2.8em;
           color: #fff;
           line-height: 1.5;
           font-weight: normal;
@@ -7612,7 +7613,7 @@ h1, h2, h3, h4, h5,
             .owl-carousel.home-slider .slider-item .slider-text h1 {
               font-size: 30px; } }
         .owl-carousel.home-slider .slider-item .slider-text p {
-          font-size: 18px;
+          font-size: 1em;
           line-height: 1.5;
           font-weight: 300;
           color: white; }
@@ -7629,7 +7630,7 @@ h1, h2, h3, h4, h5,
             list-style: none; }
         .owl-carousel.home-slider .slider-item .slider-text .breadcrumbs {
           text-transform: uppercase;
-          font-size: 13px;
+          font-size: 0.8em;
           letter-spacing: 1px; }
           .owl-carousel.home-slider .slider-item .slider-text .breadcrumbs span {
             border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
@@ -8107,7 +8108,7 @@ h1, h2, h3, h4, h5,
     .table tbody tr td.product-name {
       width: 30%; }
       .table tbody tr td.product-name h3 {
-        font-size: 16px;
+        font-size: 1em;
         text-transform: uppercase; }
     .table tbody tr td.total, .table tbody tr td.price {
       color: #fff; }
@@ -8116,11 +8117,16 @@ h1, h2, h3, h4, h5,
   display: block;
   width: 100%; }
 
-.cart-total {
+  .cart-total {
+    width: max-content;
+    display: block;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    padding: 0.7em; }
+/* .cart-total {
   width: 100%;
   display: block;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px; }
+  padding: 20px; } */
   .cart-total h3 {
     font-size: 20px;
     text-transform: uppercase; }
@@ -8165,7 +8171,21 @@ h1, h2, h3, h4, h5,
     -moz-appearance: none;
     appearance: none; }
 
-.billing-form .form-control {
+    .billing-form .form-control {
+      font-weight: 300;
+      border: transparent !important;
+      border: 3px solid wheat !important;
+      height: 58px !important;
+      padding-left: 15px;
+      padding-right: 15px;
+      background: transparent !important;
+      color: rgba(255, 255, 255, 0.4) !important;
+      font-size: 0.7em;
+      border-radius: 0px;
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+  }
+/* .billing-form .form-control {
   font-weight: 300;
   border: transparent !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -8177,7 +8197,7 @@ h1, h2, h3, h4, h5,
   font-size: 14px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
-  box-shadow: none !important; }
+  box-shadow: none !important; } */
   .billing-form .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     color: rgba(255, 255, 255, 0.4); }
@@ -8507,7 +8527,7 @@ textarea.form-control {
   background: #030202; }
 
 .ftco-footer {
-  font-size: 16px;
+  font-size: 0.6em;
   padding: 7em 0;
   background: #120f0f; }
   .ftco-footer .ftco-footer-logo {
@@ -8516,8 +8536,8 @@ textarea.form-control {
   .ftco-footer .ftco-footer-widget h2 {
     font-weight: normal;
     color: #fff;
-    margin-bottom: 40px;
-    font-size: 16px;
+    margin-bottom: 0.2em;
+    font-size: 1.5em;
     font-weight: 400;
     position: relative;
     text-transform: uppercase;
@@ -8722,14 +8742,19 @@ textarea.form-control {
     background: #c49b63;
     margin: 0 auto; }
 
+a.img{
+  border-radius: 15%;
+  border: 2px solid;
+}
 .hero-wrap,
 .img,
 .blog-img,
 .user-img {
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: center center;
 
+}
 @media (max-width: 767.98px) {
   .img-about {
     height: 400px;
@@ -8889,7 +8914,7 @@ textarea.form-control {
   .blog-entry .text {
     position: relative; }
     .blog-entry .text .heading {
-      font-size: 18px;
+      font-size: 1.2em;
       margin-bottom: 16px;
       font-weight: 400; }
       .blog-entry .text .heading a {
@@ -8903,7 +8928,7 @@ textarea.form-control {
     font-size: 14px; }
     .blog-entry .meta > div a {
       color: gray;
-      font-size: 15px; }
+      font-size: 1em; }
       .blog-entry .meta > div a:hover {
         color: #666666; }
 
@@ -8920,7 +8945,7 @@ textarea.form-control {
     vertical-align: top; }
   .block-23 ul li .icon {
     width: 40px;
-    font-size: 18px;
+    font-size: 1em;
     padding-top: 2px;
     color: white; }
 
@@ -8928,10 +8953,10 @@ textarea.form-control {
   margin-bottom: 40px; }
 
 .block-18 .icon > span {
-  font-size: 40px; }
+  font-size: 1em; }
 
 .block-18 .text strong {
-  font-size: 30px; }
+  font-size: 1em; }
 
 .block-18 .text span {
   display: block; }
@@ -8971,7 +8996,7 @@ textarea.form-control {
   padding-right: 0;
   background: transparent !important;
   color: rgba(255, 255, 255, 0.9) !important;
-  font-size: 13px;
+  font-size: 1em;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important; }
@@ -8997,7 +9022,7 @@ textarea.form-control {
   outline: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  font-size: 15px; }
+  font-size: 1em; }
 
 .block-21 .blog-img {
   display: block;
@@ -9056,7 +9081,7 @@ textarea.form-control {
 
 /* Blog*/
 .post-info {
-  font-size: 12px;
+  font-size: 1em;
   text-transform: uppercase;
   font-weight: bold;
   color: #fff;
@@ -9077,7 +9102,7 @@ textarea.form-control {
   border-radius: 4px;
   color: #b3b3b3;
   border: 1px solid #674c27;
-  font-size: 11px; }
+  font-size: 1em; }
   .tagcloud a:hover {
     border: 1px solid #000; }
 
@@ -9109,7 +9134,7 @@ textarea.form-control {
       float: right;
       width: calc(100% - 80px); }
       .comment-list li .comment-body h3 {
-        font-size: 20px; }
+        font-size: 1em; }
       .comment-list li .comment-body .meta {
         text-transform: uppercase;
         font-size: 13px;
@@ -9161,13 +9186,13 @@ textarea.form-control {
 .sidebar-box {
   margin-bottom: 30px;
   padding: 25px;
-  font-size: 15px;
+  font-size: 1em;
   width: 100%;
   float: left; }
   .sidebar-box *:last-child {
     margin-bottom: 0; }
   .sidebar-box h3 {
-    font-size: 18px;
+    font-size: 1.5em;
     margin-bottom: 15px; }
 
 .categories li, .sidelink li {

@@ -5,6 +5,18 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\SanPham;
+use App\Models\ChiTietHoaDon;
+use App\Models\ChiTietSanPham;
+use App\Models\HoaDon;
+use App\Models\KhachHang;
+use App\Models\KhuyenMai;
+use App\Models\LoaiNhanVien;
+use App\Models\LoaiSanPham;
+use App\Models\NhanVien;
+use Illuminate\Support\Facades\Redirect;
+use Cart;
+
 class ServiceController extends Controller
 {
     /**
@@ -15,7 +27,12 @@ class ServiceController extends Controller
     public function index()
     {
         //
-        return view('frontend.services.index');
+        $type_product = LoaiSanPham::where('trangthai',1)->get();
+        $viewData = [
+            'type_product' => $type_product,
+        ];
+
+        return view('frontend.services.index',$viewData);
     }
 
     /**

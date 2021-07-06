@@ -7,42 +7,14 @@
                     <h2 class="ftco-heading-2">Về chúng tôi</h2>
                     <p>Sun Coffee là chuỗi cà phê được thành lập vào năm 2020 nhưng với tư duy sáng tạo và phong cách
                         mới mẻ đã đem đến những hương vị mới về cà phê. </p>
-                    {{-- <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                    </ul> --}}
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Bài viết mới nhất</h2>
-                    <div class="block-21 mb-4 d-flex">
-                        <a class="blog-img mr-4"
-                            style="background-image: url({{ asset('frontend/images/image_1.jpg') }});"></a>
-                        <div class="text">
-                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a>
-                            </h3>
-                            <div class="meta">
-                                <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="block-21 mb-4 d-flex">
-                        <a class="blog-img mr-4"
-                            style="background-image: url({{ asset('frontend/images/image_2.jpg') }});"></a>
-                        <div class="text">
-                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a>
-                            </h3>
-                            <div class="meta">
-                                <div><a href="#"><span class="icon-calendar"></span> Sept 15, 2018</a></div>
-                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                            </div>
-                        </div>
-                    </div>
+                    <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.410462746698!2d106.70980511462409!3d10.932334692215882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175281ca7aa9583%3A0xbd4e60821b659919!2zQUVPTiBNQUxMIELDjE5IIETGr8agTkcgQ0FOQVJZ!5e0!3m2!1sen!2s!4v1625337665714!5m2!1sen!2s"
+                    width="100%" height="300px" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
             <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
@@ -58,11 +30,11 @@
             </div>
             <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Bạn có câu hỏi nào chăng ?</h2>
+                    <h2 class="ftco-heading-2"><a href="{{ route('contact_user.index')}}">Bạn có thắc mắc nào ?</a> </h2>
                     <div class="block-23 mb-3">
                         <ul>
-                            <li><span class="icon icon-map-marker"></span><span class="text">137/3C, khu phố 2, phường
-                                    An Phú, thành phố Thuận An, tỉnh Bình Dương</span></li>
+                            <li><span class="icon icon-map-marker"></span><span class="text"><a href="{{ route('contact_user.index')}}">137/3C, khu phố 2, phường
+                                    An Phú, thành phố Thuận An, tỉnh Bình Dương</a> </span></li>
                             <li><a href="#"><span class="icon icon-phone"></span><span class="text">+84 916 105
                                         406</span></a></li>
                             <li><a href="#"><span class="icon icon-envelope"></span><span class="text">

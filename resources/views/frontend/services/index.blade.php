@@ -27,8 +27,8 @@
                 <span class="flaticon-choices"></span>
             </div>
             <div class="media-body">
-              <h3 class="heading">Easy to Order</h3>
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+              <h3 class="heading">Dễ dàng mua hàng</h3>
+              <p>Giao diện dễ thao tác và đội ngũ nhân viên phụ vụ nhiệt tình.</p>
             </div>
           </div>      
         </div>
@@ -38,8 +38,8 @@
                 <span class="flaticon-delivery-truck"></span>
             </div>
             <div class="media-body">
-              <h3 class="heading">Fastest Delivery</h3>
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+              <h3 class="heading">Giao hàng siêu nhanh</h3>
+              <p>Sun Coffee hợp tác với nhiều đơn vị phân phối và đối tác giao hàng khác nhau. Do đó, thời gian cà phê đến tay bạn luôn là nhanh nhất.</p>
             </div>
           </div>      
         </div>
@@ -48,8 +48,8 @@
             <div class="icon d-flex justify-content-center align-items-center mb-5">
                 <span class="flaticon-coffee-bean"></span></div>
             <div class="media-body">
-              <h3 class="heading">Quality Coffee</h3>
-              <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+              <h3 class="heading">Chất lượng cà phê thượng hạng</h3>
+              <p>Cà phê được cung cấp trực tiếp từ sơn nguyên và trải qua quá trình chọn lọc và xử lí kĩ lưỡng nên luôn giữ được hương vị tuyệt hảo nhất.</p>
             </div>
           </div>    
         </div>

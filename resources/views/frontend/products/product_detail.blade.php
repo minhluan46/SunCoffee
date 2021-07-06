@@ -26,64 +26,54 @@
             <div class="row">
                 <div class="col-lg-6 mb-5 ftco-animate">
                     <a href="images/menu-2.jpg" class="image-popup"><img
-                            src="{{ asset('uploads/SanPham/' . $product_detail->hinhanh) }}" class="img-fluid"
+                            src="{{ asset('uploads/SanPham/' . $product->hinhanh) }}" class="img-fluid"
                             alt="Colorlib Template"></a>
                 </div>
                 <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                    <h3>{{ $product_detail->tensanpham }}</h3>
-                    <p>{{ $product_detail->mota }}</p>
+                    <form>
+                        <fieldset>
+                            @csrf
+                            <input id type="hidden" value="{{ $product->id }}" name="product_id_hidden">
+                            <h3>{{ $product->tensanpham }}</h3>
+                            <p> <b>Mô ta: </b>{{ $product->mota }}</p>
 
 
-                    <form action="{{ route('product_user.save_cart') }}" method="POST">
-                        {{ csrf_field() }}
-                        {{-- <p class="price" ><span>$4.90</span></p> --}}
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="form-group d-flex">
-                                    <div class="select-wrap">
-                                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                        <select style=" height: fit-content !important;
-                                                        font-size: 2em !important;
-                                                        width: fit-content !important;" name="" id="" class="form-control">
-                                            @foreach ($pro_detail as $item)
+                            <select id="pro_detail_id" class="form-control">
+                                @foreach ($product_detail as $pro_detail)
+                                    <option value="{{ $pro_detail->id }}">
+                                        {{ $pro_detail->kichthuoc }} -- {{ $pro_detail->giasanpham }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <button id="save-cart" style="width: inherit; margin: 0.5em;background: wheat; border-radius: 7%;"><i class="ti-save"><span style="color: darkred;" class="icon-repeat"></span></i></button> --}}
 
-                                                <option>
-                                                    <b>{{ $item->kichthuoc }}</b> - <h3>
-                                                        <span>{{ number_format($item->giasanpham) . 'VND' }}</span>
-                                                    </h3>
-                                                    <input type="hidden" value="{{ $item->id }}"
-                                                        name="detail_pro_id_hidden">
-                                                </option>
 
-                                            @endforeach
-                                            {{-- <option value="">Medium</option>
-                                        <option value="">Large</option>
-                                        <option value="">Extra Large</option> --}}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="w-100"></div>
-                            <div class="input-group col-md-6 d-flex mb-3">
-                                <span class="input-group-btn mr-2">
-                                    <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
-                                        <i class="icon-minus"></i>
-                                    </button>
-                                </span>
-                                <input type="number" id="quantity" name="quantity" class="form-control input-number"
-                                    value="1" min="1" max="100">
-                                <input type="hidden" value="{{ $product_detail->id }}" name="product_id_hidden">
-                                <span class="input-group-btn ml-2">
-                                    <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                                        <i class="icon-plus"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary py-3 px-5" type="submit"><a><b
-                                    style="color: black; font-size: 1.5em !important">Thêm vào giỏ hàng</b></a> </button>
-                        {{-- <p><a href="cart.html" class="btn btn-primary py-3 px-5">Thêm vào giỏ hàng</a></p> --}}
+                        </fieldset>
                     </form>
+                    <div class="w-100"></div>
+                    <div style="text-align: -webkit-center; padding: 1em;">
+                        <div class="input-group col-md-6 d-flex mb-3">
+                            <span class="input-group-btn mr-2">
+                                <button type="button" class="quantity-left-minus btn" data-type="minus"
+                                    data-field="#quantity">
+                                    <i class="icon-minus"></i>
+                                </button>
+                            </span>
+                            <input type="number" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+
+                            <span class="input-group-btn ml-2">
+                                <button type="button" class="quantity-right-plus btn" data-type="plus" data-target=""
+                                    data-field="">
+                                    <i class="icon-plus"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <button id="save-cart"
+                        style=" width: -webkit-fill-available;margin: 0.5em;padding: 0.2em;background: wheat;"><b>Thêm vào
+                            giỏ hàng</b></button>
+
                 </div>
 
             </div>
@@ -100,7 +90,7 @@
                         đậm vị hơn nữa.</p>
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 @foreach ($product as $item)
                     <div class="col-md-3">
                         <div class="menu-entry">
@@ -115,8 +105,79 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
+            </div> --}}
         </div>
     </section>
 
+@endsection
+@section('javascript')
+    <script type="text/javascript">
+        $('.quantity-right-plus').on("click", function() {
+
+            // alert($('#quantity').val());
+            var i = parseInt($('#quantity').val()) + 1;
+            $('#quantity').val(i);
+        });
+        $('.quantity-left-minus').on("click", function() {
+
+            //   alert($('#quantity').val());
+            var i = parseInt($('#quantity').val()) - 1;
+            $('#quantity').val(i);
+        });
+
+        $('#save-cart').on("click", function() {
+
+            // alert($('#pro_detail_id').val());
+            // alert($('#quantity').val());
+            var el = {
+                key: $('#pro_detail_id').val(),
+                qty: $('#quantity').val(),
+            };
+            alert(el);
+            $.ajax({
+                url: "{{ route('product_user.save_cart') }}",
+                type: 'POST',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "data": el,
+                },
+                success: function(data) {
+                    location.reload();
+                    alert("Update success");
+                }
+            });
+
+
+        });
+
+        // $(".edit-all").on("click", function() {
+        //     alert("Edit all");
+        //     var list = [];
+        //     $("tr td").each(function() {
+        //         $(this).find("input").each(function() {
+        //             var el = {
+        //                 key: $(this).data("row_id"),
+        //                 value: $(this).val()
+        //             };
+        //             list.push(el);
+        //         });
+        //     });
+        //     console.log(list);
+        //     $.ajax({
+        //         // url:"{{ url('/quickview') }}",
+        //         url: "{{ route('cart_user.update_qty') }}",
+        //         // method:"POST",
+        //         type: 'POST',
+        //         // dataType:"JSON",
+        //         data: {
+        //             "_token": "{{ csrf_token() }}",
+        //             "data": list,
+        //         },
+        //         success: function(data) {
+        //             location.reload();
+        //         }
+        //     });
+
+        // });
+    </script>
 @endsection

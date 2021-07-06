@@ -1,10 +1,10 @@
 <?php
 
+
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\SanPham;
 use App\Models\ChiTietHoaDon;
 use App\Models\ChiTietSanPham;
@@ -17,7 +17,7 @@ use App\Models\NhanVien;
 use Illuminate\Support\Facades\Redirect;
 use Cart;
 
-class BlogController extends Controller
+class PromotionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,7 +32,7 @@ class BlogController extends Controller
             'type_product' => $type_product,
         ];
 
-        return view('frontend.blogs.index',$viewData);
+        return view('frontend.promotion.index',$viewData);
     }
 
     /**

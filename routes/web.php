@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,24 +14,76 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 //user
-Route::group(['namespace' => 'frontend', 'prefix' => 'SunCoffee'], function(){
+Route::group(['namespace' => 'frontend'], function(){
+    //Home Page
     Route::get('/', 'HomeController@index')->name('home_user.index');
-    Route::get('/service', 'ServiceController@index')->name('service_user.index');
-    Route::get('/blog', 'BlogController@index')->name('blog_user.index');
-    Route::get('/about', 'AboutController@index')->name('about_user.index');
-    Route::get('/product', 'ProductController@index')->name('product_user.index');
+
+    //Product Detail Page
     Route::get('/product_detail/{id}', 'ProductController@getProductDetail')->name('product_user.product_detail');
+
+    // Add to cart
     Route::post('/save_cart', 'CartController@saveCart')->name('product_user.save_cart');
 
+    //About page
+    Route::get('/about', 'AboutController@index')->name('about_user.index');
 
+    // Header cua hang
+    Route::get('/type_product/{id}', 'ProductController@type_product')->name('product_user.type_product');
 
+    //Promotion Page
+    Route::get('/promotion', 'PromotionController@index')->name('promotion_user.index');
+    
+    // Product Page
+    Route::get('/product', 'ProductController@index')->name('product_user.index');
+
+    //Contact page
     Route::get('/contact', 'ContactController@index')->name('contact_user.index');
+    
+    //Cart Page
     Route::get('/cart', 'CartController@index')->name('cart_user.index');
+    
+    //Cart delete prodoct
     Route::get('/cart_delete/{rowId}', 'CartController@deleteToCart')->name('cart_user.delete_product');
+
+    //Cart update quantity
+    Route::post('/cart_update', 'CartController@updateQty')->name('cart_user.update_qty');
+
+    //Check out
+    Route::get('/check_out','CartController@checkOut')->name('cart_user.check_out');
+
+    //Show detail dialog
+    Route::post('/product_show_detail', 'ProductController@showDetail')->name('product_user.show_detail');
+
+    //Type product Page type_product_page
+    Route::get('/product_type_page/{id}', 'ProductController@productTypePage')->name('product_user.product_type_page');
+
+    //Menu Page
+    Route::get('/menu', 'ProductController@menuPage')->name('product_user.menu_page');
+
+
+
+    /////
+
+    Route::get('/service', 'ServiceController@index')->name('service_user.index');
+
+    Route::get('/blog', 'BlogController@index')->name('blog_user.index');
+    // Route::get('/type_product/{id}', 'ProductController@type_product')->name('product_user.type_product');
+
+    // Route::get('/product_detail/{id}', 'ProductController@getProductDetail')->name('product_user.product_detail');
+
+    Route::post('/quickview','ProductController@quickview')->name('product_user.quick_view');
+
+    // Route::get('/san-pham/{name}/{id}', array('as' => 'product','uses'=>'ProductController@view'));
+
+    
+
+
+
+
 
 
 
