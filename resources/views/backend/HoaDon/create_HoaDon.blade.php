@@ -3,8 +3,8 @@
     <div class="main_content_iner ">
         <div class="btn-pm">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" onclick="showModalAddProduct()" href="javascript:(0)"><span
-                        class="btn-label"></span>Thêm Sản Phẩm</a>
+                <a class="btn btn-success" onclick="showModalAddProduct()" href="javascript:(0)"><span class="btn-label"></span>Thêm Sản Phẩm</a>
+                <a class="btn btn-info" href="{{ route('hoa-don.index') }}">Danh SáchHóa Đơn</a>
             </div>
         </div>
         <form class="add-form" method="POST" action="{{ route('hoa-don.create') }}" enctype="multipart/form-data">
@@ -39,10 +39,10 @@
                                                                 class="text-muted font_s_13">{{ $item['CTSP']->kichthuoc }}</span>
                                                         </p>
                                                     </td>
-                                                    <td>{{ number_format($item['CTSP']->giasanpham) }} VNĐ</td>
+                                                    <td>{{ number_format($item['CTSP']->giasanpham, 0, ',', '.') }} VNĐ</td>
                                                     <td>
                                                         @if ($item['GiamGia'] > 0)
-                                                            {{ '-' . number_format($item['GiamGia']) }} VNĐ
+                                                            {{ '-' . number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
                                                         @else
 
                                                         @endif
@@ -50,7 +50,7 @@
                                                     <td><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}"
                                                             type="number" class="form-control form-control-sm w-25"
                                                             value="{{ $item['SoLuong'] }}"></td>
-                                                    <td>{{ number_format($item['TongGia']) }} VNĐ</td>
+                                                    <td>{{ number_format($item['TongGia'], 0, ',', '.') }} VNĐ</td>
                                                     <td>
                                                         <a href="javascript:(0)" data-id="{{ $item['CTSP']->id }}"
                                                             class="action_btn deleteItemHoaDon">
@@ -73,20 +73,20 @@
                                                     <tr>
                                                         <td class="payment-title">Tổng Cộng</td>
                                                         <td id="totalPriceCart">
-                                                            {{ number_format(Session::get('GioHang')->totalPrice) . ' VNĐ' }}
+                                                            {{ number_format(Session::get('GioHang')->totalPrice, 0, ',', '.') . ' VNĐ' }}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="payment-title">Tổng Giảm Giá</td>
                                                         <td id="totalDiscountCart">
-                                                            {{ '-' . number_format(Session::get('GioHang')->totalDiscount) . ' VNĐ' }}
+                                                            {{ '-' . number_format(Session::get('GioHang')->totalDiscount, 0, ',', '.') . ' VNĐ' }}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="payment-title">Thành Tiền</td>
                                                         <td class="text-dark">
                                                             <strong
-                                                                id="TotalCart">{{ number_format(Session::get('GioHang')->Total) . ' VNĐ' }}</strong>
+                                                                id="TotalCart">{{ number_format(Session::get('GioHang')->Total, 0, ',', '.') . ' VNĐ' }}</strong>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -146,15 +146,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="">
-                        <div class="serach_field-area d-flex align-items-center mb-3">
-                            <div class="search_inner">
-                                <div class="search_field">
-                                    <input type="text" name="keyword" placeholder="Search" id="keyword">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="serach_field-area d-flex align-items-center mb-3">
+                                            <div class="search_inner">
+                                                <div class="search_field">
+                                                    <input type="text" name="keyword" placeholder="Search" id="keyword">
+                                                </div>
+                                                <button type="submit" onclick="search()"> <img
+                                                        src="{{ asset('backend/img/icon/icon_search.svg') }}" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" onclick="search()"> <img
-                                        src="{{ asset('backend/img/icon/icon_search.svg') }}" alt="">
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -218,18 +229,45 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
-        $(document).ready(function() { //kiểm tra nhập 10 số.
-            $("#SDT").keypress(function() {
-                if (this.value.length == 10) {
-                    return false;
+        function showModalAddProduct() { // Hiện modal thêm san phẩm.
+            $('#exampleModal').modal('show');
+        }
+
+        function kichthuoc(obj, idSP) { // Lấy ra giá sản phẩm và khuyến mãi dựa vào kích thước.
+            var value = obj.value;
+            $.ajax({ // ajax lấy giá bán và gắn sự kiện onlick addcart().
+                url: "priceProduct/" + value,
+                method: "GET",
+                success: function(data) {
+                    $('#giaban' + idSP).html(data);
+                    $('#them' + idSP).attr("onclick", "addcart('" + value + "')");
                 }
             })
-        });
-        $(document).on('blur', '#SoLuongSanPham', function() { //thai đổi số lượng.
+            $.ajax({ //ajax lấy khuyến mãi.
+                url: "discountProduct/" + value,
+                method: "GET",
+                success: function(data) {
+                    $('#giamgia' + idSP).html(data);
+                }
+            })
+        }
+
+        function addcart(id) { // thêm sản phẩm vào giỏ hàng.
+            $.ajax({
+                url: "addCart/" + id,
+                method: "GET",
+                success: function(data) {
+                    LoadTotal(data);
+                    alertify.success('Đã Thêm');
+                }
+            })
+        }
+
+        $(document).on('blur', '#SoLuongSanPham', function() { // thai đổi số lượng.
             var quantity = $(this).val();
             var id = $(this).data("id");
-            $.ajax({ //ajax tìm khách hàng.
-                url: "quantityChange-hoa-don/" + id + "/" + quantity,
+            $.ajax({
+                url: "quantityChange/" + id + "/" + quantity,
                 method: "GET",
                 success: function(data) {
                     LoadTotal(data);
@@ -237,9 +275,10 @@
                 }
             })
         });
-        $("#itemHoaDon").on("click", ".deleteItemHoaDon", function() { //ajax xóa sản phẩm trong giỏ hàng.
+
+        $("#itemHoaDon").on("click", ".deleteItemHoaDon", function() { // xóa sản phẩm trong giỏ hàng.
             $.ajax({
-                url: "deleteItemHoaDon-hoa-don/" + $(this).data("id"),
+                url: "deleteItemHoaDon/" + $(this).data("id"),
                 method: "GET",
                 success: function(data) {
                     LoadTotal(data);
@@ -248,9 +287,10 @@
             })
         });
 
-        function showModalAddProduct() { // Hiện modal thêm san phẩm.
-            $('#exampleModal').modal('show');
-        }
+
+
+
+
 
         function LoadTotal(data) { //cập nhật giao diện.
             $('#itemHoaDon').html(data);
@@ -264,42 +304,12 @@
             }
         };
 
-        function kichthuoc(obj, idSP) { //Lấy ra giá sản phẩm và khuyến mãi dựa vào kích thước.
-            var value = obj.value;
-            $.ajax({ // ajax lấy giá bán và gắn sự kiện onlick addcart().
-                url: "priceProduct-hoa-don/" + value,
-                method: "GET",
-                data: {},
-                success: function(data) {
-                    $('#giaban' + idSP).html(data);
-                    $('#them' + idSP).attr("onclick", "addcart('" + value + "')");
-                }
-            })
-            $.ajax({ //ajax lấy khuyến mãi.
-                url: "discountProduct-hoa-don/" + value,
-                method: "GET",
-                data: {},
-                success: function(data) {
-                    $('#giamgia' + idSP).html(data);
-                }
-            })
-        }
 
-        function addcart(id) { //ajax thêm sản phẩm vào giỏ hàng.
-            $.ajax({
-                url: "addCart-hoa-don/" + id,
-                method: "GET",
-                success: function(data) {
-                    LoadTotal(data);
-                    alertify.success('Đã Thêm');
-                }
-            })
-        }
 
         function search() { // ajax tìm sản phẩm.
             var keyword = $('#keyword').val();
             $.ajax({
-                url: "searchProduct-hoa-don",
+                url: "searchProduct",
                 method: "GET",
                 data: {
                     keyword: keyword

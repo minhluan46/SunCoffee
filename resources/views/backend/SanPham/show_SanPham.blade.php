@@ -43,8 +43,8 @@
                 @foreach ($ChiTietSanPham as $valuectsp)
                     <tr>
                         <td style="text-align: left">{{ $valuectsp->kichthuoc }}</td>
-                        <td>{{ number_format($valuectsp->soluong) }}</td>
-                        <td>{{ number_format($valuectsp->giasanpham) }}</td>
+                        <td>{{ number_format($valuectsp->soluong, 0, ',', '.') }}</td>
+                        <td>{{ number_format($valuectsp->giasanpham, 0, ',', '.') }}</td>
                         <td>{{ $valuectsp->ngaysanxuat }}</td>
                         <td>{{ $valuectsp->hansudung }}</td>
                         <td>

@@ -21,17 +21,17 @@
                                 class="text-muted font_s_13">{{ $item['CTSP']->kichthuoc }}</span>
                         </p>
                     </td>
-                    <td>{{ number_format($item['CTSP']->giasanpham) }} VNĐ</td>
+                    <td>{{ number_format($item['CTSP']->giasanpham, 0, ',', '.') }} VNĐ</td>
                     <td>
                         @if ($item['GiamGia'] > 0)
-                            {{ '-' . number_format($item['GiamGia']) }} VNĐ
+                            {{ '-' . number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
                         @else
 
                         @endif
                     </td>
                     <td><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}" type="number"
                             class="form-control form-control-sm w-25" value="{{ $item['SoLuong'] }}"></td>
-                    <td>{{ number_format($item['TongGia']) }} VNĐ</td>
+                    <td>{{ number_format($item['TongGia'], 0, ',', '.') }} VNĐ</td>
                     <td>
                         <a href="javascript:(0)" data-id="{{ $item['CTSP']->id }}"
                             class="action_btn deleteItemHoaDon">
@@ -41,9 +41,9 @@
             @endforeach
         </tbody>
     </table>
-    <input hidden type="text" id="tongcong" value="{{ number_format(Session::get('GioHang')->totalPrice) }}">
-    <input hidden type="text" id="giamgia" value="{{ number_format(Session::get('GioHang')->totalDiscount) }}">
-    <input hidden type="text" id="thanhtien" value="{{ number_format(Session::get('GioHang')->Total) }}">
+    <input hidden type="text" id="tongcong" value="{{ number_format(Session::get('GioHang')->totalPrice, 0, ',', '.') }}">
+    <input hidden type="text" id="giamgia" value="{{ number_format(Session::get('GioHang')->totalDiscount, 0, ',', '.') }}">
+    <input hidden type="text" id="thanhtien" value="{{ number_format(Session::get('GioHang')->Total, 0, ',', '.') }}">
 @else
     <table class="table mb-0" style="text-align: center">
         <thead>

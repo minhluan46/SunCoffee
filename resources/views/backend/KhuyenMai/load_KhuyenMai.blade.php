@@ -8,7 +8,20 @@
             <td>{{ $value->muckhuyenmaitoida }}%</td>
             <td>
                 <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
-                    {{ $value->trangthai == 1 ? 'Còn Khuyến Mãi' : 'Đã Hết' }}</span>
+                    {{ $value->trangthai == 1 ? 'Mở' : 'Khóa' }}</span>
+            </td>
+            <td>
+                @isset($today)
+                    @if ($value->thoigianketthuc < $today)
+                        <span class="badge rounded-pill bg-danger">Kết Thúc</span>
+                    @elseif ($value->trangthai == 0 && $value->thoigianketthuc >= $today)
+                        <span class="badge rounded-pill bg-warning">Đã Khóa</span>
+                    @elseif ($value->thoigianbatdau > $today )
+                        <span class="badge rounded-pill bg-info">Sắp Đến</span>
+                    @else
+                        <span class="badge rounded-pill bg-primary">Đang Áp Dụng</span>
+                    @endif
+                @endisset
             </td>
             <td>
                 <a href="javascript:(0)" class="action_btn mr_10 view-add"

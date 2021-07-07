@@ -15,14 +15,15 @@ class KhachHangController extends Controller
     public function index() // danh sách.
     {
         $viewData = [
-            'KhachHang' => KhachHang::orderBy('created_at', 'desc')->paginate(10),
+            'KhachHang' => KhachHang::where('id', '!=', 'KH00000000000000')->orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.KhachHang.index', $viewData);
     }
+
     public function load() // tải lại.
     {
         $viewData = [
-            'KhachHang' => KhachHang::orderBy('created_at', 'desc')->paginate(10),
+            'KhachHang' => KhachHang::where('id', '!=', 'KH00000000000000')->orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.KhachHang.load_KhachHang', $viewData);
     }
@@ -33,21 +34,23 @@ class KhachHangController extends Controller
         $trangthai = $KhachHang->trangthai == 1 ? 'bg-success' : 'bg-danger';
         $trangthaitext = $KhachHang->trangthai == 1 ? 'Được Dùng' : 'Đã Khoá';
         $output = "<td style='text-align: left'>" . $KhachHang->id . "</td><td>" . $KhachHang->tenkhachhang . "</td><td>" . $KhachHang->sdt . "</td>
-        <td style='text-align: left'>" . $KhachHang->diachi . "</td><td>" . number_format($KhachHang->diemtichluy) . "</td><td><span class='badge rounded-pill  " .
-            $trangthai . "'>" . $trangthaitext . "</span></td><td><div class='d-flex'><a href='javascript:(0)' class='action_btn mr_10 view-edit' data-url
+        <td style='text-align: left'>" . $KhachHang->diachi . "</td><td>" . number_format($KhachHang->diemtichluy, 0, ',', '.') . "</td><td><span class='badge rounded-pill  " .
+            $trangthai . "'>" . $trangthaitext . "</span></td><td><a href='javascript:(0)' class='action_btn mr_10 view-edit' data-url
         ='" . route('khach-hang.edit', $KhachHang->id) . "'><i class='fas fa-edit'></i></a><a href='javascript:(0)' class='action_btn mr_10 form-delete'
-          data-url='" . route('khach-hang.destroy', $KhachHang->id) . "' data-id='" . $KhachHang->id . "'><i class='fas fa-trash-alt'></i></a></div></td>";
+          data-url='" . route('khach-hang.destroy', $KhachHang->id) . "' data-id='" . $KhachHang->id . "'><i class='fas fa-trash-alt'></i></a></td>";
         return $output;
     }
 
     public function search(Request $request) //tìm.
     {
         $viewData = [
-            'KhachHang' => KhachHang::where('tenKhachHang', 'like', '%' . $request->search . '%')->orderBy('created_at', 'desc')->get(),
+            'KhachHang' => KhachHang::where([['id', '!=', 'KH00000000000000'], ['tenKhachHang', 'like', '%' . $request->search . '%']])
+                ->orwhere([['id', '!=', 'KH00000000000000'], ['sdt', 'like', '%' . $request->search . '%']])
+                ->orderBy('created_at', 'desc')->get(),
         ];
         return view('backend.KhachHang.load_KhachHang', $viewData);
     }
-    
+
     public function create() //trang thêm.
     {
         return view('backend.KhachHang.create_KhachHang');

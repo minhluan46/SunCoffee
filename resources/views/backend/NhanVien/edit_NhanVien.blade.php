@@ -94,7 +94,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Lương<b style="color:red"> *</b></label>
-                                                <input type="number" class='max10 @error(' luong') is-invalid @enderror
+                                                <input type="text" class='max10 money @error(' luong') is-invalid @enderror
                                                     form-control' maxlength="10" name="luong" required
                                                     value="{{ $NhanVien->luong }}">
                                             </div>
@@ -199,5 +199,83 @@
                 }
             })
         });
+
+        (function($) { // định dạng tiền.
+            $.fn.simpleMoneyFormat = function() {
+                this.each(function(index, el) {
+                    var elType = null; // input or other
+                    var value = null;
+                    // get value
+                    if ($(el).is('input') || $(el).is('textarea')) {
+                        value = $(el).val().replace(/,/g, '');
+                        elType = 'input';
+                    } else {
+                        value = $(el).text().replace(/,/g, '');
+                        elType = 'other';
+                    }
+                    // if value changes
+                    $(el).on('paste keyup', function() {
+                        value = $(el).val().replace(/,/g, '');
+                        formatElement(el, elType, value); // format element
+                    });
+                    formatElement(el, elType, value); // format element
+                });
+
+                function formatElement(el, elType, value) {
+                    var result = '';
+                    var valueArray = value.split('');
+                    var resultArray = [];
+                    var counter = 0;
+                    var temp = '';
+                    for (var i = valueArray.length - 1; i >= 0; i--) {
+                        // kiểm tra nếu nó là số thì cộng vào.
+                        if (!isNaN(valueArray[i])) {
+                            temp += valueArray[i];
+                            counter++
+                            if (counter == 3) {
+                                resultArray.push(temp);
+                                counter = 0;
+                                temp = '';
+                            }
+                        }
+                    };
+                    if (counter > 0) {
+                        resultArray.push(temp);
+                    }
+                    for (var i = resultArray.length - 1; i >= 0; i--) {
+                        var resTemp = resultArray[i].split('');
+                        for (var j = resTemp.length - 1; j >= 0; j--) {
+                            result += resTemp[j];
+                        };
+                        if (i > 0) {
+                            result += '.'
+                        }
+                    };
+                    if (elType == 'input') {
+                        $(el).val(result);
+                    } else {
+                        $(el).empty().text(result);
+                    }
+                }
+            };
+        }(jQuery));
+
+        $('.money').simpleMoneyFormat(); // áp dụng cho class money.
+
+        function UpImg() { // hiện hình ảnh.
+            var fileSL = document.getElementById('image').files;
+            if (fileSL.length > 0) {
+                var imgUp = fileSL[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoaderEvent) {
+                    var srcI = fileLoaderEvent.target.result;
+                    var newImg = document.createElement('img');
+                    newImg.src = srcI;
+                    document.getElementById('displayIMG').innerHTML = newImg.outerHTML;
+                }
+                fileReader.readAsDataURL(imgUp);
+            }
+
+        }
     </script>
 @endsection

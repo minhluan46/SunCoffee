@@ -12,7 +12,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}" /> {{-- bootstrap --}}
     <!-- themefy CSS -->
-    <link rel="stylesheet" href="{{ asset('backend/vendors/themefy_icon/themify-icons.css') }}" />      {{-- icon ở menu --}}
+    {{--  --}}
+    {{-- <link rel="stylesheet" href="{{ asset('backend/vendors/themefy_icon/themify-icons.css') }}" /> --}}
+    {{-- icon ở menu --}}
     <!-- select2 CSS -->
     {{-- <link rel="stylesheet" href="{{ asset('backend/vendors/niceselect/css/nice-select.css') }}" /> --}}
     <!-- owl carousel CSS -->
@@ -44,7 +46,9 @@
 
 
     <!-- menu css  -->
-    <link rel="stylesheet" href="{{ asset('backend/css/metisMenu.css') }}">
+    {{--  --}}
+    {{-- <link rel="stylesheet" href="{{ asset('backend/css/metisMenu.css') }}"> --}}
+
     <!-- style CSS -->
     <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('backend/css/css.css') }}" />
@@ -70,14 +74,15 @@
     <!-- bootstarp js -->
     <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
     @yield('script')
-   
-    <script src="{{ asset('backend/js/upload.js') }}"></script>
+
+    {{-- <script src="{{ asset('backend/js/upload.js') }}"></script> --}}
 
     <!-- popper js -->
     {{-- <script src="{{ asset('backend/js/popper.min.js') }}"></script> --}}
-    
+
     <!-- sidebar menu  -->
-    <script src="{{ asset('backend/js/metisMenu.js') }}"></script>
+    {{--  --}}
+    {{-- <script src="{{ asset('backend/js/metisMenu.js') }}"></script> --}}
     <!-- waypoints js -->
     {{-- <script src="{{ asset('backend/vendors/count_up/jquery.waypoints.min.js') }}"></script> --}}
     <!-- waypoints js -->
@@ -118,15 +123,14 @@
     <!-- apex chrat  -->
     {{-- <script src="{{ asset('backend/vendors/apex_chart/apex-chart2.js') }}"></script> --}}
     {{-- <script src="{{ asset('backend/vendors/apex_chart/apex_dashboard.js') }}"></script> --}}
-{{-- 
-    <script src="{{ asset('backend/vendors/chart_am/core.js') }}"></script>
+    {{-- <script src="{{ asset('backend/vendors/chart_am/core.js') }}"></script>
     <script src="{{ asset('backend/vendors/chart_am/charts.js') }}"></script>
     <script src="{{ asset('backend/vendors/chart_am/animated.js') }}"></script>
     <script src="{{ asset('backend/vendors/chart_am/kelly.js') }}"></script>
     <script src="{{ asset('backend/vendors/chart_am/chart-custom.js') }}"></script> --}}
     <!-- custom js -->
     {{-- <script src="{{asset('backend/js/dashboard_init.js')}}"></script> --}}
-    <script src="{{ asset('backend/js/custom.js') }}"></script>
+    {{-- <script src="{{ asset('backend/js/custom.js') }}"></script> --}}
 
     {{-- <script src="{{asset('backend/vendors/ckeditor/ckeditor.js')}}"></script>
   <script type="text/javascript">

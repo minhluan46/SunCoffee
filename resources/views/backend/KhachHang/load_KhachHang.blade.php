@@ -5,7 +5,7 @@
             <td>{{ $value->tenkhachhang }}</td>
             <td>{{ $value->sdt }}</td>
             <td style="text-align: left">{{ $value->diachi }}</td>
-            <td>{{ number_format($value->diemtichluy) }}</td>
+            <td>{{ number_format($value->diemtichluy, 0, ',', '.') }}</td>
             <td>
                 <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                     {{ $value->trangthai == 1 ? 'Được Dùng' : 'Đã Khoá' }}</span>

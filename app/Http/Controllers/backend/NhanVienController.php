@@ -53,6 +53,11 @@ class NhanVienController extends Controller
 
     public function store(NhanVienRequest $request) //thêm. (chưa ajax)
     {
+        $luong = filter_var($request->luong, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
+        if ($luong > 2000000000) { // trả về nếu lớn hơn 2 tỷ.
+            return Response()->json(['errors' => 'Lương Phải Nằm Trong Khoảng 0 Đến 2.000.000.000']);
+        }
+
         $iddate = "NV" . Carbon::now('Asia/Ho_Chi_Minh'); //chuỗi thời gian.
         $exp = explode("-", $iddate); //cắt chuỗi.
         $imp = implode('', $exp); //nối chuỗi
@@ -66,7 +71,7 @@ class NhanVienController extends Controller
         $data['diachi'] = ucwords($request->diachi);
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
-        $data['luong'] = $request->luong;
+        $data['luong'] = $luong;
         $data['tentaikhoan'] = $request->tentaikhoan;
         $data['password'] = bcrypt($request->password);
         $data['id_loainhanvien'] = $request->id_loainhanvien;
@@ -110,12 +115,17 @@ class NhanVienController extends Controller
 
     public function update(NhanVienRequest $request, $id) //cập nhật.  (chưa ajax)
     {
+        $luong = filter_var($request->luong, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
+        if ($luong > 2000000000) { // trả về nếu lớn hơn 2 tỷ.
+            return Response()->json(['errors' => 'Lương Phải Nằm Trong Khoảng 0 Đến 2.000.000.000']);
+        }
+
         $data['tennhanvien'] = ucwords($request->tennhanvien);
         $data['sdt'] = $request->sdt;
         $data['diachi'] = ucwords($request->diachi);
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
-        $data['luong'] = $request->luong;
+        $data['luong'] = $luong;
         $data['tentaikhoan'] = $request->tentaikhoan;
 
         $data['id_loainhanvien'] = $request->id_loainhanvien;
@@ -128,9 +138,9 @@ class NhanVienController extends Controller
             $data['password'] = bcrypt($request->password);
         }
         if ($request->hasFile('hinhanh')) { //kiểm tra xem có file không.
-            if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-                unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
-            }
+            // if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
+            //     unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
+            // }
             $file = $request->hinhanh; //lấy tên hình được gửi lên.
             $extension = $file->extension(); //lấy đui file.
             $path = 'uploads/NhanVien/'; //đường dẫn.
@@ -147,10 +157,10 @@ class NhanVienController extends Controller
 
     public function destroy($id) // xóa.
     {
-        $OldNhanVien = NhanVien::find($id); //lấy nhân viên củ
-        if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-            unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
-        }
+        // $OldNhanVien = NhanVien::find($id); //lấy nhân viên củ
+        // if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
+        //     unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
+        // }
         NhanVien::where(
             [['id', '!=', "NV00000000000000"], ['id', $id]]
         )->delete();

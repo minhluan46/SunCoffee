@@ -91,16 +91,16 @@ class Cart
         // 1,000    5,000   10,000     100,000
 
         if ($PhoneMember != null) {
-            if ($DiscountMember > 100000) {
+            if ($DiscountMember >= 100000) {
                 $this->PhoneMember = $PhoneMember;
                 $this->DiscountMember = $this->SubTotal * 0.1;
-            } elseif ($DiscountMember > 10000) {
+            } elseif ($DiscountMember >= 10000) {
                 $this->PhoneMember = $PhoneMember;
                 $this->DiscountMember = $this->SubTotal * 0.05;
-            } elseif ($DiscountMember > 5000) {
+            } elseif ($DiscountMember >= 5000) {
                 $this->PhoneMember = $PhoneMember;
                 $this->DiscountMember = $this->SubTotal * 0.03;
-            } elseif ($DiscountMember > 1000) {
+            } elseif ($DiscountMember >= 1000) {
                 $this->PhoneMember = $PhoneMember;
                 $this->DiscountMember = $this->SubTotal * 0.01;
             } else {

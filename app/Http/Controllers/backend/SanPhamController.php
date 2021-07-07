@@ -16,7 +16,7 @@ class SanPhamController extends Controller
     public function index() // danh sách.
     {
         $viewData = [
-            'SanPham' => SanPham::orderBy('created_at', 'desc')->paginate(3),
+            'SanPham' => SanPham::orderBy('created_at', 'desc')->paginate(10),
             'LoaiSanPham' => LoaiSanPham::all(),
         ];
         return view('backend.SanPham.index', $viewData);
@@ -116,11 +116,11 @@ class SanPhamController extends Controller
         if (empty($request->trangthai)) {
             $data['trangthai'] = 0;
         }
-        $OldSanPham = SanPham::find($id); //lấy sản phẩm củ.
+        // $OldSanPham = SanPham::find($id); //lấy sản phẩm củ.
         if ($request->hasFile('hinhanh')) { //kiểm tra xem có file không.
-            if ($OldSanPham->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-                unlink('uploads/SanPham/' . $OldSanPham->hinhanh); //xoá ảnh củ.
-            }
+            // if ($OldSanPham->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
+            //     unlink('uploads/SanPham/' . $OldSanPham->hinhanh); //xoá ảnh củ.
+            // }
             $file = $request->hinhanh; //lấy tên hình được gửi lên.
             $extension = $file->extension(); //lấy đui file.
             $path = 'uploads/SanPham/'; //đường dẫn.
@@ -137,10 +137,10 @@ class SanPhamController extends Controller
 
     public function destroy($id) //xóa.
     {
-        $OldSanPham = SanPham::find($id); //lấy sản phẩm củ.
-        if ($OldSanPham->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-            unlink('uploads/SanPham/' . $OldSanPham->hinhanh); //xoá ảnh củ.
-        }
+        // $OldSanPham = SanPham::find($id); //lấy sản phẩm củ.
+        // if ($OldSanPham->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
+        //     unlink('uploads/SanPham/' . $OldSanPham->hinhanh); //xoá ảnh củ.
+        // }
         ChiTietSanPham::where('id_sanpham', $id)->delete();
         SanPham::where('id', $id)->delete();
         return response()->json(['success' => 'Thành Công Rồi']);

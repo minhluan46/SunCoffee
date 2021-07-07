@@ -9,7 +9,7 @@
                 <div class="col-8 col-sm-8">
                     <h4><b>{{ $NhanVien->tennhanvien }} </b> <span>({{ $NhanVien->id }})</span></h4>
                     <h4><b>SĐT: </b> <span>{{ $NhanVien->sdt }}</span></h4>
-                    <h4><b>Lương: </b> <span>{{ $NhanVien->luong }}</span></h4>
+                    <h4><b>Lương: </b> <span>{{ number_format($NhanVien->luong, 0, ',', '.') }}</span></h4>
                     <h4><b>Giớ Tính: </b> <span>{{ $NhanVien->gioitinh == 1 ? 'Nam' : 'Nữ' }}</span></h4>
                     <h4><b>Ngày Sinh: </b> <span>{{ $NhanVien->ngaysinh }}</span></h4>
                     <h4><b>Loại Nhân Viên: </b> <span>

@@ -5,7 +5,19 @@
             <h4><b>Thời Gian Bắt Đầu: </b> <span>{{ $KhuyenMai->thoigianbatdau }}</span></h4>
             <h4><b>Thời Gian Kết Thúc: </b> <span>{{ $KhuyenMai->thoigianketthuc }}</span></h4>
             <h4><b>Mức Khuyến Mãi Tối Đa: </b> <span>{{ $KhuyenMai->muckhuyenmaitoida . '%' }}</span></h4>
-            <h4><b>Trạng Thái: </b> <span>{{ $KhuyenMai->trangthai == 1 ? 'Còn Khuyến Mãi' : 'Đã Hết' }}</span></h4>
+            <h4><b>Trạng Thái: </b> <span>{{ $KhuyenMai->trangthai == 1 ? 'Mở' : 'Khóa' }}</span></h4>
+            <h4><b>Tình Trạng: </b> <span>@isset($today)
+                        @if ($KhuyenMai->thoigianketthuc < $today)
+                            Kết Thúc
+                        @elseif ($KhuyenMai->trangthai == 0 && $KhuyenMai->thoigianketthuc >= $today)
+                            Đã Khóa
+                        @elseif ($KhuyenMai->thoigianbatdau > $today )
+                            Sắp Đến
+                        @else
+                            Đang Áp Dụng
+                        @endif
+                    @endisset
+                </span></h4>
             <h4><b>Mô Tả: </b> <span>{{ $KhuyenMai->mota }}</span></h4>
         </div>
     </div>
@@ -73,7 +85,7 @@
                             @endisset
                         </td>
                         <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
-                        <td>{{ number_format($valuectkm->giakhuyenmai) . 'VNĐ' }}</td>
+                        <td>{{ number_format($valuectkm->giakhuyenmai, 0, ',', '.') . 'VNĐ' }}</td>
                         <td>
                             <a href="javascript:(0)" class="action_btn mr_10 view-edit-CTKM"
                                 data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
