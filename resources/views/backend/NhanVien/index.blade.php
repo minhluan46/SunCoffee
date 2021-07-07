@@ -5,12 +5,13 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" href="{{ route('nhan-vien.create') }}">Thêm Mới</a>
+                <a class="btn btn-info" href="{{ route('loai-nhan-vien.index') }}">Loại Nhân Viên</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
                     <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Tìm..." name="search">
+                            <input type="text" placeholder="Tên, loại, sđt..." name="search">
                         </div>
                         <button id="form-search" data-url="{{ route('nhan-vien.search') }}" type="submit">
                             <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
@@ -55,8 +56,7 @@
                                             @foreach ($NhanVien as $value)
                                                 <tr id="{{ $value->id }}">
                                                     <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td><img src="{{ asset('uploads/NhanVien/' . $value->hinhanh) }}"
-                                                            style="width: 100px; height: 100px; border-radius: 5px;"></td>
+                                                    <td><img src="{{ asset('uploads/NhanVien/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;"></td>
                                                     <td>{{ $value->tennhanvien }}</td>
                                                     <td>{{ $value->sdt }}</td>
                                                     <td>
@@ -69,19 +69,13 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span
-                                                            class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Còn Làm' : 'Đã Nghỉ' }}</span>
                                                     </td>
                                                     <td>
-                                                        <a onclick="Show('{{ route('nhan-vien.show', $value->id) }}')"
-                                                            href="javascript:(0)" class="action_btn mr_10"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a href="{{ route('nhan-vien.edit', $value->id) }}"
-                                                            class="action_btn mr_10"><i class="fas fa-edit"></i></a>
-                                                        <a data-url="{{ route('nhan-vien.destroy', $value->id) }}"
-                                                            data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn form-delete"><i
+                                                        <a onclick="Show('{{ route('nhan-vien.show', $value->id) }}')" href="javascript:(0)" class="action_btn mr_10"><i class="fas fa-eye"></i></a>
+                                                        <a href="{{ route('nhan-vien.edit', $value->id) }}" class="action_btn mr_10"><i class="fas fa-edit"></i></a>
+                                                        <a data-url="{{ route('nhan-vien.destroy', $value->id) }}" data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn form-delete"><i
                                                                 class="fas fa-trash-alt"></i></a>
                                                     </td>
                                                 </tr>
@@ -104,8 +98,7 @@
     </div>
 @endsection
 @section('modal')
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -147,7 +140,7 @@
                         alertify.success("Đã Tìm");
                     },
                     error: function(response) {
-                        alertify.error("Lỗi");
+                        alertify.error("Lỗi Tìm Kiếm");
                     }
                 })
             } else {
@@ -166,7 +159,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Có Lỗi");
+                    alertify.error("Có Trang Chi Tiết");
                 }
             })
         };
@@ -181,7 +174,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Có Lỗi");
+                    alertify.error("Lỗi Nhân Viên Đang Được Sử Dụng");
                 }
             })
         };

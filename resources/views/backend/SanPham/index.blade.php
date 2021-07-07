@@ -5,12 +5,13 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" href="{{ route('san-pham.create') }}">Thêm Mới</a>
+                <a class="btn btn-info" href="{{ route('loai-san-pham.index') }}">Loại Sản Phẩm</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
                     <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Tìm..." name="search">
+                            <input type="text" placeholder="Tìm tên, loại, thẻ..." name="search">
                         </div>
                         <button id="form-search" data-url="{{ route('san-pham.search') }}" type="submit">
                             <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
@@ -55,8 +56,7 @@
                                             @foreach ($SanPham as $value)
                                                 <tr id="{{ $value->id }}">
                                                     <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td><img src="{{ asset('uploads/SanPham/' . $value->hinhanh) }}"
-                                                            style="width: 100px; height: 100px; border-radius: 5px;"></td>
+                                                    <td><img src="{{ asset('uploads/SanPham/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;"></td>
                                                     <td>{{ $value->tensanpham }}</td>
                                                     <td>{{ $value->the }}</td>
                                                     <td>
@@ -69,25 +69,19 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span
-                                                            class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Đang Bán' : 'Ngừng Bán' }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add"
-                                                            data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}"
-                                                            data-id="{{ $value->id }}"><i
-                                                                class="fas fa-plus-square"></i></a>
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}"
+                                                            data-id="{{ $value->id }}"><i class="fas fa-plus-square"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show"
-                                                            data-url="{{ route('san-pham.show', $value->id) }}"
-                                                            data-id="{{ $value->id }}"><i class="fas fa-eye"></i></a>
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('san-pham.show', $value->id) }}" data-id="{{ $value->id }}">
+                                                            <i class="fas fa-eye"></i></a>
 
-                                                        <a href="{{ route('san-pham.edit', $value->id) }}"
-                                                            class="action_btn mr_10"><i class="fas fa-edit"></i></a>
+                                                        <a href="{{ route('san-pham.edit', $value->id) }}" class="action_btn mr_10"><i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete"
-                                                            data-url="{{ route('san-pham.destroy', $value->id) }}"
+                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('san-pham.destroy', $value->id) }}"
                                                             data-id="{{ $value->id }}">
                                                             <i class="fas fa-trash-alt"></i></a>
                                                     </td>
@@ -112,8 +106,7 @@
 @endsection
 @section('modal')
     {{-- modal 500px --}}
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,8 +125,7 @@
         </div>
     </div>
     {{-- modal 800px --}}
-    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -223,9 +215,10 @@
             $('.money').simpleMoneyFormat(); // áp dụng cho class money.
         }
 
-        function Store() { // thêm.
+        function Store() { // thêm chi tiết.
             $('#form-create').on('click', function(e) {
                 e.preventDefault(); // dừng  sự kiện submit.
+                var url = "san-pham/" + $("input[name='id_sanpham']").val() + "/show"
                 $.ajax({
                     url: $(this).data('url'),
                     method: 'POST',
@@ -245,6 +238,7 @@
                         } else {
                             $("#exampleModal").modal('hide');
                             alertify.success(response.success);
+                            Show(url);
                         }
                     },
                     error: function(response) {

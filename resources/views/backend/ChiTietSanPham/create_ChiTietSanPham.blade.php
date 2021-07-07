@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Khích Thước<b style="color:red"> *</b></label>
+                <label>Kích Thước<b style="color:red"> *</b></label>
                 <input type="text" class='form-control' maxlength="50" name="kichthuoc">
             </div>
             <div class="form-group">

@@ -21,10 +21,10 @@
                                 class="text-muted font_s_13">{{ $item['CTSP']->kichthuoc }}</span>
                         </p>
                     </td>
-                    <td>{{ number_format($item['CTSP']->giasanpham) }} VNĐ</td>
-                    <td>{{ '-' . number_format($item['GiamGia']) }} VNĐ</td>
+                    <td>{{ number_format($item['CTSP']->giasanpham, 0, ',', '.') }} VNĐ</td>
+                    <td>{{ '-' . number_format($item['GiamGia'], 0, ',', '.') }} VNĐ</td>
                     <td>{{ $item['SoLuong'] }}</td>
-                    <td>{{ number_format($item['TongGia']) }} VNĐ</td>
+                    <td>{{ number_format($item['TongGia'], 0, ',', '.') }} VNĐ</td>
                     <td>
                         <a href="javascript:(0)" data-id="{{ $item['CTSP']->id }}" class="action_btn deleteItemCart">
                             <i class="far fa-times-circle"></i></a>
@@ -33,8 +33,8 @@
             @endforeach
         </tbody>
     </table>
-    <input hidden type="text" id="tongcong" value="{{ number_format(Session::get('GioHang')->totalPrice) }}">
-    <input hidden type="text" id="soluong" value="{{ number_format(Session::get('GioHang')->totalQuanty) }}">
-    <input hidden type="text" id="giamgia" value="{{ number_format(Session::get('GioHang')->totalDiscount) }}">
-    <input hidden type="text" id="thanhtien" value="{{ number_format(Session::get('GioHang')->Total) }}">
+    <input hidden type="text" id="tongcong" value="{{ number_format(Session::get('GioHang')->totalPrice, 0, ',', '.') }}">
+    <input hidden type="text" id="soluong" value="{{ number_format(Session::get('GioHang')->totalQuanty, 0, ',', '.') }}">
+    <input hidden type="text" id="giamgia" value="{{ number_format(Session::get('GioHang')->totalDiscount, 0, ',', '.') }}">
+    <input hidden type="text" id="thanhtien" value="{{ number_format(Session::get('GioHang')->Total, 0, ',', '.') }}">
 @endif

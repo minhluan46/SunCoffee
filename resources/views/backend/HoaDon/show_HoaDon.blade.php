@@ -1,20 +1,24 @@
 @if (isset($HoaDon))
-    <b>Mã:( <span style="color: red">{{ $HoaDon->id }}</span>)</b><br>
-    <b>Ngày Lập: </b>{{ $HoaDon->ngaylap }} <br>
-    <b>Tổng Tiền Hóa Đơn:</b> {{ number_format($HoaDon->tongtienhoadon) }}VNĐ <br>
-    <b>Giảm Giá: </b> {{ number_format($HoaDon->giamgia) }}VNĐ <br>
-    <b>Thành Tiền: </b> {{ number_format($HoaDon->thanhtien) }}VNĐ <br>
-
-    <b>Khách Hàng: </b> {{ $KhachHang->tenkhachhang }} <br>
-    <b>SĐT Khách Hàng: </b> {{ $HoaDon->sdtkhachhang }} <br>
-    <b>ĐC Khách Hàng: </b> {{ $HoaDon->diachikhachhang }} <br>
-    <b>Điểm Tích Lũy: </b> {{ number_format($HoaDon->diemtichluy) }} Điểm<br>
-    <b>Nhân Viên Bán Hàng: </b> {{ $NhanVien->tennhanvien }} <br>
-    <b>Trạng Thái: </b>{{ $HoaDon->trangthai == 1 ? 'Hoạt Động' : 'Ngừng' }} <br>
-
-    <b>Khách Hàng Ghi Chú: </b> {{ $HoaDon->khachhangghichu }}
-
+    <div class="row">
+        <div class="col-6 col-sm-6">
+            <h4><b>Mã: </b> <span>({{ $HoaDon->id }})</span></h4>
+            <h4><b>Ngày Lập: </b> <span>{{ $HoaDon->ngaylap }}</span></h4>
+            <h4><b>Tổng Tiền: </b> <span>{{ number_format($HoaDon->tongtienhoadon, 0, ',', '.') }}VNĐ</span></h4>
+            <h4><b>Giảm Giá: </b> <span>{{ number_format($HoaDon->giamgia, 0, ',', '.') }}VNĐ</span></h4>
+            <h4><b>Thành Tiền: </b> <span>{{ number_format($HoaDon->thanhtien, 0, ',', '.') }}VNĐ</span></h4>
+            <h4><b>Trạng Thái: </b> <span>{{ $HoaDon->trangthai == 1 ? 'Hoạt Động' : 'Ngừng' }}</span></h4>
+        </div>
+        <div class="col-6 col-sm-6">
+            <h4><b>Nhân Viên: </b> <span>{{ $NhanVien->tennhanvien }}</span></h4>
+            <h4><b>Khách Hàng: </b> <span>{{ $KhachHang->tenkhachhang }}</span></h4>
+            <h4><b>SĐT Khách Hàng: </b> <span>{{ $HoaDon->sdtkhachhang }}</span></h4>
+            <h4><b>ĐC Khách Hàng: </b> <span>{{ $HoaDon->diachikhachhang }}</span></h4>
+            <h4><b>Điểm Tích Lũy: </b> <span>{{ number_format($HoaDon->diemtichluy, 0, ',', '.') }} Điểm</span></h4>
+            <h4><b>Khách Hàng Ghi Chú: </b> <span>{{ $HoaDon->khachhangghichu }}</span></h4>
+        </div>
+    </div>
 @endif
+<hr>
 @if (isset($ChiTietHoaDon))
     <table class="table" style="text-align: center">
         <thead>
@@ -43,13 +47,13 @@
                     <td>
                         @foreach ($ChiTietSanPham as $itemCTSP)
                             @if ($itemCTSP->id == $item->id_chitietsanpham)
-                                {{  number_format($itemCTSP->giasanpham) }}VNĐ
+                                {{ number_format($itemCTSP->giasanpham, 0, ',', '.') }}VNĐ
                             @endif
                         @endforeach
                     </td>
-                    <td>{{  number_format($item->giamgia) }}VNĐ</td>
-                    <td>{{  number_format($item->soluong) }}</td>
-                    <td>{{  number_format($item->tonggiasanpham) }}VNĐ</td>
+                    <td>{{ number_format($item->giamgia, 0, ',', '.') }}VNĐ</td>
+                    <td>{{ number_format($item->soluong, 0, ',', '.') }}</td>
+                    <td>{{ number_format($item->tonggiasanpham, 0, ',', '.') }}VNĐ</td>
                 </tr>
             @endforeach
         </tbody>

@@ -30,7 +30,6 @@ class NhanVienRequest extends FormRequest
             'ngaysinh' => 'required',
             'gioitinh' => 'required',
             'hinhanh' => 'image|max:2048',
-            'luong' => 'required|integer|between:0,1000000000',
             'tentaikhoan' => 'required|min:2',
             'password' => 'required|min:5',
             'password_confirm' => 'required|same:password',
@@ -54,10 +53,6 @@ class NhanVienRequest extends FormRequest
 
             'hinhanh.image' => 'Hãy Chọn Một Tệp Hình Ảnh',
             'hinhanh.max' => 'Tệp Hình Ảnh Không Được Lớn Hơn 2MB',
-
-            'luong.required' => 'Lương Không Được Để Trống',
-            'luong.integer' => 'Lương Phải Nằm Trong Khoảng 0 Đến 1.000.000.000',
-            'luong.between' => 'Lương Phải Nằm Trong Khoảng 0 Đến 1.000.000.000',
 
             'tentaikhoan.required' => 'Tên Tài Khoản Không Được Để Trống',
             'tentaikhoan.min' => 'Tên Tài Khoản Phải Nhỏ Hơn 2 Ký Tự',

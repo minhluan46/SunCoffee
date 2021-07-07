@@ -4,9 +4,30 @@ use Illuminate\Support\Facades\Route;
 
 //////////////////////////////      frontend      //////////////////////////////
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['namespace' => 'frontend'], function () {
+    // trang chủ
+
+    Route::get('/', 'TrangChuController@index')->name('Trangchu.index');
+    // Sản Phẩm
+
+    Route::get('/san-pham', 'SanPhamController@index')->name('SanPham.index');
+    Route::get('/chi-tiet/{id}', 'SanPhamController@show')->name('SanPham.show');
+    // Dịch Vụ
+
+    Route::get('/dich-vu', 'DichVuController@index')->name('DichVu.index');
+    // Về Chúng Tôi
+
+    Route::get('/ve-chung-toi', 'VeChungToiController@index')->name('VeChungToi.index');
+    // Liên lạc
+
+    Route::get('/lien-lac', 'LienLacController@index')->name('LienLac.index');
+    // Giỏ hàng
+
+    Route::get('/gio-hang', 'GioHangController@index')->name('GioHang.index');
+    Route::get('/thanh-toan', 'GioHangController@show')->name('GioHang.show');
 });
+
+
 //////////////////////////////        Login       //////////////////////////////
 
 Route::group(['namespace' => 'Auth'], function () {
@@ -119,46 +140,36 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::put('/{idCTSP}/{idKM}/update', 'ChiTietKhuyenMaiController@update')->name('chi-tiet-khuyen-mai.update'); //cập nhật chi tiết.
         Route::get('/{idCTSP}/{idKM}/delete', 'ChiTietKhuyenMaiController@destroy')->name('chi-tiet-khuyen-mai.destroy'); //xóa chi tiết.
     });
+    // hóa đơn.
+
+    Route::group(['prefix' => 'hoa-don'], function () {
+        Route::get('/', 'HoaDonController@index')->name('hoa-don.index'); // đến trang danh sách.
+        Route::get('/create', 'HoaDonController@create')->name('hoa-don.create'); // đến trang thêm.
+        Route::get('priceProduct/{id}', 'HoaDonController@priceProduct')->name('hoa-don.priceProduct'); // lấy giá sản phẩm.
+        Route::get('discountProduct/{id}', 'HoaDonController@discountProduct')->name('hoa-don.discountProduct'); //lấy giảm giá khuyến mãi.
+        Route::get('addCart/{id}', 'HoaDonController@addCart')->name('hoa-don.addCart'); // thêm vào GioHang.
+        Route::get('quantityChange/{id}/{quantity}', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange'); // thay đổi số lượng SP trong GioHang.
+        Route::get('deleteItemHoaDon/{id}', 'HoaDonController@deleteItemHoaDon')->name('hoa-don.deleteItemHoaDon'); // xóa khổi GioHang.
+        Route::get('searchProduct', 'HoaDonController@searchProduct')->name('hoa-don.searchProduct'); // tìm sản phẩm.
+        Route::get('payment', 'HoaDonController@payment')->name('hoa-don.payment'); // đến trang thanh toán.
+        Route::get('searchCustomer', 'HoaDonController@searchCustomer')->name('hoa-don.searchCustomer'); // tìm khách hàng.
+        Route::get('discountMember', 'HoaDonController@discountMember')->name('hoa-don.discountMember'); // lấy giảm giá thành viên.
+        Route::get('in', 'HoaDonController@in')->name('hoa-don.in'); // tạo hóa đơn.
+        Route::get('/show/{id}', 'HoaDonController@show')->name('hoa-don.show'); // chi tiết.
+        Route::put('updateStatus/{id}', 'HoaDonController@updateStatus')->name('hoa-don.updateStatus'); // cập nhật trạng thái.
+        Route::get('destroy/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy'); // xóa.
+        Route::get('/search', 'HoaDonController@search')->name('hoa-don.search'); // tìm.
 
 
 
-
-
-
-
-
-
-
+        Route::post('update/{id}', 'HoaDonController@update')->name('hoa-don.update');
+        Route::post('/store', 'HoaDonController@store')->name('hoa-don.store');
+        Route::get('/edit/{id}', 'HoaDonController@edit')->name('hoa-don.edit');
+    });
 
 
 
     // Thống kê.
 
     Route::get('/', 'HomeController@index')->name('home.index');
-    // hóa đơn.
-
-    Route::group(['prefix' => 'hoa-don'], function () {
-        Route::get('/', 'HoaDonController@index')->name('hoa-don.index'); // đến trang danh sách.
-        Route::get('/create', 'HoaDonController@create')->name('hoa-don.create'); // đến trang thêm.
-        Route::post('/store', 'HoaDonController@store')->name('hoa-don.store'); // tạo.
-        Route::get('/show/{id}', 'HoaDonController@show')->name('hoa-don.show'); // hiện modal chi tiết.
-        Route::get('/edit/{id}', 'HoaDonController@edit')->name('hoa-don.edit');
-        Route::post('update/{id}', 'HoaDonController@update')->name('hoa-don.update');
-        Route::get('destroy/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy'); // xóa. (chưa có ajax)
-        Route::get('priceProduct/{id}', 'HoaDonController@priceProduct')->name('hoa-don.priceProduct'); // lấy giá sản phẩm. (nên tối ưu với giảm giá)
-        Route::get('discountProduct/{id}', 'HoaDonController@discountProduct')->name('hoa-don.discountProduct'); //lấy giảm giá khuyến mãi. (chưa sử lý ngày hết hạng)
-        Route::get('searchProduct', 'HoaDonController@searchProduct')->name('hoa-don.searchProduct'); // tìm sản phẩm. ()
-        Route::get('addCart/{id}', 'HoaDonController@addCart')->name('hoa-don.addCart'); // thêm vào GioHang.
-        Route::get('deleteItemHoaDon/{id}', 'HoaDonController@deleteItemHoaDon')->name('hoa-don.deleteItemHoaDon'); // xóa khổi GioHang.
-        Route::get('quantityChange/{id}/{quantity}', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange'); // thay đổi số lượng SP trong GioHang.
-        Route::get('payment', 'HoaDonController@payment')->name('hoa-don.payment'); // đến trang thanh toán.
-        Route::get('discountMember', 'HoaDonController@discountMember')->name('hoa-don.discountMember'); // lấy giảm giá thành viên.
-        Route::get('in', 'HoaDonController@in')->name('hoa-don.in'); // tạo hóa đơn. (nên chuyển về hoa-don.store)
-        Route::get('searchCustomer', 'HoaDonController@searchCustomer')->name('hoa-don.searchCustomer'); // tìm khách hàng.
-    });
-    //////////////////////////////        chưa sử lý       //////////////////////////////
-    // chi tiết hóa đơn.
-
-    Route::resource('chi-tiet-hoa-don', 'ChiTietHoaDonController')->except(['destroy']);
-    Route::get('chi-tiet-hoa-don/{id}/delete', 'ChiTietHoaDonController@destroy')->name('chi-tiet-hoa-don.destroy');
 });

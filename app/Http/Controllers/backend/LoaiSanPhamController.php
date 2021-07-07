@@ -15,7 +15,7 @@ class LoaiSanPhamController extends Controller
     public function index() //danh sách.
     {
         $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(5),
+            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.LoaiSanPham.index', $viewData);
     }
@@ -23,7 +23,7 @@ class LoaiSanPhamController extends Controller
     public function load() // tải lại.
     {
         $viewData = [
-            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(5),
+            'LoaiSanPham' => LoaiSanPham::orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.LoaiSanPham.load_LoaiSanPham', $viewData);
     }

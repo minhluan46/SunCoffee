@@ -20,6 +20,7 @@ class KhuyenMaiController extends Controller
     {
         $viewData = [
             'KhuyenMai' => KhuyenMai::orderBy('created_at', 'desc')->paginate(10),
+            'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
         ];
         return view('backend.KhuyenMai.index', $viewData);
     }
@@ -85,6 +86,7 @@ class KhuyenMaiController extends Controller
     {
         $viewData = [
             'KhuyenMai' => KhuyenMai::orderBy('created_at', 'desc')->paginate(10),
+            'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
         ];
         return view('backend.KhuyenMai.load_KhuyenMai', $viewData);
     }
@@ -97,6 +99,7 @@ class KhuyenMaiController extends Controller
             'ChiTietSanPham' => ChiTietSanPham::all(),
             'LoaiSanPham' => LoaiSanPham::all(),
             'ChiTietKhuyenMai' => ChiTietKhuyenMai::where('id_khuyenmai', $id)->orderBy('updated_at', 'desc')->get(),
+            'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
         ];
         return view('backend.KhuyenMai.show_KhuyenMai', $viewData);
     }
@@ -168,7 +171,19 @@ class KhuyenMaiController extends Controller
     {
         $KhuyenMai = KhuyenMai::find($id);
         $trangthai = $KhuyenMai->trangthai == 1 ? 'bg-success' : 'bg-danger';
-        $trangthaitext = $KhuyenMai->trangthai == 1 ? 'Còn Khuyến Mãi' : 'Đã Hết';
+        $trangthaitext = $KhuyenMai->trangthai == 1 ? 'Mở' : 'Khóa';
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+
+
+        if ($KhuyenMai->thoigianketthuc < $today) {
+            $tinhtrang = "<span class='badge rounded-pill bg-danger'>Kết Thúc</span>";
+        } elseif ($KhuyenMai->trangthai == 0 && $KhuyenMai->thoigianketthuc >= $today) {
+            $tinhtrang = "<span class='badge rounded-pill bg-warning'>Đã Khóa</span>";
+        } elseif ($KhuyenMai->thoigianbatdau > $today) {
+            $tinhtrang = "<span class='badge rounded-pill bg-info'>Sắp Đến</span>";
+        } else {
+            $tinhtrang = "<span class='badge rounded-pill bg-primary'>Đang Áp Dụng</span>";
+        }
         $output = "
         <td style='text-align: left'>" . $KhuyenMai->id . "</td>
         <td>" . $KhuyenMai->tenkhuyenmai . "</td>
@@ -178,6 +193,7 @@ class KhuyenMaiController extends Controller
         <td>
             <span class='badge rounded-pill " . $trangthai . "'> " . $trangthaitext . "</span>
         </td>
+        <td>" . $tinhtrang . "</td>
         <td>
             <a href='javascript:(0)' class='action_btn mr_10 view-add'
                 data-url='" . route('chi-tiet-khuyen-mai.create', $KhuyenMai->id) . "'
@@ -213,6 +229,7 @@ class KhuyenMaiController extends Controller
     {
         $viewData = [
             'KhuyenMai' => KhuyenMai::where('tenkhuyenmai', 'like', '%' . $request->search . '%')->orderBy('created_at', 'desc')->get(),
+            'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
         ];
         return view('backend.KhuyenMai.load_KhuyenMai', $viewData);
     }

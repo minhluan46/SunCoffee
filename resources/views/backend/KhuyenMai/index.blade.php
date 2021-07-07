@@ -11,7 +11,7 @@
                 <div class="search_inner">
                     <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Tìm Theo Tên..." name="search">
+                            <input type="text" placeholder="Tên..." name="search">
                         </div>
                         <button id="form-search" data-url="{{ route('khuyen-mai.search') }}" type="submit">
                             <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
@@ -41,6 +41,7 @@
                                             <th scope="col">Kết Thúc</th>
                                             <th scope="col">Lên Đến</th>
                                             <th scope="col">Trạng Thái</th>
+                                            <th scope="col">Tình Trạng</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
                                     </thead>
@@ -54,28 +55,34 @@
                                                     <td>{{ $value->thoigianketthuc }}</td>
                                                     <td>{{ $value->muckhuyenmaitoida }}%</td>
                                                     <td>
-                                                        <span
-                                                            class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $value->trangthai == 1 ? 'Còn Khuyến Mãi' : 'Đã Hết' }}</span>
+                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                            {{ $value->trangthai == 1 ? 'Mở' : 'Khóa' }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add"
-                                                            data-url="{{ route('chi-tiet-khuyen-mai.create', $value->id) }}"
+                                                        @isset($today)
+                                                            @if ($value->thoigianketthuc < $today)
+                                                                <span class="badge rounded-pill bg-danger">Kết Thúc</span>
+                                                            @elseif ($value->trangthai == 0 && $value->thoigianketthuc >= $today)
+                                                                <span class="badge rounded-pill bg-warning">Đã Khóa</span>
+                                                            @elseif ($value->thoigianbatdau > $today )
+                                                                <span class="badge rounded-pill bg-info">Sắp Đến</span>
+                                                            @else
+                                                                <span class="badge rounded-pill bg-primary">Đang Áp Dụng</span>
+                                                            @endif
+                                                        @endisset
+                                                    </td>
+                                                    <td>
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-khuyen-mai.create', $value->id) }}"
                                                             data-id="{{ $value->id }}">
                                                             <i class="fas fa-plus-square"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show"
-                                                            data-url="{{ route('khuyen-mai.show', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('khuyen-mai.show', $value->id) }}" data-id="{{ $value->id }}">
                                                             <i class="fas fa-eye"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit"
-                                                            data-url="{{ route('khuyen-mai.edit', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('khuyen-mai.edit', $value->id) }}" data-id="{{ $value->id }}">
                                                             <i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete"
-                                                            data-url="{{ route('khuyen-mai.destroy', $value->id) }}"
+                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('khuyen-mai.destroy', $value->id) }}"
                                                             data-id="{{ $value->id }}">
                                                             <i class="fas fa-trash-alt"></i></a>
                                                     </td>
@@ -100,8 +107,7 @@
 @endsection
 @section('modal')
     {{-- modal 500px --}}
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -120,8 +126,7 @@
         </div>
     </div>
     {{-- modal 800px --}}
-    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,9 +148,11 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/vendors/select2/dist/css/select2.min.css') }}">
 @endsection
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script src="{{ asset('backend/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
         function Create(url) { // trang thêm.
             $.ajax({
@@ -160,7 +167,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Create");
+                    alertify.error("Lỗi Trang Thêm Mới");
                 }
             })
         };
@@ -191,7 +198,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi Store");
+                        alertify.error("Lỗi Thêm Mới");
                     }
                 })
             })
@@ -222,7 +229,7 @@
                         alertify.success("Đã Tìm");
                     },
                     error: function(response) {
-                        alertify.error("Lỗi");
+                        alertify.error("Lỗi Tìm Kiếm");
                     }
                 })
             } else {
@@ -230,7 +237,7 @@
             }
         });
 
-        function CreateCTKM(url) { // trang chi tiết.
+        function CreateCTKM(url) { // trang thêm chi tiết.
             $.ajax({
                 url: url,
                 method: 'GET',
@@ -239,11 +246,16 @@
                     $('.modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Khuyến Mãi");
                     $("#exampleModal").modal('show');
+                    $(document).ready(function() {
+                        $("#select-sanpham").select2({
+                            width: 'resolve',
+                        });
+                    });
                     StoreCTKM();
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi CreateCTKM");
+                    alertify.error("Lỗi Trang Thêm Chi Tiết");
                 }
             })
         };
@@ -263,7 +275,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Show");
+                    alertify.error("Lỗi Trang Chi Tiết");
                 }
             })
         };
@@ -296,7 +308,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi Store");
+                        alertify.error("Lỗi Thêm Chi Tiết");
                     }
                 })
             })
@@ -314,7 +326,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Create");
+                    alertify.error("Lỗi Trang Cập Nhật");
                 }
             })
         };
@@ -349,7 +361,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi Update");
+                        alertify.error("Lỗi Cập Nhật");
                     }
                 })
             })
@@ -375,7 +387,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Delete");
+                    alertify.error("Lỗi Khuyến Mãi Dang Được Sử Dụng");
                 }
             })
         };
@@ -398,7 +410,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi EditCTKM");
+                    alertify.error("Lỗi Trang Cập Nhật Chi Tiét");
                 }
             })
         };
@@ -432,7 +444,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi Update");
+                        alertify.error("Lỗi Cập Nhật Chi Tiết");
                     }
                 })
 
@@ -449,7 +461,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi DeleteCTKM");
+                    alertify.error("Lỗi Chi Tiết Khuyến Mãi Dang Được Sử Dụng");
                 }
             })
         };
