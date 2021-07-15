@@ -15,7 +15,7 @@ class CreateChiTietSanPhamsTable extends Migration
     {
         Schema::create('chi_tiet_san_pham', function (Blueprint $table) {
             $table->char('id', 18);
-            $table->string('kichthuoc', 50);
+            $table->string('kichthuoc', 18);
             $table->integer('soluong');
             $table->integer('giasanpham');
             $table->date('ngaysanxuat');
@@ -23,7 +23,7 @@ class CreateChiTietSanPhamsTable extends Migration
             $table->char('id_sanpham', 18);
             $table->boolean('trangthai');
             $table->timestamps();
-            
+
             $table->primary('id');
             $table->foreign('id_sanpham')->references('id')->on('san_pham');
         });

@@ -39,8 +39,6 @@
                                             <th scope="col">Tên Khuyến Mãi</th>
                                             <th scope="col">Bắt đầu</th>
                                             <th scope="col">Kết Thúc</th>
-                                            <th scope="col">Lên Đến</th>
-                                            <th scope="col">Trạng Thái</th>
                                             <th scope="col">Tình Trạng</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
@@ -51,13 +49,8 @@
                                                 <tr id="{{ $value->id }}">
                                                     <td style="text-align: left">{{ $value->id }}</td>
                                                     <td>{{ $value->tenkhuyenmai }}</td>
-                                                    <td>{{ $value->thoigianbatdau }}</td>
-                                                    <td>{{ $value->thoigianketthuc }}</td>
-                                                    <td>{{ $value->muckhuyenmaitoida }}%</td>
-                                                    <td>
-                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $value->trangthai == 1 ? 'Mở' : 'Khóa' }}</span>
-                                                    </td>
+                                                    <td>{{ Date_format(Date_create($value->thoigianbatdau), 'd/m/Y') }}</td>
+                                                    <td>{{ Date_format(Date_create($value->thoigianketthuc), 'd/m/Y') }}</td>
                                                     <td>
                                                         @isset($today)
                                                             @if ($value->thoigianketthuc < $today)
@@ -72,19 +65,27 @@
                                                         @endisset
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-khuyen-mai.create', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
-                                                            <i class="fas fa-plus-square"></i></a>
+                                                        @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-khuyen-mai.create', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-plus-square"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('khuyen-mai.show', $value->id) }}" data-id="{{ $value->id }}">
-                                                            <i class="fas fa-eye"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('khuyen-mai.show', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-eye"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('khuyen-mai.edit', $value->id) }}" data-id="{{ $value->id }}">
-                                                            <i class="fas fa-edit"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('khuyen-mai.edit', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('khuyen-mai.destroy', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
-                                                            <i class="fas fa-trash-alt"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('khuyen-mai.destroy', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-trash-alt"></i></a>
+                                                        @else
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('khuyen-mai.show', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-eye"></i></a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -120,7 +121,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -139,7 +139,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -159,15 +158,13 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-
                     $('.modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Khuyến Mãi");
                     $("#exampleModal").modal('show');
                     Store();
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Trang Thêm Mới");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -184,7 +181,6 @@
                         tenkhuyenmai: $("input[name='tenkhuyenmai']").val(),
                         thoigianbatdau: $("input[name='thoigianbatdau']").val(),
                         thoigianketthuc: $("input[name='thoigianketthuc']").val(),
-                        muckhuyenmaitoida: $("input[name='muckhuyenmaitoida']").val(),
                         mota: $("textarea[name='mota']").val(),
                     },
                     success: function(response) {
@@ -197,7 +193,6 @@
                         }
                     },
                     error: function(response) {
-
                         alertify.error("Lỗi Thêm Mới");
                     }
                 })
@@ -242,7 +237,6 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-
                     $('.modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Khuyến Mãi");
                     $("#exampleModal").modal('show');
@@ -254,8 +248,7 @@
                     StoreCTKM();
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Trang Thêm Chi Tiết");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -274,8 +267,7 @@
                     $("#exampleModal2").modal('show');
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Trang Chi Tiết");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -295,7 +287,6 @@
                         id_khuyenmai: $("input[name='id_khuyenmai']").val(),
                         id_chitietsanpham: $("select[name='id_chitietsanpham']").val(),
                         muckhuyenmai: $("input[name='muckhuyenmai']").val(),
-                        giakhuyenmai: $("input[name='giakhuyenmai']").val(),
                     },
                     success: function(response) {
                         if (response.errors) {
@@ -307,8 +298,7 @@
                         }
                     },
                     error: function(response) {
-
-                        alertify.error("Lỗi Thêm Chi Tiết");
+                        alertify.error("Lỗi Thêm Mới");
                     }
                 })
             })
@@ -325,8 +315,7 @@
                     Update();
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Trang Cập Nhật");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -347,7 +336,6 @@
                         tenkhuyenmai: $("input[name='tenkhuyenmai']").val(),
                         thoigianbatdau: $("input[name='thoigianbatdau']").val(),
                         thoigianketthuc: $("input[name='thoigianketthuc']").val(),
-                        muckhuyenmaitoida: $("input[name='muckhuyenmaitoida']").val(),
                         mota: $("textarea[name='mota']").val(),
                     },
                     success: function(response) {
@@ -360,7 +348,6 @@
                         }
                     },
                     error: function(response) {
-
                         alertify.error("Lỗi Cập Nhật");
                     }
                 })
@@ -386,8 +373,7 @@
                     alertify.success(response.success);
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Khuyến Mãi Dang Được Sử Dụng");
+                    alertify.error("Khuyến Mãi Này Đã Được Sử Dụng");
                 }
             })
         };
@@ -409,8 +395,7 @@
                     UpdateCTKM();
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Trang Cập Nhật Chi Tiét");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -431,7 +416,6 @@
                         id_khuyenmai: $("input[name='id_khuyenmai']").val(),
                         id_chitietsanpham: $("input[name='id_chitietsanpham']").val(),
                         muckhuyenmai: $("input[name='muckhuyenmai']").val(),
-                        giakhuyenmai: $("input[name='giakhuyenmai']").val(),
                     },
                     success: function(response) {
                         if (response.errors) {
@@ -443,8 +427,7 @@
                         }
                     },
                     error: function(response) {
-
-                        alertify.error("Lỗi Cập Nhật Chi Tiết");
+                        alertify.error("Lỗi Cập Nhật");
                     }
                 })
 
@@ -460,8 +443,7 @@
                     Show('khuyen-mai/' + idkm + '/show');
                 },
                 error: function(response) {
-
-                    alertify.error("Lỗi Chi Tiết Khuyến Mãi Dang Được Sử Dụng");
+                    alertify.error("Chi Tiết Khuyến Mãi Này Đã Được Sử Dụng");
                 }
             })
         };

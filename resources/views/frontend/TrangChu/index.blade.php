@@ -128,15 +128,15 @@
             </div>
             {{--  --}}
             <div class="productnew-slider owl-carousel">
-                @isset($CaPheBanChayNhatHienNay)
-                    @foreach ($CaPheBanChayNhatHienNay as $item)
+                @isset($CaPheHatBanChayNhat)
+                    @foreach ($CaPheHatBanChayNhat as $item)
                         <div class="menu-entry menu-entry-slider">
                             <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
                             <div class="text text-center pt-4">
                                 <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                 <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
                                 </p>
-                                <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ</a></p>
+                                <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ Hàng</a></p>
                             </div>
                         </div>
                     @endforeach

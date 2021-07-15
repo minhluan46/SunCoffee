@@ -30,7 +30,7 @@ class NhanVienRequest extends FormRequest
             'ngaysinh' => 'required',
             'gioitinh' => 'required',
             'hinhanh' => 'image|max:2048',
-            'tentaikhoan' => 'required|min:2',
+            'email' => 'required|email:rfc,dns',
             'password' => 'required|min:5',
             'password_confirm' => 'required|same:password',
             'id_loainhanvien' => 'required',
@@ -44,6 +44,9 @@ class NhanVienRequest extends FormRequest
             'sdt.required' => 'Số Điện Thoại Không Được Bỏ Trống',
             'sdt.unique' => 'Số Điện Thoại Đã Tồ Tại',
             'sdt.min' => 'Số Điện Thoại Không Đủ 10 Số',
+
+            'email.required' => 'Email Không Được Bỏ Trống',
+            'email.email' => 'Email Không Hợp Lệ',
 
             'diachi.required' => 'Địa Chỉ Không Được Để Trống',
 

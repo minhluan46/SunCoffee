@@ -3,9 +3,22 @@
     class="nav-item active"
 @endsection
 @section('content')
+    {{-- Thông báo thêm thành công --}}
+    @if (session('success'))
+        <input type="text" class="success-addCartOnline" id="success-addCartOnline" value="{{ session('success') }}" hidden>
+    @endif
+    @if (session('error'))
+        <input type="text" class="error-addCartOnline" id="error-addCartOnline" value="{{ session('errors') }}" hidden>
+    @endif
+    @if (session('warning'))
+        <input type="text" class="warning-addCartOnline" id="warning-addCartOnline" value="{{ session('warning') }}" hidden>
+    @endif
+    @if (session('message'))
+        <input type="text" class="message-addCartOnline" id="message-addCartOnline" value="{{ session('message') }}" hidden>
+    @endif
+    {{--  --}}
     <section class="home-slider owl-carousel">
-        <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});"
-            data-stellar-background-ratio="0.5">
+        <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});" data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
                 <div class="row slider-text justify-content-center align-items-center">
@@ -22,7 +35,6 @@
     {{--  --}}
     <section class="ftco-menu mb-5 pb-5">
         <div class="container">
-
             <div class="row d-md-flex">
                 <div class="col-lg-12">
                     <div class="row">
@@ -81,8 +93,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -93,8 +104,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -105,8 +115,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -117,8 +126,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -136,8 +144,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -148,8 +155,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -160,8 +166,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -172,8 +177,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -191,8 +195,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -203,8 +206,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -215,8 +217,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -227,8 +228,7 @@
                                 </div>
                                 <div class="col-md-4  menu-t">
                                     <div class="menu-entry">
-                                        <a href="#" class="img"
-                                            style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
                                         <div class="text text-center pt-4">
                                             <h3><a href="#">Coffee Capuccino</a></h3>
                                             <p class="price"><span>10.000 VNĐ</span></p>
@@ -247,4 +247,25 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/css/css.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
+@endsection
+@section('script')
+    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            if ($('#success-addCartOnline').hasClass('success-addCartOnline')) {
+                alertify.success($('#success-addCartOnline').val());
+            }
+            if ($('#error-addCartOnline').hasClass('error-addCartOnline')) {
+                alertify.error($('#error-addCartOnline').val());
+            }
+            if ($('#warning-addCartOnline').hasClass('warning-addCartOnline')) {
+                alertify.warning($('#warning-addCartOnline').val());
+            }
+            if ($('#message-addCartOnline').hasClass('message-addCartOnline')) {
+                alertify.message($('#message-addCartOnline').val());
+            }
+        };
+    </script>
 @endsection

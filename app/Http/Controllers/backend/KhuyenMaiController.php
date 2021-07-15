@@ -38,7 +38,6 @@ class KhuyenMaiController extends Controller
                 'tenkhuyenmai' => 'required',
                 'thoigianbatdau' => 'required|date',
                 'thoigianketthuc' => 'required|date|after:thoigianbatdau',
-                'muckhuyenmaitoida' => 'required',
                 'mota' => 'required',
             ],
             [
@@ -50,8 +49,6 @@ class KhuyenMaiController extends Controller
                 'thoigianketthuc.required' => 'Thời Gian Kết Thúc Không Được Để Trống',
                 'thoigianketthuc.date' => 'Thời Gian Kết Thúc Không Đúng Đinh Dạng Ngày',
                 'thoigianketthuc.after' => 'Thời Gian Kết Thúc Phải Sau Thời Gian Bắt Đầu',
-
-                'muckhuyenmaitoida.required' => 'Mức Khuyến Mãi Tối Đa Không Được Để Trống',
 
                 'mota.required' => 'Mô Tả Không Được Để Trống',
             ]
@@ -71,7 +68,6 @@ class KhuyenMaiController extends Controller
         $data['tenkhuyenmai'] = $request->tenkhuyenmai;
         $data['thoigianbatdau'] = $request->thoigianbatdau;
         $data['thoigianketthuc'] = $request->thoigianketthuc;
-        $data['muckhuyenmaitoida'] = $request->muckhuyenmaitoida;
         $data['mota'] = $request->mota;
         if ($request->trangthai == "2") {
             $data['trangthai'] = 1;
@@ -93,13 +89,24 @@ class KhuyenMaiController extends Controller
 
     public function show($id) // chi tiết.
     {
+
+        $ChiTietKhuyenMai = ChiTietKhuyenMai::where('chi_tiet_khuyen_mai.id_khuyenmai', $id)
+            ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_khuyen_mai.id_chitietsanpham')
+            ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+            ->join('loai_san_pham', 'loai_san_pham.id', '=', 'san_pham.id_loaisanpham')
+            ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+            ->select(
+                'chi_tiet_khuyen_mai.*',
+                'san_pham.tensanpham',
+                'loai_san_pham.tenloaisanpham',
+                'quy_cach.tenquycach',
+            )->orderBy('updated_at', 'desc')
+            ->get();
         $viewData = [
-            'KhuyenMai' => KhuyenMai::find($id),
-            'SanPham' => SanPham::all(),
-            'ChiTietSanPham' => ChiTietSanPham::all(),
-            'LoaiSanPham' => LoaiSanPham::all(),
-            'ChiTietKhuyenMai' => ChiTietKhuyenMai::where('id_khuyenmai', $id)->orderBy('updated_at', 'desc')->get(),
             'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
+            'KhuyenMai' => KhuyenMai::find($id),
+            'ChiTietKhuyenMai' => $ChiTietKhuyenMai,
+
         ];
         return view('backend.KhuyenMai.show_KhuyenMai', $viewData);
     }
@@ -120,7 +127,6 @@ class KhuyenMaiController extends Controller
                 'tenkhuyenmai' => 'required',
                 'thoigianbatdau' => 'required|date',
                 'thoigianketthuc' => 'required|date|after:thoigianbatdau',
-                'muckhuyenmaitoida' => 'required',
                 'mota' => 'required',
             ],
             [
@@ -133,8 +139,6 @@ class KhuyenMaiController extends Controller
                 'thoigianketthuc.date' => 'Thời Gian Kết Thúc Không Đúng Đinh Dạng Ngày',
                 'thoigianketthuc.after' => 'Thời Gian Kết Thúc Phải Sau Thời Gian Bắt Đầu',
 
-                'muckhuyenmaitoida.required' => 'Mức Khuyến Mãi Tối Đa Không Được Để Trống',
-
                 'mota.required' => 'Mô Tả Không Được Để Trống',
             ]
         );
@@ -145,7 +149,6 @@ class KhuyenMaiController extends Controller
         $data['tenkhuyenmai'] = $request->tenkhuyenmai;
         $data['thoigianbatdau'] = $request->thoigianbatdau;
         $data['thoigianketthuc'] = $request->thoigianketthuc;
-        $data['muckhuyenmaitoida'] = $request->muckhuyenmaitoida;
         $data['mota'] = $request->mota;
         $data['trangthai'] = $request->trangthai;
 
@@ -170,8 +173,6 @@ class KhuyenMaiController extends Controller
     public function loadUpdate($id) //tải cập nhật.
     {
         $KhuyenMai = KhuyenMai::find($id);
-        $trangthai = $KhuyenMai->trangthai == 1 ? 'bg-success' : 'bg-danger';
-        $trangthaitext = $KhuyenMai->trangthai == 1 ? 'Mở' : 'Khóa';
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
 
 
@@ -187,12 +188,8 @@ class KhuyenMaiController extends Controller
         $output = "
         <td style='text-align: left'>" . $KhuyenMai->id . "</td>
         <td>" . $KhuyenMai->tenkhuyenmai . "</td>
-        <td>" . $KhuyenMai->thoigianbatdau . "</td>
-        <td>" . $KhuyenMai->thoigianketthuc . "</td>
-        <td>" . $KhuyenMai->muckhuyenmaitoida . "%</td>
-        <td>
-            <span class='badge rounded-pill " . $trangthai . "'> " . $trangthaitext . "</span>
-        </td>
+        <td>" . Date_format(Date_create($KhuyenMai->thoigianbatdau), 'd/m/Y') . "</td>
+        <td>" . Date_format(Date_create($KhuyenMai->thoigianketthuc), 'd/m/Y') . "</td>
         <td>" . $tinhtrang . "</td>
         <td>
             <a href='javascript:(0)' class='action_btn mr_10 view-add'

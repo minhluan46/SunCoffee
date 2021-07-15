@@ -18,7 +18,7 @@ class CreateSanPhamsTable extends Migration
             $table->string('tensanpham', 100);
             $table->char('hinhanh', 25);
             $table->text('mota')->nullable();
-            $table->string('the', 50)->nullable();
+            $table->string('the', 50);
             $table->char('id_loaisanpham', 18);
             $table->boolean('trangthai');
             $table->timestamps();

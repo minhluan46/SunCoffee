@@ -18,7 +18,6 @@ class CreateKhuyenMaisTable extends Migration
             $table->string('tenkhuyenmai', 100);
             $table->date('thoigianbatdau');
             $table->date('thoigianketthuc');
-            $table->integer('muckhuyenmaitoida');
             $table->text('mota');
             $table->boolean('trangthai');
             $table->timestamps();

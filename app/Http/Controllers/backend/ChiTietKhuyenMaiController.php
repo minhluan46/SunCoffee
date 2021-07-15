@@ -16,11 +16,19 @@ class ChiTietKhuyenMaiController extends Controller
 
     public function create($id) // trang thêm chi tiết.
     {
+        $ChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.trangthai', '=', '1')
+            ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+            ->where('san_pham.trangthai', '=', '1')
+            ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+            ->where('san_pham.trangthai', '=', '1')
+            ->select(
+                'san_pham.tensanpham',
+                'chi_tiet_san_pham.id',
+                'quy_cach.tenquycach',
+            )->get();
         $viewData = [
             'KhuyenMai' => KhuyenMai::find($id),
-            'SanPham' => SanPham::all(),
-            'ChiTietKhuyenMai' => ChiTietKhuyenMai::where('id_khuyenmai', $id)->get(),
-            'ChiTietSanPham' => ChiTietSanPham::where('trangthai', 1)->get(),
+            'ChiTietSanPham' => $ChiTietSanPham,
         ];
         return view('backend.ChiTietKhuyenMai.create_ChiTietKhuyenMai', $viewData);
     }
@@ -32,14 +40,11 @@ class ChiTietKhuyenMaiController extends Controller
             [
                 'id_chitietsanpham' => 'required',
                 'muckhuyenmai' => 'required',
-                'giakhuyenmai' => 'required',
             ],
             [
                 'id_chitietsanpham.required' => 'Sản Phẩm Không Được Để Trống',
 
                 'muckhuyenmai.required' => 'Mức Khuyến Mãi Không Được Để Trống',
-
-                'giakhuyenmai.required' => 'Giá Sản Phẩm Không Được Để Trống',
             ]
         );
         if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
@@ -49,7 +54,6 @@ class ChiTietKhuyenMaiController extends Controller
             return response()->json(['errors' => 'Mức Khuyến Mãi Phải Nhỏ Hơn 100']);
         }
 
-
         $OldChiTietKhuyenMai = ChiTietKhuyenMai::where([
             ['id_chitietsanpham', $request->id_chitietsanpham],
             ['id_khuyenmai', $request->id_khuyenmai],
@@ -58,14 +62,12 @@ class ChiTietKhuyenMaiController extends Controller
             $data['id_chitietsanpham'] = $request->id_chitietsanpham;
             $data['id_khuyenmai'] = $request->id_khuyenmai;
             $data['muckhuyenmai'] = $request->muckhuyenmai;
-            $data['giakhuyenmai'] = $request->giakhuyenmai;
             ChiTietKhuyenMai::create($data);
             return response()->json(['success' => 'Thành Công Rồi']);
         } else {
             $data['id_chitietsanpham'] = $request->id_chitietsanpham;
             $data['id_khuyenmai'] = $request->id_khuyenmai;
             $data['muckhuyenmai'] = $request->muckhuyenmai;
-            $data['giakhuyenmai'] = $request->giakhuyenmai;
             ChiTietKhuyenMai::where([
                 ['id_chitietsanpham', $request->id_chitietsanpham],
                 ['id_khuyenmai', $request->id_khuyenmai],
@@ -76,11 +78,18 @@ class ChiTietKhuyenMaiController extends Controller
 
     public function edit($idCTSP, $idKM) // trang chi tiết.
     {
+        $ChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', '=', $idCTSP)
+            ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+            ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+            ->select(
+                'san_pham.tensanpham',
+                'chi_tiet_san_pham.id',
+                'quy_cach.tenquycach',
+            )->first();
         $viewData = [
-            'ChiTietKhuyenMai' => ChiTietKhuyenMai::where([['id_chitietsanpham', $idCTSP], ['id_khuyenmai', $idKM]])->first(),
             'KhuyenMai' => KhuyenMai::find($idKM),
-            'SanPham' => SanPham::all(),
-            'ChiTietSanPham' => ChiTietSanPham::where('trangthai', 1)->get(),
+            'ChiTietKhuyenMai' => ChiTietKhuyenMai::where([['id_chitietsanpham', $idCTSP], ['id_khuyenmai', $idKM]])->first(),
+            'ChiTietSanPham' =>  $ChiTietSanPham,
         ];
         return view('backend.ChiTietKhuyenMai.edit_ChiTietKhuyenMai', $viewData);
     }
@@ -93,14 +102,11 @@ class ChiTietKhuyenMaiController extends Controller
                 'id_chitietsanpham' => 'required',
                 'id_khuyenmai' => 'required',
                 'muckhuyenmai' => 'required',
-                'giakhuyenmai' => 'required',
             ],
             [
                 'id_chitietsanpham.required' => 'Sản Phẩm Không Được Để Trống',
 
                 'muckhuyenmai.required' => 'Mức Khuyến Mãi Không Được Để Trống',
-
-                'giakhuyenmai.required' => 'Giá Sản Phẩm Không Được Để Trống',
             ]
         );
         if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
@@ -113,7 +119,6 @@ class ChiTietKhuyenMaiController extends Controller
         $data['id_chitietsanpham'] = $request->id_chitietsanpham;
         $data['id_khuyenmai'] = $request->id_khuyenmai;
         $data['muckhuyenmai'] = $request->muckhuyenmai;
-        $data['giakhuyenmai'] = $request->giakhuyenmai;
         ChiTietKhuyenMai::where([
             ['id_chitietsanpham', $idCTSP],
             ['id_khuyenmai', $idKM],

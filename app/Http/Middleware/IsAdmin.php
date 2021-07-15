@@ -18,10 +18,9 @@ class IsAdmin
     public function handle($request, Closure $next)
     {
         if (Auth::user()->id_loainhanvien == "LNV00000000000000") {
-            dd("nó là admin đó");
             return $next($request);
         } else {
-            dd("không phải admin đâu");
+            return redirect()->route('hoa-don.create')->with('warning', "Không Có Quyền Truy Cập");
         }
     }
 }

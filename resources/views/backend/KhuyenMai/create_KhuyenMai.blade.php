@@ -20,15 +20,10 @@
                 <input type="date" class='form-control' name="thoigianketthuc">
             </div>
             <div class="form-group">
-                <label>Mức Khuyến Mãi Tối Đa<b style="color:red"> *</b></label>
-                <input type="number" class='form-control' name="muckhuyenmaitoida">
-            </div>
-            <div class="form-group">
                 <label>Mô Tả<b style="color:red"> *</b></label>
                 <textarea type="text" class='form-control' name="mota"></textarea>
             </div>
-            <button id="form-create" data-url="{{ route('khuyen-mai.store') }}" type="submit" class="btn btn-success"
-                style="width: 100%">Thêm</button>
+            <button id="form-create" data-url="{{ route('khuyen-mai.store') }}" type="submit" class="btn btn-success" style="width: 100%">Thêm</button>
         </div>
     </div>
 </form>

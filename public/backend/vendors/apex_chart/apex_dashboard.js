@@ -60,7 +60,7 @@ options = {
     plotOptions: { bar: { columnWidth: "30%" } },
     colors: ["#9767FD", "#dfe2e6", "#f1b44c"],
     series: [
-        { name: "Desktops", type: "column", data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30] },
+        { name: "Số Lượn", type: "column", data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30] },
         { name: "Laptops", type: "area", data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43] },
         { name: "Tablets", type: "line", data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39] },
     ],
@@ -123,7 +123,7 @@ var options = {
         colors:  ["#9767FD" ,"#E5ECFF" ],
     },
     xaxis: {
-        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        categories: ['1', '2', 'Apr', 'May', 'Jun', 'Jul'],
         axisBorder: {
             show: false,
         },

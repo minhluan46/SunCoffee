@@ -31,8 +31,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Số Điện Thoại<b style="color:red"> *</b></label>
-                                                <input type="number" class='@error(' sdt') is-invalid @enderror
-                                                    form-control' id="SDT" name="sdt" required>
+                                                <input type="number" class='@error(' sdt') is-invalid @enderror form-control' id="SDT" name="sdt" required>
                                             </div>
                                             @error('sdt')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -42,8 +41,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Mật Khẩu<b style="color:red"> *</b></label>
-                                                <input type="password" class='@error(' password') is-invalid @enderror
-                                                    form-control' maxlength="200" name="password" required>
+                                                <input type="password" class='@error(' password') is-invalid @enderror form-control' maxlength="200" name="password" required>
                                             </div>
                                             @error('password')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -53,8 +51,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Họ Tên<b style="color:red"> *</b></label>
-                                                <input type="int" class='@error(' tennhanvien') is-invalid @enderror
-                                                    form-control' maxlength="50" name="tennhanvien" required>
+                                                <input type="int" class='@error(' tennhanvien') is-invalid @enderror form-control' maxlength="50" name="tennhanvien" required>
                                             </div>
                                             @error('tennhanvien')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -64,9 +61,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Nhập Lại Mật Khẩu<b style="color:red"> *</b></label>
-                                                <input type="password" class='@error(' password_confirm') is-invalid
-                                                    @enderror form-control' maxlength="200" name="password_confirm"
-                                                    required>
+                                                <input type="password" class='@error(' password_confirm') is-invalid @enderror form-control' maxlength="200" name="password_confirm" required>
                                             </div>
                                             @error('password_confirm')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -75,11 +70,10 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Tên Đăng Nhập<b style="color:red"> *</b></label>
-                                                <input type="int" class='@error(' tentaikhoan') is-invalid @enderror
-                                                    form-control' maxlength="50" name="tentaikhoan" required>
+                                                <label>Email<b style="color:red"> *</b></label>
+                                                <input type="email" class='@error(' email') is-invalid @enderror form-control' maxlength="100" name="email" required>
                                             </div>
-                                            @error('tentaikhoan')
+                                            @error('email')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -87,8 +81,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Lương<b style="color:red"> *</b></label>
-                                                <input type="text" class='max10 money @error(' luong') is-invalid @enderror
-                                                    form-control' maxlength="10" name="luong" required>
+                                                <input type="text" class='max10 money @error(' luong') is-invalid @enderror form-control' maxlength="10" name="luong" required>
                                             </div>
                                             @error('luong')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -98,8 +91,7 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label>Ngày Sinh<b style="color:red"> *</b></label>
-                                                <input type="date" class='@error(' ngaysinh') is-invalid @enderror
-                                                    form-control' name="ngaysinh" required>
+                                                <input type="date" class='@error(' ngaysinh') is-invalid @enderror form-control' name="ngaysinh" required>
                                             </div>
                                             @error('ngaysinh')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -109,8 +101,7 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label>Giới Tính<b style="color:red"> *</b></label>
-                                                <select class="@error(' gioitinh') is-invalid @enderror form-control"
-                                                    name="gioitinh">
+                                                <select class="@error(' gioitinh') is-invalid @enderror form-control" name="gioitinh">
                                                     <option value="1">Nam</option>
                                                     <option value="0">Nữ</option>
                                                 </select>
@@ -123,8 +114,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Loại Nhân Viên<b style="color:red"> *</b></label>
-                                                <select class="@error(' id_loainhanvien') is-invalid @enderror form-control"
-                                                    name="id_loainhanvien" required>
+                                                <select class="@error(' id_loainhanvien') is-invalid @enderror form-control" name="id_loainhanvien" required>
                                                     @if (isset($LoaiNhanVien))
                                                         @foreach ($LoaiNhanVien as $valuelnv)
                                                             <option value="{{ $valuelnv->id }}">
@@ -146,8 +136,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Địa Chỉ<b style="color:red"> *</b></label>
-                                                <textarea type="text" class='@error(' diachi') is-invalid @enderror
-                                                    form-control' maxlength="100" name="diachi" required></textarea>
+                                                <textarea type="text" class='@error(' diachi') is-invalid @enderror form-control' maxlength="100" name="diachi" required></textarea>
                                             </div>
                                             @error('diachi')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -156,8 +145,7 @@
 
                                         <div class="col-lg-12">
                                             <label>Ảnh Đại Diện</label> <br>
-                                            <input type="file" class="image @error(' hinhanh') is-invalid @enderror"
-                                                id="image" name="hinhanh" onchange="UpImg()">
+                                            <input type="file" class="image @error(' hinhanh') is-invalid @enderror" id="image" name="hinhanh" onchange="UpImg()">
                                             <div id="displayIMG"></div>
                                             @error('hinhanh')
                                                 <div class="alert alert-danger">{{ $message }}</div>

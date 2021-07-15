@@ -31,11 +31,8 @@
                         </div>
                         <div class="white_card_body">
                             {{-- thông báo thành công --}}
-                            @if (session('messsge'))
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    <strong>{{ session('messsge') }}</strong>
-                                </div>
+                            @if (session('success'))
+                                <input type="text" class="alert-success" id="alert-success" value="{{ session('success') }}" hidden>
                             @endif
                             {{-- data sheet --}}
                             <div class="table-responsive">
@@ -119,7 +116,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -138,7 +134,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -151,6 +146,12 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
+        window.onload = function() {
+            if ($('#alert-success').hasClass('alert-success')) {
+                alertify.success($('#alert-success').val());
+            }
+        };
+
         function Money() { // định dạng tiền.
             (function($) {
                 $.fn.simpleMoneyFormat = function() {
@@ -200,7 +201,7 @@
                                 result += resTemp[j];
                             };
                             if (i > 0) {
-                                result += ','
+                                result += '.'
                             }
                         };
                         if (elType == 'input') {
@@ -225,7 +226,7 @@
                     data: {
                         _token: $("input[name='_token']").val(),
                         trangthai: $('input[name = "trangthai"]:checked').length,
-                        kichthuoc: $("input[name='kichthuoc']").val(),
+                        kichthuoc: $("select[name='kichthuoc']").val(),
                         soluong: $("input[name='soluong']").val(),
                         giasanpham: $("input[name='giasanpham']").val(),
                         ngaysanxuat: $("input[name='ngaysanxuat']").val(),
@@ -243,7 +244,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi Store");
+                        alertify.error("Lỗi Thêm Mới");
                     }
                 })
             })
@@ -266,7 +267,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Add");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -287,7 +288,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Show");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -305,7 +306,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Delete");
+                    alertify.error("Sản Phẩm Này Đã Được Sử Dụng");
                 }
             })
         };
@@ -331,7 +332,7 @@
                         alertify.success("Đã Tìm");
                     },
                     error: function(response) {
-                        alertify.error("Lỗi");
+                        alertify.error("Lỗi Tìm Kiếm");
                     }
                 })
             } else {
@@ -340,7 +341,7 @@
         });
 
         function UpdateCTSP() { // cập nhật chi tiết sản phẩm.
-            $('#form-create-CTSP').on('click', function(e) {
+            $('#form-edit-CTSP').on('click', function(e) {
                 e.preventDefault(); // dừng  sự kiện submit.
                 var url = "san-pham/" + $("input[name='id_sanpham']").val() + "/show"
                 $.ajax({
@@ -349,7 +350,7 @@
                     data: {
                         _token: $("input[name='_token']").val(),
                         trangthai: $('input[name = "trangthai"]:checked').length,
-                        kichthuoc: $("input[name='kichthuoc']").val(),
+                        kichthuoc: $("select[name='kichthuoc']").val(),
                         soluong: $("input[name='soluong']").val(),
                         giasanpham: $("input[name='giasanpham']").val(),
                         ngaysanxuat: $("input[name='ngaysanxuat']").val(),
@@ -367,7 +368,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi UpdateCTSP");
+                        alertify.error("Lỗi Cập Nhật");
                     }
                 })
             })
@@ -387,7 +388,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi EditCTSP");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -410,7 +411,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi DeleteCTSP");
+                    alertify.error("Chi Tiết Sản Phẩm Này Đã Được Sử Dụng");
                 }
             })
         };

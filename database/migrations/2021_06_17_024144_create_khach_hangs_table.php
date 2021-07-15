@@ -18,6 +18,7 @@ class CreateKhachHangsTable extends Migration
             $table->string('tenkhachhang', 50);
             $table->char('sdt', 10);
             $table->string('diachi', 150);
+            $table->char('email', 100);
             $table->integer('diemtichluy');
             $table->boolean('trangthai');
             $table->timestamps();

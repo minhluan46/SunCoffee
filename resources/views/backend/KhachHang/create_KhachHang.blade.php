@@ -9,19 +9,22 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>Họ Tên<b style="color:red"> *</b></label>
+                <input type="int" class='form-control' maxlength="50" name="tenkhachhang" required>
+            </div>
+            <div class="form-group">
                 <label>Số Điện Thoại<b style="color:red"> *</b></label>
                 <input type="number" class='form-control' id="SDT" name="sdt" required>
             </div>
             <div class="form-group">
-                <label>Họ Tên<b style="color:red"> *</b></label>
-                <input type="int" class='form-control' maxlength="50" name="tenkhachhang" required>
+                <label>Email<b style="color:red"> *</b></label>
+                <input type="email" class='form-control' name="email" required>
             </div>
             <div class="form-group">
                 <label>Địa Chỉ<b style="color:red"> *</b></label>
                 <textarea type="text" class='form-control' maxlength="150" name="diachi" required></textarea>
             </div>
-            <button id="form-create" data-url="{{ route('khach-hang.store') }}" type="submit" class="btn btn-success"
-                style="width: 100%">Thêm</button>
+            <button id="form-create" data-url="{{ route('khach-hang.store') }}" type="submit" class="btn btn-success" style="width: 100%">Thêm</button>
         </div>
     </div>
 </form>

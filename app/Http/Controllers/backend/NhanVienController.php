@@ -7,42 +7,28 @@ use Illuminate\Http\Request;
 use App\Models\NhanVien;
 use App\Models\LoaiNhanVien;
 use App\http\Requests\NhanVienRequest;
+use App\Models\ChiTietSanPham;
+use App\Models\SanPham;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class NhanVienController extends Controller
 {
-
+    /////////////////////////////////////////////////////////////////////////////////////////// index
     public function index() //danh sách.
     {
         $viewData = [
-            'NhanVien' => NhanVien::where('id', '!=', "NV00000000000000")->orderBy('created_at', 'desc')->paginate(10),
+            'NhanVien' => NhanVien::where(
+                [
+                    ['id', '!=', "NV00000000000000"], //admin
+                    ['id', '!=', "NV11111111111111"] //online
+                ]
+            )->orderBy('created_at', 'desc')->paginate(10),
             'LoaiNhanVien' => LoaiNhanVien::all(),
         ];
         return view('backend.NhanVien.index', $viewData);
     }
-
-    public function search(Request $request) // tìm.
-    {
-        $loaiNV = LoaiNhanVien::where([['id', '!=', "LNV00000000000000"], ['tenloainhanvien', $request->search]])->first();
-        if ($loaiNV == null) {
-            $idLoaiNV = "NV00000000000000";
-        } else {
-            $idLoaiNV = $loaiNV->id;
-        }
-        $viewData = [
-            'NhanVien' => NhanVien::where(
-                [['id', '!=', "NV00000000000000"], ['tennhanvien', 'like', '%' . $request->search . '%']]
-            )->orWhere(
-                [['id', '!=', "NV00000000000000"], ['sdt', 'like', '%' . $request->search . '%']]
-            )->orWhere(
-                [['id', '!=', "NV00000000000000"], ['id_loainhanvien', $idLoaiNV]]
-            )->orderBy('created_at', 'desc')->get(),
-            'LoaiNhanVien' => LoaiNhanVien::all(),
-        ];
-        return view('backend.NhanVien.load_NhanVien', $viewData);
-    }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// create
     public function create() // trang thêm. (chưa ajax)
     {
         $viewData = [
@@ -50,7 +36,7 @@ class NhanVienController extends Controller
         ];
         return view('backend.NhanVien.create_NhanVien', $viewData);
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// store
     public function store(NhanVienRequest $request) //thêm. (chưa ajax)
     {
         $luong = filter_var($request->luong, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
@@ -72,7 +58,7 @@ class NhanVienController extends Controller
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
         $data['luong'] = $luong;
-        $data['tentaikhoan'] = $request->tentaikhoan;
+        $data['email'] = $request->email;
         $data['password'] = bcrypt($request->password);
         $data['id_loainhanvien'] = $request->id_loainhanvien;
         $data['trangthai'] = $request->trangthai;
@@ -92,9 +78,9 @@ class NhanVienController extends Controller
             'NhanVien' => NhanVien::orderBy('created_at', 'desc')->get(),
             'LoaiNhanVien' => LoaiNhanVien::all(),
         ];
-        return redirect()->route('nhan-vien.index', $viewData)->with('messsge', "Thêm Thành Công");
+        return redirect()->route('nhan-vien.index', $viewData)->with('success', "Thành Công Rồi");
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// show
     public function show($id) //cho tiết.
     {
         $viewData = [
@@ -103,7 +89,15 @@ class NhanVienController extends Controller
         ];
         return view('backend.NhanVien.show_NhanVien', $viewData);
     }
-
+    public function myProfile($id) //cho tiết.
+    {
+        $viewData = [
+            'NhanVien' => NhanVien::find($id),
+            'LoaiNhanVien' => LoaiNhanVien::all(),
+        ];
+        return view('backend.NhanVien.myProfile_NhanVien', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// edit
     public function edit($id) //trang cập nhật.  (chưa ajax)
     {
         $viewData = [
@@ -112,7 +106,7 @@ class NhanVienController extends Controller
         ];
         return view('backend.NhanVien.edit_NhanVien', $viewData);
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// update
     public function update(NhanVienRequest $request, $id) //cập nhật.  (chưa ajax)
     {
         $luong = filter_var($request->luong, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
@@ -125,8 +119,8 @@ class NhanVienController extends Controller
         $data['diachi'] = ucwords($request->diachi);
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
+        $data['email'] = $request->email;
         $data['luong'] = $luong;
-        $data['tentaikhoan'] = $request->tentaikhoan;
 
         $data['id_loainhanvien'] = $request->id_loainhanvien;
         $data['trangthai'] = $request->trangthai;
@@ -138,32 +132,59 @@ class NhanVienController extends Controller
             $data['password'] = bcrypt($request->password);
         }
         if ($request->hasFile('hinhanh')) { //kiểm tra xem có file không.
-            // if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-            //     unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
-            // }
             $file = $request->hinhanh; //lấy tên hình được gửi lên.
             $extension = $file->extension(); //lấy đui file.
             $path = 'uploads/NhanVien/'; //đường dẫn.
             $data['hinhanh'] = $id . "." . $extension; //sửa lại tên hình ảnh.
             $file->move($path, $data['hinhanh']); //lưu hình ảnh.
         }
-        NhanVien::where('id', $id)->update($data);
+        NhanVien::where([
+            ['id', '!=', "NV00000000000000"],
+            ['id', '!=', "NV11111111111111"],
+            ['id', $id]
+        ])->update($data);
         $viewData = [
             'NhanVien' => NhanVien::orderBy('created_at', 'desc')->get(),
             'LoaiNhanVien' => LoaiNhanVien::all(),
         ];
-        return redirect()->route('nhan-vien.index', $viewData)->with('messsge', "Cập Nhật Thành Công");
+        return redirect()->route('nhan-vien.index', $viewData)->with('success', "Thành Công Rồi");
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// delete
     public function destroy($id) // xóa.
     {
-        // $OldNhanVien = NhanVien::find($id); //lấy nhân viên củ
-        // if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
-        //     unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
-        // }
+        $OldNhanVien = NhanVien::find($id); //lấy nhân viên củ
         NhanVien::where(
-            [['id', '!=', "NV00000000000000"], ['id', $id]]
+            [
+                ['id', '!=', "NV00000000000000"],
+                ['id', '!=', "NV11111111111111"],
+                ['id', $id]
+            ]
         )->delete();
+        if ($OldNhanVien->hinhanh != "NOIMAGE.png") { //kiểm tra có phải đang dùng hình ảnh mặc định không.
+            unlink('uploads/NhanVien/' . $OldNhanVien->hinhanh); //xoá ảnh củ.
+        }
+
         return response()->json(['success' => 'Thành Công Rồi']);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// search
+    public function search(Request $request) // tìm.
+    {
+        $loaiNV = LoaiNhanVien::where([['id', '!=', "LNV00000000000000"], ['id', '!=', "NV11111111111111"], ['tenloainhanvien', $request->search]])->first();
+        if ($loaiNV == null) {
+            $idLoaiNV = "NULL";
+        } else {
+            $idLoaiNV = $loaiNV->id;
+        }
+        $viewData = [
+            'NhanVien' => NhanVien::where(
+                [['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"], ['tennhanvien', 'like', '%' . $request->search . '%']]
+            )->orWhere(
+                [['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"], ['sdt', 'like', '%' . $request->search . '%']]
+            )->orWhere(
+                [['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"], ['id_loainhanvien', $idLoaiNV]]
+            )->orderBy('created_at', 'desc')->get(),
+            'LoaiNhanVien' => LoaiNhanVien::all(),
+        ];
+        return view('backend.NhanVien.load_NhanVien', $viewData);
     }
 }

@@ -1,8 +1,7 @@
 @extends('layouts.backend_layout')
 @section('content')
     <div class="main_content_iner ">
-        <form class="add-form" method="POST" action="{{ route('nhan-vien.update', $NhanVien->id) }}"
-            enctype="multipart/form-data">
+        <form class="add-form" method="POST" action="{{ route('nhan-vien.update', $NhanVien->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="btn-pm">
@@ -23,8 +22,7 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <label>Trạng Thái</label>
-                                    <input type="checkbox" name="trangthai" value='1' class="form-check-input"
-                                        {{ $NhanVien->trangthai == 1 ? 'checked' : '' }}>
+                                    <input type="checkbox" name="trangthai" value='1' class="form-check-input" {{ $NhanVien->trangthai == 1 ? 'checked' : '' }}>
                                 </div>
                             </div>
                             <div class="row">
@@ -34,9 +32,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Số Điện Thoại<b style="color:red"> *</b></label>
-                                                <input type="number" class='@error(' sdt') is-invalid @enderror
-                                                    form-control' id="SDT" name="sdt" required
-                                                    value="{{ $NhanVien->sdt }}">
+                                                <input type="number" class='@error(' sdt') is-invalid @enderror form-control' id="SDT" name="sdt" required value="{{ $NhanVien->sdt }}">
                                             </div>
                                             @error('sdt')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -46,8 +42,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Mật Khẩu<b style="color:red"> *</b></label>
-                                                <input type="password" class='@error(' password') is-invalid @enderror
-                                                    form-control' maxlength="200" name="password" required
+                                                <input type="password" class='@error(' password') is-invalid @enderror form-control' maxlength="200" name="password" required
                                                     value="{{ $NhanVien->password }}">
                                             </div>
                                             @error('password')
@@ -58,8 +53,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Họ Tên<b style="color:red"> *</b></label>
-                                                <input type="int" class='@error(' tennhanvien') is-invalid @enderror
-                                                    form-control' maxlength="50" name="tennhanvien" required
+                                                <input type="int" class='@error(' tennhanvien') is-invalid @enderror form-control' maxlength="50" name="tennhanvien" required
                                                     value="{{ $NhanVien->tennhanvien }}">
                                             </div>
                                             @error('tennhanvien')
@@ -70,8 +64,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Nhập Lại Mật Khẩu<b style="color:red"> *</b></label>
-                                                <input type="password" class='@error(' password_confirm') is-invalid
-                                                    @enderror form-control' maxlength="200" name="password_confirm" required
+                                                <input type="password" class='@error(' password_confirm') is-invalid @enderror form-control' maxlength="200" name="password_confirm" required
                                                     value="{{ $NhanVien->password }}">
                                             </div>
                                             @error('password_confirm')
@@ -81,12 +74,10 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label>Tên Đăng Nhập<b style="color:red"> *</b></label>
-                                                <input type="int" class='@error(' tentaikhoan') is-invalid @enderror
-                                                    form-control' maxlength="50" name="tentaikhoan" required
-                                                    value="{{ $NhanVien->tentaikhoan }}">
+                                                <label>Email<b style="color:red"> *</b></label>
+                                                <input type="int" class='@error(' email') is-invalid @enderror form-control' maxlength="50" name="email" required value="{{ $NhanVien->email }}">
                                             </div>
-                                            @error('tentaikhoan')
+                                            @error('email')
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -94,8 +85,7 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Lương<b style="color:red"> *</b></label>
-                                                <input type="text" class='max10 money @error(' luong') is-invalid @enderror
-                                                    form-control' maxlength="10" name="luong" required
+                                                <input type="text" class='max10 money @error(' luong') is-invalid @enderror form-control' maxlength="10" name="luong" required
                                                     value="{{ $NhanVien->luong }}">
                                             </div>
                                             @error('luong')
@@ -106,9 +96,7 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label>Ngày Sinh<b style="color:red"> *</b></label>
-                                                <input type="date" class='@error(' ngaysinh') is-invalid @enderror
-                                                    form-control' name="ngaysinh" required
-                                                    value="{{ $NhanVien->ngaysinh }}">
+                                                <input type="date" class='@error(' ngaysinh') is-invalid @enderror form-control' name="ngaysinh" required value="{{ $NhanVien->ngaysinh }}">
                                             </div>
                                             @error('ngaysinh')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -118,8 +106,7 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label>Giới Tính<b style="color:red"> *</b></label>
-                                                <select class="@error(' gioitinh') is-invalid @enderror form-control"
-                                                    name="gioitinh">
+                                                <select class="@error(' gioitinh') is-invalid @enderror form-control" name="gioitinh">
                                                     <option value="1" {{ $NhanVien->gioitinh == 1 ? 'selected' : '' }}>
                                                         Nam
                                                     </option>
@@ -136,12 +123,10 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label>Loại Nhân Viên<b style="color:red"> *</b></label>
-                                                <select class="@error(' id_loainhanvien') is-invalid @enderror form-control"
-                                                    name="id_loainhanvien" required>
+                                                <select class="@error(' id_loainhanvien') is-invalid @enderror form-control" name="id_loainhanvien" required>
                                                     @if (isset($LoaiNhanVien))
                                                         @foreach ($LoaiNhanVien as $valuelnv)
-                                                            <option value="{{ $valuelnv->id }}"
-                                                                {{ $NhanVien->id_loainhanvien == $valuelnv->id ? 'selected' : '' }}>
+                                                            <option value="{{ $valuelnv->id }}" {{ $NhanVien->id_loainhanvien == $valuelnv->id ? 'selected' : '' }}>
                                                                 {{ $valuelnv->tenloainhanvien }}
                                                             </option>
                                                         @endforeach
@@ -160,8 +145,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label>Địa Chỉ<b style="color:red"> *</b></label>
-                                                <textarea type="text" class='@error(' diachi') is-invalid @enderror
-                                                    form-control' maxlength="100" name="diachi"
+                                                <textarea type="text" class='@error(' diachi') is-invalid @enderror form-control' maxlength="100" name="diachi"
                                                     required>{{ $NhanVien->diachi }}</textarea>
                                             </div>
                                             @error('diachi')
@@ -171,8 +155,7 @@
 
                                         <div class="col-lg-12">
                                             <label>Ảnh Đại Diện</label> <br>
-                                            <input type="file" class="image @error(' hinhanh') is-invalid @enderror"
-                                                id="image" name="hinhanh" onchange="UpImg()">
+                                            <input type="file" class="image @error(' hinhanh') is-invalid @enderror" id="image" name="hinhanh" onchange="UpImg()">
                                             <div id="displayIMG">
                                                 <img src="{{ asset('uploads/NhanVien/' . $NhanVien->hinhanh) }}">
                                             </div>

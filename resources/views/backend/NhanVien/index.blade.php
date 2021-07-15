@@ -31,11 +31,8 @@
                         </div>
                         <div class="white_card_body">
                             {{-- thông báo thành công --}}
-                            @if (session('messsge'))
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    <strong>{{ session('messsge') }}</strong>
-                                </div>
+                            @if (session('success'))
+                                <input type="text" class="alert-success" id="alert-success" value="{{ session('success') }}" hidden>
                             @endif
                             {{-- data sheet --}}
                             <div class="table-responsive">
@@ -111,7 +108,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -124,6 +120,11 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
+        window.onload = function() {
+            if ($('#alert-success').hasClass('alert-success')) {
+                alertify.success($('#alert-success').val());
+            }
+        };
         $('#form-search').on('click', function(e) { //tìm
             e.preventDefault(); // dừng  sự kiện submit.
             if ($("input[name='search']").val().length > 0) {
