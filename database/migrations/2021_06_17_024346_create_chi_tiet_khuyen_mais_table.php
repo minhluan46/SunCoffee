@@ -17,7 +17,6 @@ class CreateChiTietKhuyenMaisTable extends Migration
             $table->char('id_chitietsanpham', 18);
             $table->char('id_khuyenmai', 18);
             $table->integer('muckhuyenmai');
-            $table->integer('giakhuyenmai');
             $table->timestamps();
 
             $table->foreign('id_chitietsanpham')->references('id')->on('chi_tiet_san_pham');

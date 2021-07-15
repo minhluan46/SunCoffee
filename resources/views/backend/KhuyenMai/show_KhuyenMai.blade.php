@@ -2,10 +2,8 @@
     <div class="row">
         <div class="col-sm-12">
             <h4><b>{{ $KhuyenMai->tenkhuyenmai }} </b> <span>({{ $KhuyenMai->id }})</span></h4>
-            <h4><b>Thời Gian Bắt Đầu: </b> <span>{{ $KhuyenMai->thoigianbatdau }}</span></h4>
-            <h4><b>Thời Gian Kết Thúc: </b> <span>{{ $KhuyenMai->thoigianketthuc }}</span></h4>
-            <h4><b>Mức Khuyến Mãi Tối Đa: </b> <span>{{ $KhuyenMai->muckhuyenmaitoida . '%' }}</span></h4>
-            <h4><b>Trạng Thái: </b> <span>{{ $KhuyenMai->trangthai == 1 ? 'Mở' : 'Khóa' }}</span></h4>
+            <h4><b>Thời Gian Bắt Đầu: </b> <span>{{ Date_format(Date_create($KhuyenMai->thoigianbatdau), 'd/m/Y') }}</span></h4>
+            <h4><b>Thời Gian Kết Thúc: </b> <span>{{ Date_format(Date_create($KhuyenMai->thoigianketthuc), 'd/m/Y') }}</span></h4>
             <h4><b>Tình Trạng: </b> <span>@isset($today)
                         @if ($KhuyenMai->thoigianketthuc < $today)
                             Kết Thúc
@@ -24,80 +22,72 @@
     <hr>
     {{-- chi tiết sảm phẩm --}}
     @isset($ChiTietKhuyenMai)
-        <table class="table" style="text-align: center">
-            <thead>
-                <tr>
-                    <th scope="col" style="text-align: left">Sản Phẩm</th>
-                    <th scope="col">Kích Thước</th>
-                    <th scope="col">Loại</th>
-                    <th scope="col">Mức Khuyến Mãi</th>
-                    <th scope="col">Giá Khuyến Mãi</th>
-                    <th scope="col">Thao Tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($ChiTietKhuyenMai as $valuectkm)
+        @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
+            <table class="table" style="text-align: center">
+                <thead>
                     <tr>
-                        <td style="text-align: left">
-                            @isset($ChiTietSanPham)
-                                @foreach ($ChiTietSanPham as $itemCTSP)
-                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
-                                        @isset($SanPham)
-                                            @foreach ($SanPham as $itemSP)
-                                                @if ($itemCTSP->id_sanpham == $itemSP->id)
-                                                    {{ $itemSP->tensanpham }}
-                                                @endif
-                                            @endforeach
-                                        @endisset
-                                    @endif
-                                @endforeach
-                            @endisset
-                        </td>
-                        <td>
-                            @isset($ChiTietSanPham)
-                                @foreach ($ChiTietSanPham as $itemCTSP)
-                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
-                                        {{ $itemCTSP->kichthuoc }}
-                                    @endif
-                                @endforeach
-                            @endisset
-                        </td>
-                        <td>
-                            @isset($ChiTietSanPham)
-                                @foreach ($ChiTietSanPham as $itemCTSP)
-                                    @if ($valuectkm->id_chitietsanpham == $itemCTSP->id)
-                                        @isset($SanPham)
-                                            @foreach ($SanPham as $itemSP)
-                                                @if ($itemCTSP->id_sanpham == $itemSP->id)
-                                                    @isset($LoaiSanPham)
-                                                        @foreach ($LoaiSanPham as $itemLSP)
-                                                            @if ($itemSP->id_loaisanpham == $itemLSP->id)
-                                                                {{ $itemLSP->tenloaisanpham }}
-                                                            @endif
-                                                        @endforeach
-
-                                                    @endisset
-                                                @endif
-                                            @endforeach
-                                        @endisset
-                                    @endif
-                                @endforeach
-                            @endisset
-                        </td>
-                        <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
-                        <td>{{ number_format($valuectkm->giakhuyenmai, 0, ',', '.') . 'VNĐ' }}</td>
-                        <td>
-                            <a href="javascript:(0)" class="action_btn mr_10 view-edit-CTKM"
-                                data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
-                                <i class="fas fa-edit"></i></a>
-
-                            <a href="javascript:(0)" class="action_btn mr_10 form-delete-CTKM"
-                                data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
-                                <i class="fas fa-trash-alt"></i></a>
-                        </td>
+                        <th scope="col" style="text-align: left">Sản Phẩm</th>
+                        <th scope="col">Kích Thước</th>
+                        <th scope="col">Loại</th>
+                        <th scope="col">Mức Khuyến Mãi</th>
+                        <th scope="col">Thao Tác</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($ChiTietKhuyenMai as $valuectkm)
+                        <tr>
+                            <td style="text-align: left">
+                                {{ $valuectkm->tensanpham }}
+                            </td>
+                            <td>
+                                {{ $valuectkm->tenquycach }}
+                            </td>
+                            <td>
+                                {{ $valuectkm->tenloaisanpham }}
+                            </td>
+                            <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:(0)" class="action_btn mr_10 view-edit-CTKM" data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
+                                        <i class="fas fa-edit"></i></a>
+
+                                    <a href="javascript:(0)" class="action_btn mr_10 form-delete-CTKM" data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
+                                        <i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+        @else
+            <table class="table" style="text-align: center">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align: left">Sản Phẩm</th>
+                        <th scope="col">Kích Thước</th>
+                        <th scope="col">Loại</th>
+                        <th scope="col">Mức Khuyến Mãi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($ChiTietKhuyenMai as $valuectkm)
+                        <tr>
+                            <td style="text-align: left">
+                                {{ $valuectkm->tensanpham }}
+                            </td>
+                            <td>
+                                {{ $valuectkm->tenquycach }}
+                            </td>
+                            <td>
+                                {{ $valuectkm->tenloaisanpham }}
+                            </td>
+                            <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+
     @endisset
 @endisset

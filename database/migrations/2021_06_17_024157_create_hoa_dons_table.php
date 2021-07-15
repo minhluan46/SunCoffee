@@ -20,9 +20,11 @@ class CreateHoaDonsTable extends Migration
             $table->integer('giamgia');
             $table->integer('thanhtien');
             $table->integer('diemtichluy')->nullable();
+            $table->string('tenkhachhang', 50)->nullable();
             $table->char('sdtkhachhang', 10)->nullable();
             $table->string('diachikhachhang', 150)->nullable();
-            $table->text('khachhangghichu')->nullable();
+            $table->char('emailkhachhang', 100)->nullable();
+            $table->text('ghichukhachhang')->nullable();
             $table->char('id_khachhang', 18);
             $table->char('id_nhanvien', 18);
             $table->boolean('trangthai');

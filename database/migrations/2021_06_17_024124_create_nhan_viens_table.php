@@ -18,11 +18,11 @@ class CreateNhanViensTable extends Migration
             $table->string('tennhanvien', 50);
             $table->char('sdt', 10);
             $table->string('diachi', 150);
+            $table->char('email', 100);
             $table->date('ngaysinh');
             $table->boolean('gioitinh');
             $table->char('hinhanh', 25);
             $table->integer('luong');
-            $table->string('tentaikhoan', 30);
             $table->char('password', 200);
             $table->char('id_loainhanvien', 18);
             $table->boolean('trangthai');

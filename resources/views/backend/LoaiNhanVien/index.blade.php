@@ -11,7 +11,7 @@
                 <div class="search_inner">
                     <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Tìm..." name="search">
+                            <input type="text" placeholder="Tên..." name="search">
                         </div>
                         <button id="form-search" data-url="{{ route('loai-nhan-vien.search') }}" type="submit">
                             <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
@@ -48,17 +48,14 @@
                                                     <td style="text-align: left">{{ $value->id }}</td>
                                                     <td>{{ $value->tenloainhanvien }}</td>
                                                     <td>
-                                                        <span
-                                                            class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Hoạt Động' : 'Tạm Dừng' }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit"
-                                                            data-url="{{ route('loai-nhan-vien.edit', $value->id) }}">
+                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('loai-nhan-vien.edit', $value->id) }}">
                                                             <i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete"
-                                                            data-url="{{ route('loai-nhan-vien.destroy', $value->id) }}"
+                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('loai-nhan-vien.destroy', $value->id) }}"
                                                             data-id="{{ $value->id }}">
                                                             <i class="fas fa-trash-alt"></i></a>
                                                     </td>
@@ -82,8 +79,7 @@
     </div>
 @endsection
 @section('modal')
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -115,6 +111,9 @@
                 method: 'GET',
                 success: function(response) {
                     $('#dataSheet').html(response);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
                 }
             });
         }
@@ -134,7 +133,7 @@
                         alertify.success("Đã Tìm");
                     },
                     error: function(response) {
-                        alertify.error("Lỗi");
+                        alertify.error("Lỗi Tìm Kiếm");
                     }
                 })
             } else {
@@ -155,7 +154,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Có Lỗi");
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -182,7 +181,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Có Lỗi");
+                        alertify.error("Có Thêm Mới");
                     }
                 })
             })
@@ -201,7 +200,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Có Lỗi");
+                    alertify.error("Có Tải Trang");
                 }
             })
         };
@@ -229,7 +228,7 @@
                     },
                     error: function(response) {
 
-                        alertify.error("Lỗi");
+                        alertify.error("Lỗi Cập Nhật");
                     }
                 })
             })
@@ -248,7 +247,7 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Có Lỗi");
+                    alertify.error("Loại Sản Phẩm Này Đã Được Sử Dụng");
                 }
             })
         };

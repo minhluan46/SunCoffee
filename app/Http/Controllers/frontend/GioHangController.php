@@ -5,8 +5,15 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\SanPham;
 use App\Models\ChiTietSanPham;
+use App\Models\KhuyenMai;
+use App\Models\ChiTietKhuyenMai;
+use App\Models\KhachHang;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Cart;
+use App\Models\ChiTietHoaDon;
+use App\Models\HoaDon;
+use Illuminate\Support\Facades\Session;
 
 class GioHangController extends Controller
 {
@@ -31,6 +38,198 @@ class GioHangController extends Controller
         ];
         return view('frontend.giohang.index', $viewData);
     }
+
+    function addCartOnline(Request $request) // thêm từ trang chi tiết.
+    {
+        $SL = $request->quantity; // số lượng được gửi qua.
+        $ID = $request->id_product_details; // id chi tiết sản phẩm được gửi qua.
+        $ChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', $ID)
+            ->join('quy_cach', 'quy_cach.id', 'chi_tiet_san_pham.kichthuoc')
+            ->select(
+                'chi_tiet_san_pham.*',
+                'quy_cach.tenquycach',
+            )->first();
+
+
+        $SanPham = SanPham::where('id', $ChiTietSanPham->id_sanpham)->first();
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $ChiTietKhuyenMai = ChiTietKhuyenMai::where('id_chitietsanpham', $ID)->orderBy('created_at', 'asc')->get(); // sắp xếp thời gian tạo giảm.
+        if (count($ChiTietKhuyenMai) > 0) { // kiểm tra khuyến mãi.
+            $ApDungKhuyenMai = 0; // giữ nguyên 0% nếu không đúng với điều kiện.
+            foreach ($ChiTietKhuyenMai as $item) {
+                $KhuyenMai = KhuyenMai::where('id', $item->id_khuyenmai)->first(); // lấy ra từng khuyến mãi.
+                if (!($KhuyenMai->thoigianketthuc < $today) && $KhuyenMai->trangthai == 1 &&  !($KhuyenMai->thoigianbatdau > $today)) { //kiểm tra còn hạng, không khóa, chưa bắt đầu.
+                    $ApDungKhuyenMai = ChiTietKhuyenMai::where(
+                        [
+                            ['id_chitietsanpham', $ID],
+                            ['id_khuyenmai', $KhuyenMai->id]
+                        ]
+                    )->first();
+                    $ApDungKhuyenMai = $ApDungKhuyenMai->muckhuyenmai; // gắn lạy phần trăm giảm giá.
+                    break; // áp dụng khuyến mãi tạo trước.
+                }
+            }
+        } else {
+            $ApDungKhuyenMai = 0; // 0% nếu không tìm thấy chi tiết khuyến mãi.
+        }
+        $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null; // kiểm tra session và gắn lại khi đã có.
+        $newCart = new Cart($odlCart); // khỏi tạo class Cart.
+
+        if (!isset(Session('GioHangOnline')->products[$ID])) { // kiểm tra nếu chưa có.
+            if ($SL > $ChiTietSanPham->soluong) {
+                $SL1 = $ChiTietSanPham->soluong;
+                $newCart->addCartOnline($ID, $SanPham, $ChiTietSanPham, $ApDungKhuyenMai, $SL1); // gọi phương thức.
+                $request->Session()->put('GioHangOnline', $newCart);
+                return redirect()->route('SanPham.index')->with('warning', "Bạn Chỉ Có Thể Thêm " . $SL1 . " Sản Phẩm");
+            }
+        } else {
+            if ($SL + Session('GioHangOnline')->products[$ID]['SoLuong'] > $ChiTietSanPham->soluong) {
+                $SL1 = $ChiTietSanPham->soluong - Session('GioHangOnline')->products[$ID]['SoLuong'];
+                if ($SL1 == 0) {
+                    return redirect()->route('SanPham.index')->with('error', "Bạn Đã Thêm Tối Đa");
+                }
+                $newCart->addCartOnline($ID, $SanPham, $ChiTietSanPham, $ApDungKhuyenMai, $SL1); // gọi phương thức.
+                $request->Session()->put('GioHangOnline', $newCart);
+                return redirect()->route('SanPham.index')->with('warning', "Bạn Chỉ Có Thể Thêm " . $SL1 . " Sản Phẩm");
+            }
+        }
+        $newCart->addCartOnline($ID, $SanPham, $ChiTietSanPham, $ApDungKhuyenMai, $SL); // gọi phương thức.
+        $request->Session()->put('GioHangOnline', $newCart);
+        return redirect()->route('SanPham.index')->with('message', "Đã Thêm " . $SL . " Sản Phẩm");
+    }
+
+    public function deleteItemCartOnline(Request $request, $id)
+    {
+        $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null;
+        $newCart = new Cart($odlCart);
+        $newCart->deleteItemCart($id);
+        if (count($newCart->products) > 0) {
+            $request->session()->put('GioHangOnline', $newCart);
+            $output = "<input type='text' id='soluong' value='" . Session::get('GioHangOnline')->totalQuanty . "'>
+            <input type='text' id='tongcong' value='" . number_format(Session::get('GioHangOnline')->totalPrice, 0, ',', '.') . ' VNĐ' . "'>
+            <input type='text' id='giamgia' value='" . number_format(Session::get('GioHangOnline')->totalDiscount, 0, ',', '.') . ' VNĐ' . "'>
+            <input type='text' id='thanhtien' value='" . number_format(Session::get('GioHangOnline')->Total, 0, ',', '.') . ' VNĐ' . "'>";
+        } else {
+            $request->Session()->forget('GioHangOnline');
+            $output = "<input type='text' id='soluong' value='0'>";
+        }
+        return $output;
+    }
+
+    public function deleteCartOnline(Request $request)
+    {
+        $request->Session()->forget('GioHangOnline');
+    }
+
+    public function updateQuantityOnline(Request $request)
+    {
+        foreach ($request->data as $item) {
+            $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null;
+            $newCart = new Cart($odlCart);
+            $newCart->quantityChange($item['id'], $item['sl']);
+            $request->session()->put('GioHangOnline', $newCart);
+        }
+    }
+
+    public function discountMemberOnline(Request $request)
+    {
+        dd($request->sdt);
+    }
+
+    public function orderOnline(Request $request)
+    {
+        $KhachHang = KhachHang::where('sdt', $request->sdt)->first();
+        if ($KhachHang != null) {
+            /////////////////////////////////////////////////////////
+            // lấy giảm giá thành viên.
+            $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null;
+            $newCart = new Cart($odlCart);
+            $newCart->DiscountMember($KhachHang->diemtichluy, $KhachHang->sdt);
+            $request->session()->put('GioHangOnline', $newCart);
+            /////////////////////////////////////////////////////////
+            // hóa đơn.
+            $iddate = "HD" . Carbon::now('Asia/Ho_Chi_Minh');
+            $exp = explode("-", $iddate);
+            $imp = implode('', $exp);
+            $exp = explode(" ", $imp);
+            $imp = implode('', $exp);
+            $exp = explode(":", $imp);
+            $imp = implode('', $exp);
+            $data['id'] = $imp;
+            $data['ngaylap'] = Carbon::now('Asia/Ho_Chi_Minh');
+            $data['tongtienhoadon'] = Session::get('GioHangOnline')->totalPrice;
+            $data['giamgia'] = Session::get('GioHangOnline')->totalDiscount;
+            $data['thanhtien'] = Session::get('GioHangOnline')->Total;
+            $data['diemtichluy'] = Session::get('GioHangOnline')->Total / 10000;
+            $data['tenkhachhang'] = $request->hoten;
+            $data['sdtkhachhang'] = $request->sdt;
+            $data['diachikhachhang'] = $request->diachi;
+            $data['emailkhachhang'] = $request->email;
+            $data['ghichukhachhang'] = $request->ghichu;
+            $data['id_khachhang'] = $KhachHang->id;
+            $data['id_nhanvien'] = "NV11111111111111"; // tài khoản đặt hàng Online.
+            $data['trangthai'] = 2; // trạng thái chờ xác nhận.
+            // $diemtichluy = $KhachHang->diemtichluy + $data['diemtichluy'];
+            // KhachHang::where("id", $KhachHang->id)->update(['diemtichluy' => $diemtichluy]); // cập nhật điểm tích lũy. {sẻ được cộng khi xác nhận đơn hàng}
+            HoaDon::create($data); //tạo hóa đơn.
+        } else {
+            $iddate = "HD" . Carbon::now('Asia/Ho_Chi_Minh');
+            $exp = explode("-", $iddate);
+            $imp = implode('', $exp);
+            $exp = explode(" ", $imp);
+            $imp = implode('', $exp);
+            $exp = explode(":", $imp);
+            $imp = implode('', $exp);
+            $data['id'] = $imp;
+            $data['ngaylap'] = Carbon::now('Asia/Ho_Chi_Minh');
+            $data['tongtienhoadon'] = Session::get('GioHangOnline')->totalPrice;
+            $data['giamgia'] = Session::get('GioHangOnline')->totalDiscount;
+            $data['thanhtien'] = Session::get('GioHangOnline')->Total;
+            $data['tenkhachhang'] = $request->hoten;
+            $data['emailkhachhang'] = $request->email;
+            $data['sdtkhachhang'] = $request->sdt;
+            $data['diachikhachhang'] = $request->diachi;
+            $data['ghichukhachhang'] = $request->ghichu;
+            $data['id_khachhang'] = "KH00000000000000";
+            $data['id_nhanvien'] = "NV11111111111111"; // tài khoản đặt hàng Online.
+            $data['trangthai'] = 2; // trạng thái chờ xác nhận.
+            HoaDon::create($data); //tạo hóa đơn.
+        }
+        foreach (Session::get('GioHangOnline')->products as $item) { // tạo chi tiết hóa đơn.
+            $data2['id_hoadon'] = $imp;
+            $data2['id_chitietsanpham'] =  $item['CTSP']->id;
+            $data2['soluong'] = $item['SoLuong'];
+            $data2['giamgia'] = $item['GiamGia'];
+            $data2['tonggia'] = $item['TongGia'];
+            ChiTietHoaDon::create($data2); // tạo chi tiết hóa đơn.
+            // $ChiTietSanPham = ChiTietSanPham::where('id', $item['CTSP']->id)->first(); // cập nhật số lượng còn lại.{sẽ cập nhật khi xác nhận hóa đơn}
+            // $data3['soluong'] = $ChiTietSanPham->soluong - $item['SoLuong'];
+            // ChiTietSanPham::where('id', $item['CTSP']->id)->update($data3);
+        }
+        $request->Session()->forget('GioHangOnline'); //xóa session GioHang khi hoàn tất.
+        //////////////////////////////////////////////////////////////////////////////////
+        // lấy ra sản phẩm "cà phê hạt" đang "bán chạy nhất" với khối lượng "500G".
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $viewData = [
+            'CaPheHatBanChayNhat' => SanPham::where('san_pham.the', '=', 'BÁN CHẠY NHẤT')
+                ->join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
+                ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')  // lấy loại cà phê hạt.
+                ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+                ->where([
+                    ['chi_tiet_san_pham.kichthuoc', '=', '500G'], // lấy sản phẩm có khối lượng 500G.
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today], // kiểm tra còn hạng sử dụng hay không.
+                ])->select(
+                    'san_pham.*',
+                    'loai_san_pham.tenloaisanpham',
+                    'chi_tiet_san_pham.kichthuoc',
+                    'chi_tiet_san_pham.soluong',
+                    'chi_tiet_san_pham.giasanpham',
+                )->get(),
+        ];
+        return redirect()->route('Trangchu.index', $viewData);
+    }
+
+
 
     public function show()
     {

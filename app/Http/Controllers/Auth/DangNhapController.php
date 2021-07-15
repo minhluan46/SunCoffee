@@ -7,6 +7,7 @@ use App\Models\NhanVien;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class DangNhapController extends Controller
 {
@@ -21,6 +22,13 @@ class DangNhapController extends Controller
 
     public function DangNhap(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            ['sdt' => 'required', 'password' => 'required',]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return redirect()->route('DangNhap.index')->with('errors', "Bạn Cần Nhập Đầu Đủ Thông Tin Đăng Nhập");
+        }
         $data = [
             'sdt' => $request->sdt,
             'password' => $request->password,
@@ -28,16 +36,17 @@ class DangNhapController extends Controller
         if (Auth::attempt($data)) {
             $user = NhanVien::where('sdt', $request->sdt)->first();
             Auth::login($user);
-            return redirect()->route('hoa-don.create');
+            return redirect()->route('hoa-don.create')->with('message', "Xin Chào " . Auth::user()->tennhanvien);
         } else {
-            return redirect()->route('DangNhap.index');
+            return redirect()->route('DangNhap.index')->with('errors', "Thông Tin Đăng Nhập Không Chính Xác");
         }
     }
 
     public function DangXuat(Request $request)
     {
+        
         Auth::logout();
-        return redirect()->route('DangNhap.index');
+        return redirect()->route('DangNhap.index')->with('success', "Đã Đăng Xuất");
     }
 
     public function username()

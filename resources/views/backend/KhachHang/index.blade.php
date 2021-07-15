@@ -35,10 +35,11 @@
                                     <thead>
                                         <tr>
                                             <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Tên Khách Hàng</th>
+                                            <th scope="col">Họ Tên</th>
                                             <th scope="col">Số Điện Thoại</th>
                                             <th scope="col">Địa Chỉ</th>
-                                            <th scope="col">Điểm Tích Luỹ</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Điểm</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
@@ -50,19 +51,26 @@
                                                     <td style="text-align: left">{{ $value->id }}</td>
                                                     <td>{{ $value->tenkhachhang }}</td>
                                                     <td>{{ $value->sdt }}</td>
-                                                    <td style="text-align: left">{{ $value->diachi }}</td>
+                                                    <td style="text-align: left; width: 20%">{{ $value->diachi }}</td>
+                                                    <td style="text-align: left">{{ $value->email }}</td>
                                                     <td>{{ number_format($value->diemtichluy, 0, ',', '.') }}</td>
                                                     <td>
-                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $value->trangthai == 1 ? 'Được Dùng' : 'Đã Khoá' }}</span>
+                                                        @if ($value->trangthai == 1)
+                                                            <span class="badge rounded-pill bg-success">Được Dùng</span>
+                                                        @else
+                                                            <span class="badge rounded-pill bg-danger">Đã Khoá</span>
+                                                        @endif
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('khach-hang.edit', $value->id) }}">
-                                                            <i class="fas fa-edit"></i></a>
+                                                        <div class="d-flex">
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-edit" data-url="{{ route('khach-hang.edit', $value->id) }}">
+                                                                <i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('khach-hang.destroy', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
-                                                            <i class="fas fa-trash-alt"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('khach-hang.destroy', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-trash-alt"></i></a>
+                                                        </div>
+
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -97,11 +105,11 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
@@ -110,6 +118,96 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
+        /////////////////////////////////////////////////////////////////////////////////////////// index
+        function SDT() { // nhập 10 ký tự.
+            $(document).ready(function() {
+                $("#SDT").keypress(function() {
+                    if (this.value.length == 10) {
+                        return false;
+                    }
+                })
+            })
+        };
+
+        function loadData() { // tải lại.
+            $.ajax({
+                url: "{{ route('khach-hang.load') }}",
+                method: 'GET',
+                success: function(response) {
+                    $('#dataSheet').html(response);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
+                }
+            });
+        };
+        /////////////////////////////////////////////////////////////////////////////////////////// create
+        function Create(url) { // trang thêm.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('.modal-body').html(response);
+                    $("#exampleModalLabel").text("Thêm Khách Hàng");
+                    $("#exampleModal").modal('show');
+                    SDT();
+                    Store();
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Trang");
+                }
+            })
+        };
+        /////////////////////////////////////////////////////////////////////////////////////////// store
+        function Store() { // thêm.
+            $('#form-create').on('click', function(e) {
+                e.preventDefault(); // dừng  sự kiện submit.
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'POST',
+                    data: {
+                        _token: $("input[name='_token']").val(),
+                        trangthai: $('input[name = "trangthai"]:checked').length,
+                        sdt: $("input[name='sdt']").val(),
+                        email: $("input[name='email']").val(),
+                        tenkhachhang: $("input[name='tenkhachhang']").val(),
+                        diemtichluy: $("input[name='diemtichluy']").val(),
+                        diachi: $("textarea[name='diachi']").val(),
+                    },
+                    success: function(response) {
+                        if (response.errors) {
+                            alert(response.errors);
+                        } else {
+                            $("#exampleModal").modal('hide');
+                            alertify.success(response.success);
+                            loadData();
+                        }
+                    },
+                    error: function(response) {
+                        alertify.error("Lỗi Thêm Mới");
+                    }
+                })
+            })
+        };
+        /////////////////////////////////////////////////////////////////////////////////////////// edit
+        function Edit(url) { // trang cập nhật.
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    $('.modal-body').html(response);
+                    $("#exampleModalLabel").text("Sửa Loại Nhân Viên");
+                    $("#exampleModal").modal('show');
+                    Money();
+                    SDT();
+                    Update();
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Trang");
+                }
+            })
+        };
+
         function Money() { // định dạng tiền.
             (function($) {
                 $.fn.simpleMoneyFormat = function() {
@@ -173,124 +271,7 @@
 
             $('.money').simpleMoneyFormat(); // áp dụng cho class money.
         }
-
-        function SDT() { // nhập 10 ký tự.
-            $(document).ready(function() {
-                $("#SDT").keypress(function() {
-                    if (this.value.length == 10) {
-                        return false;
-                    }
-                })
-            })
-        };
-
-        function loadData() { // tải lại.
-            $.ajax({
-                url: "{{ route('khach-hang.load') }}",
-                method: 'GET',
-                success: function(response) {
-                    $('#dataSheet').html(response);
-                }
-            });
-        };
-        $('#form-search').on('click', function(e) { //tìm
-            e.preventDefault(); // dừng  sự kiện submit.
-            if ($("input[name='search']").val().length > 0) {
-                $.ajax({
-                    url: $(this).data('url'),
-                    method: 'GET',
-                    data: {
-                        search: $("input[name='search']").val()
-                    },
-                    success: function(response) {
-                        $('.pagination').hide();
-                        $("input[name='search']").val("");
-                        $('#dataSheet').html(response);
-                        alertify.success("Đã Tìm");
-                    },
-                    error: function(response) {
-                        alertify.error("Lỗi Tìm Kiếm");
-                    }
-                })
-            } else {
-                location.reload();
-            }
-        });
-
-        function Create(url) { // trang thêm.
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function(response) {
-                    $('.modal-body').html(response);
-                    $("#exampleModalLabel").text("Thêm Khách Hàng");
-                    $("#exampleModal").modal('show');
-                    SDT();
-                    Store();
-                },
-                error: function(response) {
-                    alertify.error("Lỗi Tải Trang");
-                }
-            })
-        };
-
-        function Store() { // thêm.
-            $('#form-create').on('click', function(e) {
-                e.preventDefault(); // dừng  sự kiện submit.
-                $.ajax({
-                    url: $(this).data('url'),
-                    method: 'POST',
-                    data: {
-                        _token: $("input[name='_token']").val(),
-                        trangthai: $('input[name = "trangthai"]:checked').length,
-                        sdt: $("input[name='sdt']").val(),
-                        tenkhachhang: $("input[name='tenkhachhang']").val(),
-                        diemtichluy: $("input[name='diemtichluy']").val(),
-                        diachi: $("textarea[name='diachi']").val(),
-                    },
-                    success: function(response) {
-                        if (response.errors) {
-                            alert(response.errors);
-                        } else {
-                            $("#exampleModal").modal('hide');
-                            alertify.success(response.success);
-                            loadData();
-                        }
-                    },
-                    error: function(response) {
-                        alertify.error("Lỗi Thêm Mới");
-                    }
-                })
-            })
-        };
-
-        function Edit(url) { // trang cập nhật.
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function(response) {
-                    $('.modal-body').html(response);
-                    $("#exampleModalLabel").text("Sửa Loại Nhân Viên");
-                    $("#exampleModal").modal('show');
-                    Money();
-                    Update();
-                },
-                error: function(response) {
-                    alertify.error("Lỗi Tải Trang");
-                }
-            })
-        };
-
-        function loadUpdate(id) { // tải lại cập nhật.
-            $.ajax({
-                url: "khach-hang/" + id + "/loadUpdate",
-                method: 'GET',
-                success: function(response) {
-                    $('#' + id).html(response);
-                }
-            });
-        };
-
+        /////////////////////////////////////////////////////////////////////////////////////////// update
         function Update() { // cập nhật.
             $('#form-edit').on('click', function(e) {
                 e.preventDefault(); // dừng  sự kiện submit.
@@ -302,6 +283,7 @@
                         _token: $("input[name='_token']").val(),
                         trangthai: $('input[name = "trangthai"]:checked').length,
                         sdt: $("input[name='sdt']").val(),
+                        email: $("input[name='email']").val(),
                         tenkhachhang: $("input[name='tenkhachhang']").val(),
                         diemtichluy: $("input[name='diemtichluy']").val(),
                         diachi: $("textarea[name='diachi']").val(),
@@ -325,6 +307,19 @@
             Edit($(this).data('url'));
         });
 
+        function loadUpdate(id) { // tải lại cập nhật.
+            $.ajax({
+                url: "khach-hang/" + id + "/loadUpdate",
+                method: 'GET',
+                success: function(response) {
+                    $('#' + id).html(response);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
+                }
+            });
+        };
+        /////////////////////////////////////////////////////////////////////////////////////////// delete
         function Delete(url, id) { // xóa.
             $.ajax({
                 url: url,
@@ -334,13 +329,37 @@
                     alertify.success(response.success);
                 },
                 error: function(response) {
-                    alertify.error("Lỗi Khách Hàng Đang Được Sử Dụng");
+                    alertify.error("Khách Hang Này Đã Được Sử Dụng");
                 }
             })
         };
         $(document).on('click', '.form-delete', function() { // gọi xóa.
             if (confirm("Đồng Ý Để Xóa?")) {
                 Delete($(this).data('url'), $(this).data('id'));
+            }
+        });
+        /////////////////////////////////////////////////////////////////////////////////////////// serach
+        $('#form-search').on('click', function(e) { //tìm
+            e.preventDefault(); // dừng  sự kiện submit.
+            if ($("input[name='search']").val().length > 0) {
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'GET',
+                    data: {
+                        search: $("input[name='search']").val()
+                    },
+                    success: function(response) {
+                        $('.pagination').hide();
+                        $("input[name='search']").val("");
+                        $('#dataSheet').html(response);
+                        alertify.success("Đã Tìm");
+                    },
+                    error: function(response) {
+                        alertify.error("Lỗi Tìm Kiếm");
+                    }
+                })
+            } else {
+                location.reload();
             }
         });
     </script>

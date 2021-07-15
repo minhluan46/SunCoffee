@@ -25,6 +25,12 @@ Route::group(['namespace' => 'frontend'], function () {
 
     Route::get('/gio-hang', 'GioHangController@index')->name('GioHang.index');
     Route::get('/thanh-toan', 'GioHangController@show')->name('GioHang.show');
+    Route::post('/them-vao-gio-hang', 'GioHangController@addCartOnline')->name('GioHang.addCartOnline'); // thêm vào giỏ từ trang chi tiết. (chưa cải thiện từ ngữ trả về )
+    Route::post('/loai-bo-san-phan/{id}', 'GioHangController@deleteItemCartOnline')->name('GioHang.deleteItemCartOnline'); // xóa 1 sản phẩm.
+    Route::post('/bo-tat-ca', 'GioHangController@deleteCartOnline')->name('GioHang.deleteCartOnline'); // xóa tất cả sản phẩm.
+    Route::post('/cap-nhat-so-luong', 'GioHangController@updateQuantityOnline')->name('GioHang.updateQuantityOnline'); // cập nhật số lượng. (Chư sử lý thông báo khi số lượng lớn hơn)
+    Route::post('/dat-hang', 'GioHangController@orderOnline')->name('GioHang.orderOnline'); // tìm giảm giá thành viên.
+    // Route::post('/giam-gia-thanh-vien', 'GioHangController@discountMemberOnline')->name('GioHang.discountMemberOnline'); // tìm giảm giá thành viên.
 });
 
 
@@ -33,14 +39,22 @@ Route::group(['namespace' => 'frontend'], function () {
 Route::group(['namespace' => 'Auth'], function () {
     Route::get('/DangNhap', 'DangNhapController@index')->name('DangNhap.index'); // trang đăng nhập.
     Route::post('/DangNhap', 'DangNhapController@DangNhap')->name('DangNhap'); // đăng nhập.
-    Route::post('/DangXuat', 'DangNhapController@DangXuat')->name('DangXuat');  // đăng xuất.
+    Route::get('/DangXuat', 'DangNhapController@DangXuat')->name('DangXuat');  // đăng xuất.
 });
 //////////////////////////////        admin       //////////////////////////////
 
 Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'auth'], function () {
+    // thống kê.
+    Route::group(['middleware' => 'is.admin'], function () {
+
+        Route::get('/', 'ThongKeController@index')->name('thong-ke.index'); // trang chủ.
+        Route::post('/thong-ke/tu-den', 'ThongKeController@fromto')->name('thong-ke.fromto'); // thống kê từ ngày đến ngày.
+        Route::post('/thong-ke/thang-nay', 'ThongKeController@statsForThisMonth')->name('thong-ke.statsForThisMonth'); // thông kê trong 3 ngày qua.
+    });
+
     // loại nhân viên
 
-    Route::group(['prefix' => 'loai-nhan-vien'], function () {
+    Route::group(['prefix' => 'loai-nhan-vien', 'middleware' => 'is.admin'], function () {
 
         Route::get('/', 'LoaiNhanVienController@index')->name('loai-nhan-vien.index'); // danh sách.
         Route::get('/create', 'LoaiNhanVienController@create')->name('loai-nhan-vien.create'); // trang thêm.
@@ -55,36 +69,46 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
 
     Route::group(['prefix' => 'nhan-vien'], function () {
 
-        Route::get('/', 'NhanVienController@index')->name('nhan-vien.index'); // danh sách.
-        Route::get('/create', 'NhanVienController@create')->name('nhan-vien.create'); // trang thêm. (Chưa ajax)
-        Route::post('/store', 'NhanVienController@store')->name('nhan-vien.store'); //thêm. (Chưa ajax)
-        Route::get('/{id}/show', 'NhanVienController@show')->name('nhan-vien.show'); // trang chi tiết.
-        Route::get('/{id}/edit', 'NhanVienController@edit')->name('nhan-vien.edit'); // trang cập nhật. (Chưa ajax)
-        Route::put('/{id}/update', 'NhanVienController@update')->name('nhan-vien.update'); //cập nhật (Chưa ajax)
-        Route::get('/{id}/destroy', 'NhanVienController@destroy')->name('nhan-vien.destroy'); // xóa
-        Route::get('/search', 'NhanVienController@search')->name('nhan-vien.search'); // tìm.
+        Route::group(['middleware' => 'is.admin'], function () {
+
+            Route::get('/', 'NhanVienController@index')->name('nhan-vien.index'); // danh sách.
+            Route::get('/create', 'NhanVienController@create')->name('nhan-vien.create'); // trang thêm. (Chưa ajax)
+            Route::post('/store', 'NhanVienController@store')->name('nhan-vien.store'); //thêm. (Chưa ajax)
+            Route::get('/{id}/show', 'NhanVienController@show')->name('nhan-vien.show'); // trang chi tiết.
+            Route::get('/{id}/edit', 'NhanVienController@edit')->name('nhan-vien.edit'); // trang cập nhật. (Chưa ajax)
+            Route::put('/{id}/update', 'NhanVienController@update')->name('nhan-vien.update'); //cập nhật (Chưa ajax)
+            Route::get('/{id}/destroy', 'NhanVienController@destroy')->name('nhan-vien.destroy'); // xóa
+            Route::get('/search', 'NhanVienController@search')->name('nhan-vien.search'); // tìm.
+        });
+
+        Route::get('/{id}/myProfile', 'NhanVienController@myProfile')->name('nhan-vien.myProfile'); // Thông tin cá nhân.
     });
     // khách hàng
 
     Route::group(['prefix' => 'khach-hang'], function () {
 
-        Route::get('/', 'KhachHangController@index')->name('khach-hang.index'); // danh sách.
-        Route::get('/create', 'KhachHangController@create')->name('khach-hang.create'); // trang thêm. 
+        Route::group(['middleware' => 'is.admin'], function () {
+
+            Route::get('/', 'KhachHangController@index')->name('khach-hang.index'); // danh sách.
+            Route::get('/create', 'KhachHangController@create')->name('khach-hang.create'); // trang thêm. 
+            Route::get('/{id}/edit', 'KhachHangController@edit')->name('khach-hang.edit'); // trang cập nhật. 
+            Route::put('/{id}/update', 'KhachHangController@update')->name('khach-hang.update'); //cập nhật 
+            Route::get('/{id}/destroy', 'KhachHangController@destroy')->name('khach-hang.destroy'); // xóa
+            Route::get('/load', 'KhachHangController@load')->name('khach-hang.load'); // tải lại.
+            Route::get('/{id}/loadUpdate', 'KhachHangController@loadUpdate')->name('khach-hang.loadUpdate'); // tải cập nhật.
+            Route::get('/search', 'KhachHangController@search')->name('khach-hang.search'); // tìm. 
+        });
+
         Route::post('/store', 'KhachHangController@store')->name('khach-hang.store'); //thêm. 
-        Route::get('/{id}/edit', 'KhachHangController@edit')->name('khach-hang.edit'); // trang cập nhật. 
-        Route::put('/{id}/update', 'KhachHangController@update')->name('khach-hang.update'); //cập nhật 
-        Route::get('/{id}/destroy', 'KhachHangController@destroy')->name('khach-hang.destroy'); // xóa
-        Route::get('/load', 'KhachHangController@load')->name('khach-hang.load'); // tải lại.
-        Route::get('/{id}/loadUpdate', 'KhachHangController@loadUpdate')->name('khach-hang.loadUpdate'); // tải cập nhật.
-        Route::get('/search', 'KhachHangController@search')->name('khach-hang.search'); // tìm.
     });
     // loai san phẩm
 
-    Route::group(['prefix' => 'loai-san-pham'], function () {
+    Route::group(['prefix' => 'loai-san-pham', 'middleware' => 'is.admin'], function () {
 
         Route::get('/', 'LoaiSanPhamController@index')->name('loai-san-pham.index'); // danh sách.
         Route::get('/create', 'LoaiSanPhamController@create')->name('loai-san-pham.create'); // trang thêm.
         Route::post('/store', 'LoaiSanPhamController@store')->name('loai-san-pham.store'); //thêm.
+        Route::get('/{id}/show', 'LoaiSanPhamController@show')->name('loai-san-pham.show'); // trang cập nhật.
         Route::get('/{id}/edit', 'LoaiSanPhamController@edit')->name('loai-san-pham.edit'); // trang cập nhật.
         Route::put('/{id}/update', 'LoaiSanPhamController@update')->name('loai-san-pham.update'); //cập nhật
         Route::get('/{id}/destroy', 'LoaiSanPhamController@destroy')->name('loai-san-pham.destroy'); // xóa
@@ -92,9 +116,19 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/{id}/loadUpdate', 'LoaiSanPhamController@loadUpdate')->name('loai-san-pham.loadUpdate'); // tải cập nhật.
         Route::get('/search', 'LoaiSanPhamController@search')->name('loai-san-pham.search'); // tìm.
     });
+    // quy cách.
+
+    Route::group(['prefix' => 'quy-cach', 'middleware' => 'is.admin'], function () {
+
+        Route::get('/create', 'QuyCachController@create')->name('quy-cach.create'); // trang thêm.
+        Route::post('/store', 'QuyCachController@store')->name('quy-cach.store'); //thêm.
+        Route::get('/{id}/edit', 'QuyCachController@edit')->name('quy-cach.edit'); // trang cập nhật.
+        Route::put('/{id}/update', 'QuyCachController@update')->name('quy-cach.update'); //cập nhật
+        Route::get('/{id}/destroy', 'QuyCachController@destroy')->name('quy-cach.destroy'); // xóa
+    });
     // sản phẩm.
 
-    Route::group(['prefix' => 'san-pham'], function () {
+    Route::group(['prefix' => 'san-pham', 'middleware' => 'is.admin'], function () {
 
         Route::get('/', 'SanPhamController@index')->name('san-pham.index'); // danh sách.
         Route::get('/create', 'SanPhamController@create')->name('san-pham.create'); // trang thêm. (chưa ajax)
@@ -107,7 +141,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
     });
     // chi tiết san phẩm
 
-    Route::group(['prefix' => 'chi-tiet-san-pham'], function () {
+    Route::group(['prefix' => 'chi-tiet-san-pham', 'middleware' => 'is.admin'], function () {
 
         Route::get('/{id}/create', 'ChiTietSanPhamController@create')->name('chi-tiet-san-pham.create'); // trang thêm chi tiết. 
         Route::post('/store', 'ChiTietSanPhamController@store')->name('chi-tiet-san-pham.store'); // thêm chi tiết.
@@ -119,20 +153,24 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
 
     Route::group(['prefix' => 'khuyen-mai'], function () {
 
+        Route::group(['middleware' => 'is.admin'], function () {
+
+            Route::get('/create', 'KhuyenMaiController@create')->name('khuyen-mai.create'); // trang thêm. 
+            Route::post('/store', 'KhuyenMaiController@store')->name('khuyen-mai.store'); //thêm.
+            Route::get('/{id}/edit', 'KhuyenMaiController@edit')->name('khuyen-mai.edit'); // trang cập nhật.
+            Route::put('/{id}/update', 'KhuyenMaiController@update')->name('khuyen-mai.update'); //cập nhật 
+            Route::get('/{id}/loadUpdate', 'KhuyenMaiController@loadUpdate')->name('khuyen-mai.loadUpdate'); // tải cập nhật.
+            Route::get('/{id}/destroy', 'KhuyenMaiController@destroy')->name('khuyen-mai.destroy'); // xóa.
+            Route::get('/load', 'KhuyenMaiController@load')->name('khuyen-mai.load'); // tải lại.
+        });
+
         Route::get('/', 'KhuyenMaiController@index')->name('khuyen-mai.index'); // danh sách.
-        Route::get('/create', 'KhuyenMaiController@create')->name('khuyen-mai.create'); // trang thêm. 
-        Route::post('/store', 'KhuyenMaiController@store')->name('khuyen-mai.store'); //thêm. 
-        Route::get('/load', 'KhuyenMaiController@load')->name('khuyen-mai.load'); // tải lại.
         Route::get('/{id}/show', 'KhuyenMaiController@show')->name('khuyen-mai.show'); // trang chi tiết.
-        Route::get('/{id}/edit', 'KhuyenMaiController@edit')->name('khuyen-mai.edit'); // trang cập nhật.
-        Route::put('/{id}/update', 'KhuyenMaiController@update')->name('khuyen-mai.update'); //cập nhật 
-        Route::get('/{id}/loadUpdate', 'KhuyenMaiController@loadUpdate')->name('khuyen-mai.loadUpdate'); // tải cập nhật.
-        Route::get('/{id}/destroy', 'KhuyenMaiController@destroy')->name('khuyen-mai.destroy'); // xóa.
         Route::get('/search', 'KhuyenMaiController@search')->name('khuyen-mai.search'); // tìm.
     });
     // chi tiết khuyến mãi
 
-    Route::group(['prefix' => 'chi-tiet-khuyen-mai'], function () {
+    Route::group(['prefix' => 'chi-tiet-khuyen-mai', 'middleware' => 'is.admin'], function () {
 
         Route::get('/{id}/create', 'ChiTietKhuyenMaiController@create')->name('chi-tiet-khuyen-mai.create'); // trang thêm chi tiết.
         Route::post('/store', 'ChiTietKhuyenMaiController@store')->name('chi-tiet-khuyen-mai.store'); // thêm chi tiết.
@@ -143,33 +181,48 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
     // hóa đơn.
 
     Route::group(['prefix' => 'hoa-don'], function () {
+        // danh sách hóa đơn.
+
         Route::get('/', 'HoaDonController@index')->name('hoa-don.index'); // đến trang danh sách.
+        Route::get('/show/{id}', 'HoaDonController@show')->name('hoa-don.show'); // chi tiết.
+        Route::put('updateStatus/{id}', 'HoaDonController@updateStatus')->name('hoa-don.updateStatus')->middleware('is.admin'); // cập nhật trạng thái.
+        Route::get('destroy/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy')->middleware('is.admin'); // xóa.
+        Route::get('/search', 'HoaDonController@search')->name('hoa-don.search'); // tìm.
+        // thêm giỏ hàng.
+
         Route::get('/create', 'HoaDonController@create')->name('hoa-don.create'); // đến trang thêm.
         Route::get('priceProduct/{id}', 'HoaDonController@priceProduct')->name('hoa-don.priceProduct'); // lấy giá sản phẩm.
         Route::get('discountProduct/{id}', 'HoaDonController@discountProduct')->name('hoa-don.discountProduct'); //lấy giảm giá khuyến mãi.
         Route::get('addCart/{id}', 'HoaDonController@addCart')->name('hoa-don.addCart'); // thêm vào GioHang.
-        Route::get('quantityChange/{id}/{quantity}', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange'); // thay đổi số lượng SP trong GioHang.
+        // cập nhật giỏ hàng.
+
+        Route::get('quantityChange', 'HoaDonController@quantityChange')->name('hoa-don.quantityChange'); // thay đổi số lượng SP trong GioHang.
+        // xóa giỏ hàng.
+
         Route::get('deleteItemHoaDon/{id}', 'HoaDonController@deleteItemHoaDon')->name('hoa-don.deleteItemHoaDon'); // xóa khổi GioHang.
+        Route::post('deleteHoaDon/', 'HoaDonController@deleteHoaDon')->name('hoa-don.deleteHoaDon'); // xóa khổi GioHang.
+        // tìm kiếm.
+
         Route::get('searchProduct', 'HoaDonController@searchProduct')->name('hoa-don.searchProduct'); // tìm sản phẩm.
-        Route::get('payment', 'HoaDonController@payment')->name('hoa-don.payment'); // đến trang thanh toán.
         Route::get('searchCustomer', 'HoaDonController@searchCustomer')->name('hoa-don.searchCustomer'); // tìm khách hàng.
-        Route::get('discountMember', 'HoaDonController@discountMember')->name('hoa-don.discountMember'); // lấy giảm giá thành viên.
-        Route::get('in', 'HoaDonController@in')->name('hoa-don.in'); // tạo hóa đơn.
-        Route::get('/show/{id}', 'HoaDonController@show')->name('hoa-don.show'); // chi tiết.
-        Route::put('updateStatus/{id}', 'HoaDonController@updateStatus')->name('hoa-don.updateStatus'); // cập nhật trạng thái.
-        Route::get('destroy/{id}', 'HoaDonController@destroy')->name('hoa-don.destroy'); // xóa.
-        Route::get('/search', 'HoaDonController@search')->name('hoa-don.search'); // tìm.
+        // giảm giá thành viên.
 
+        Route::get('discountMember', 'HoaDonController@discountMember')->name('hoa-don.discountMember'); // áp dụng giảm giá cho thành viên.
+        Route::get('unDiscountMember', 'HoaDonController@unDiscountMember')->name('hoa-don.unDiscountMember'); // bỏ áp dụng giảm giá cho thành viên.
+        // in.
 
+        Route::get('in', 'HoaDonController@in')->name('hoa-don.in'); // tạo hóa đơn. {IN HÓA ĐƠN}
+        // cần được xử lý.
 
-        Route::post('update/{id}', 'HoaDonController@update')->name('hoa-don.update');
-        Route::post('/store', 'HoaDonController@store')->name('hoa-don.store');
-        Route::get('/edit/{id}', 'HoaDonController@edit')->name('hoa-don.edit');
+        Route::get('/xu-ly', 'HoaDonController@handleDelivery')->name('hoa-don.handleDelivery'); // đến trang cập nhật giao hàng.
+        Route::put('/cap-nhat-xu-ly/{id}', 'HoaDonController@updateDelivery')->name('hoa-don.updateDelivery'); // cập nhật giao hàng. {IN HÓA ĐƠN, Thông báo email}
+        Route::get('/xoa-xu-ly/{id}', 'HoaDonController@deleteDelivery')->name('hoa-don.deleteDelivery'); // xóa giao hàng. {thông báo email}
+        Route::get('/so-luong', 'HoaDonController@countHandleDelivery')->name('hoa-don.countHandleDelivery'); // số lượng hóa đơn cần xử lý.
+        Route::get('/print_bill/{id}', 'HoaDonController@print_bill')->name('hoa-don.print_bill');
+        Route::get('/download_bill/{id}', 'HoaDonController@download_bill')->name('hoa-don.download_bill');
     });
-
-
-
-    // Thống kê.
-
-    Route::get('/', 'HomeController@index')->name('home.index');
 });
+
+// in hóa đơn.9
+// thông báo qua email.(dành cho thành viên: thông báo về đểm tích lũy,...)
+// activa. 

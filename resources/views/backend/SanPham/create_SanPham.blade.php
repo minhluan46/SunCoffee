@@ -78,7 +78,7 @@
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
 
-                                    <label>Hình Ảnh Sản Phẩm<b style="color:red"> *</b></label> <br>
+                                    <label>Hình Ảnh Sản Phẩm</label> <br>
                                     <input type="file" class="image @error(' hinhanh') is-invalid @enderror" id="image"
                                         name="hinhanh" onchange="UpImg()">
                                     <div id="displayIMG"></div>

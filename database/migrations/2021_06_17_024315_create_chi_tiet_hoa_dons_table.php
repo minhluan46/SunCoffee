@@ -18,7 +18,7 @@ class CreateChiTietHoaDonsTable extends Migration
             $table->char('id_chitietsanpham', 18);
             $table->integer('soluong');
             $table->integer('giamgia');
-            $table->integer('tonggiasanpham');
+            $table->integer('tonggia');
             $table->timestamps();
 
             $table->foreign('id_hoadon')->references('id')->on('hoa_don');

@@ -11,7 +11,10 @@ class NhanVien extends Authenticatable
 {
     use Notifiable;
 
-    protected $table ='nhan_vien';
+    protected $table = 'nhan_vien';
     public $incrementing = false;
-    protected $fillable = ['id', 'tennhanvien', 'sdt', 'diachi', 'ngaysinh', 'gioitinh', 'hinhanh', 'luong', 'tentaikhoan', 'password', 'id_loainhanvien', 'trangthai'];
+    protected $fillable = [
+        'id', 'tennhanvien', 'sdt', 'diachi', 'email', 'ngaysinh', 'gioitinh',
+        'hinhanh', 'luong', 'tentaikhoan', 'password', 'id_loainhanvien', 'trangthai'
+    ];
 }

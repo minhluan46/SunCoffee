@@ -1,16 +1,20 @@
 @extends('layouts.backend_layout')
 @section('content')
+    {{-- thông báo --}}
+    @if (session('success'))
+        <input type="text" class="Successful_message" id="Successful_message" value="{{ session('success') }}" hidden>
+    @endif
     <div class="main_content_iner ">
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" href="{{ route('hoa-don.create') }}">Thêm Mới</a>
+                <a class="btn btn-success" href="{{ route('hoa-don.create') }}">Thêm Hóa Đơn Mới</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
                     <form method="GET">
                         <div class="search_field">
-                            <input type="text" placeholder="Tìm..." name="search">
+                            <input type="text" placeholder="Tên, sđt  khách hàng, sđt nhân viên..." name="search">
                         </div>
                         <button id="form-search" data-url="{{ route('hoa-don.search') }}" type="submit">
                             <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
@@ -54,38 +58,37 @@
                                             @foreach ($HoaDon as $value)
                                                 <tr id="{{ $value->id }}">
                                                     <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ $value->ngaylap }}</td>
+                                                    <td>{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
                                                     <td>{{ $value->sdtkhachhang }}</td>
                                                     <td>
-                                                        @foreach ($KhachHang as $itemKH)
-                                                            @if ($value->id_khachhang == $itemKH->id)
-                                                                {{ $itemKH->tenkhachhang }}
-                                                            @endif
-                                                        @endforeach
+                                                        {{ $value->tenkhachhang }}
                                                     </td>
                                                     <td>
-                                                        @foreach ($NhanVien as $itemNV)
-                                                            @if ($value->id_nhanvien == $itemNV->id)
-                                                                {{ $itemNV->tennhanvien }}
-                                                            @endif
-                                                        @endforeach
-                                                    </td>
-                                                    <td><span
-                                                            class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $value->trangthai == 1 ? 'Hoạt Động' : 'Đã Ngừng' }}</span>
+                                                        @isset($NhanVien)
+                                                            @foreach ($NhanVien as $itemNV)
+                                                                @if ($value->id_nhanvien == $itemNV->id)
+                                                                    {{ $itemNV->tennhanvien }}
+                                                                @endif
+                                                            @endforeach
+                                                        @endisset
                                                     </td>
                                                     <td>
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn mr_10 view-show">
+                                                        @if ($value->trangthai == 1)
+                                                            <span class='badge rounded-pill bg-success'>Hoàn Thành</span>
+                                                        @else
+                                                            <span class='badge rounded-pill bg-danger'>Đã Đóng</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 view-show">
                                                             <i class="fas fa-eye"></i></a>
+                                                        @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
+                                                            <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 form-updatestatus">
+                                                                <i class="fas fa-pencil-alt "></i></a>
 
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn mr_10 form-updatestatus">
-                                                            <i class="fas fa-pencil-alt "></i></a>
-
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn form-delete">
-                                                            <i class="fas fa-trash-alt"></i></a>
+                                                            <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn form-delete">
+                                                                <i class="fas fa-trash-alt"></i></a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -107,8 +110,7 @@
     </div>
 @endsection
 @section('modal')
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,6 +136,13 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
+        window.onload = function() {
+            if ($('#Successful_message').hasClass('Successful_message')) {
+                ShowHoaDon($('#Successful_message').val());
+                alertify.success("Đã Thêm 1 Hóa Đơn Mới");
+            }
+        };
+
         function ShowHoaDon(id) { //hiển thị chi tiết hóa đơn.
             $.ajax({
                 url: 'hoa-don/show/' + id,

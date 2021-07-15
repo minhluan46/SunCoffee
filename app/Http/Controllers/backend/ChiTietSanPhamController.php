@@ -5,6 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SanPham;
+use App\Models\QuyCach;
+use App\Models\LoaiSanPham;
 use App\Models\ChiTietSanPham;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -14,15 +16,18 @@ class ChiTietSanPhamController extends Controller
 
     public function create($id) //trang thêm chi tiết.
     {
+        $SanPham = SanPham::find($id);
+        $LoaiSanPham = LoaiSanPham::where('id', $SanPham->id_loaisanpham)->first();
         $viewData = [
-            'SanPham' => SanPham::find($id),
+            'SanPham' => $SanPham,
+            'LoaiSanPham' => $LoaiSanPham,
+            'QuyCach' => QuyCach::where('id_loaisanpham', $LoaiSanPham->id)->get(),
         ];
         return view('backend.ChiTietSanPham.create_ChiTietSanPham', $viewData);
     }
 
     public function store(Request $request) //thêm chi tiết.
     {
-
         $validator = Validator::make(
             $request->all(), // kiểm tra dữ liệu nhập.
             [
@@ -85,8 +90,13 @@ class ChiTietSanPhamController extends Controller
 
     public function edit($id) //trang cập nhật chi tiết.
     {
+        $ChiTietSanPham = ChiTietSanPham::find($id);
+        $SanPham = SanPham::where('id', $ChiTietSanPham->id_sanpham)->first();
+        $LoaiSanPham = LoaiSanPham::where('id', $SanPham->id_loaisanpham)->first();
         $viewData = [
-            'ChiTietSanPham' => ChiTietSanPham::find($id),
+            'ChiTietSanPham' =>  $ChiTietSanPham,
+            'LoaiSanPham' => $LoaiSanPham,
+            'QuyCach' => QuyCach::where('id_loaisanpham', $LoaiSanPham->id)->get(),
         ];
         return view('backend.ChiTietSanPham.edit_ChiTietSanPham', $viewData);
     }
@@ -135,10 +145,19 @@ class ChiTietSanPhamController extends Controller
         $data['ngaysanxuat'] = $request->ngaysanxuat;
         $data['hansudung'] = $request->hansudung;
         $data['id_sanpham'] = $request->id_sanpham;
-        if ($request->trangthai == "1") {
-            $data['trangthai'] = 0;
+        $OldChiTietSanPham = ChiTietSanPham::find($id);
+        if ($OldChiTietSanPham->trangthai == 0) {
+            if ($request->trangthai == "1") {
+                $data['trangthai'] = 1;
+            } else {
+                $data['trangthai'] = 0;
+            }
         } else {
-            $data['trangthai'] = 1;
+            if ($request->trangthai == "2") {
+                $data['trangthai'] = 1;
+            } else {
+                $data['trangthai'] = 0;
+            }
         }
         ChiTietSanPham::where('id', $id)->update($data);
         return response()->json(['success' => 'Thành Công Rồi']);

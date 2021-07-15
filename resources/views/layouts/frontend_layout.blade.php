@@ -36,27 +36,30 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('Trangchu.index') }}">Sun<small>coffee</small></a>
             {{-- ? --}}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             {{-- /? --}}
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}"
-                            class="nav-link">Trang Chủ</a></li>
-                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}"
-                            class="nav-link">Sản Phẩm</a></li>
-                    <li @yield('active_dichvu') class="nav-item"><a href="{{ route('DichVu.index') }}"
-                            class="nav-link">Dịch Vụ</a></li>
-                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}"
-                            class="nav-link">Về Chúng Tôi</a></li>
-                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}"
-                            class="nav-link">Liên Lạc</a></li>
-                    <li class="nav-item cart"><a href="{{ route('GioHang.index') }}" class="nav-link">
+                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}" class="nav-link">Trang Chủ</a></li>
+                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}" class="nav-link">Sản Phẩm</a></li>
+                    <li @yield('active_dichvu') class="nav-item"><a href="{{ route('DichVu.index') }}" class="nav-link">Dịch Vụ</a></li>
+                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}" class="nav-link">Về Chúng Tôi</a></li>
+                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}" class="nav-link">Liên Lạc</a></li>
+                    <li class="nav-item cart">
+                        <a href="{{ route('GioHang.index') }}" class="nav-link">
                             <span class="icon icon-shopping_cart"></span>
-                            <span
-                                class="bag d-flex justify-content-center align-items-center"><small>69</small></span></a>
+                            <span class="bag d-flex justify-content-center align-items-center">
+                                <small id="cart-quantity">
+                                    @if (Session::has('GioHangOnline') != null)
+                                        {{ Session::get('GioHangOnline')->totalQuanty }}
+                                    @else
+                                        0
+                                    @endif
+                                </small>
+                            </span>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -134,8 +137,7 @@
                                         View, San Francisco, California, USA</span></li>
                                 <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929
                                             210</span></a></li>
-                                <li><a href="#"><span class="icon icon-envelope"></span><span
-                                            class="text">info@yourdomain.com</span></a></li>
+                                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -148,8 +150,7 @@
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         <script>
                             document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i class="icon-heart"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
@@ -161,8 +162,7 @@
     <div id="ftco-loader" class="show fullscreen">
         <svg class="circular" width="48px" height="48px">
             <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
-                stroke="#F96D00" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
         </svg>
     </div>
     @yield('modal')
@@ -185,8 +185,7 @@
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     @yield('script')
     {{-- Zalo chat --}}
-    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!"
-        data-autopopup="600" data-width="350" data-height="420"></div>
+    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!" data-autopopup="600" data-width="350" data-height="420"></div>
 
     <script src="https://sp.zalo.me/plugins/sdk.js"></script>
 

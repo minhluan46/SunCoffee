@@ -21,7 +21,7 @@ body {
   font-family: "Mulish", sans-serif;
   padding: 0;
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   position: relative;
   background: #F6F7FB;
 }
@@ -4001,7 +4001,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child::befor
 /* line 387, G:/admin_project/8 admin/management_html/scss/_header.scss */
 .serach_field-area .search_inner input {
   color: #86898E;
-  font-size: 11px;
+  font-size: 16px;
   height: 36px;
   width: 100%;
   padding-left: 12px;
@@ -5891,7 +5891,7 @@ body::-webkit-scrollbar {
 
 /* line 233, G:/admin_project/8 admin/management_html/scss/_dashboard_part.scss */
 .QA_section .QA_table tbody th, .QA_section .QA_table tbody td {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   border-bottom: 0;
 }
@@ -5944,7 +5944,7 @@ body::-webkit-scrollbar {
   border-bottom: 0 solid transparent;
   padding: 9px 15px;
   border: 0px solid transparent;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   color: #474D58;
   white-space: nowrap;
@@ -6515,7 +6515,7 @@ tspan {
   margin: 0;
   font-size: 12px;
   font-weight: 300;
-  color: #7e7172;
+  color: #fc0015;
   line-height: 12px;
   font-family: "Mulish", sans-serif;
 }
@@ -6525,7 +6525,7 @@ tspan {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   text-align: center;
-  background: #000 !important;
+  background: rgb(255, 144, 144) !important;
   border: 0;
   padding: 7px 22px 5px 22px !important;
   -webkit-border-radius: 5px;

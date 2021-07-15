@@ -7,20 +7,19 @@
     <title>Sun Coffee</title>
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}" /> {{-- bootstrap --}}
     <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
 </head>
 
 <body class="crm_body_bg">
     <div class="row justify-content-center" style="margin-top: 100px">
         <div class="col-lg-6">
-            {{--  --}}
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            {{-- Thông báo --}}
+            @if (session('success'))
+                <input type="text" class="Successful_message" id="Successful_message" value="{{ session('success') }}" hidden>
+            @endif
+            @if (session('errors'))
+                <input type="text" class="Failure_message" id="Failure_message" value="{{ session('errors') }}" hidden>
             @endif
             {{--  --}}
             <div class="modal-content cs_modal">
@@ -31,8 +30,7 @@
                     <form method="POST" action="{{ route('DangNhap') }}">
                         @csrf
                         <div class="form-group">
-                            <input id="SDT" name="sdt" type="number" class="form-control"
-                                placeholder="Nhập Số Điện Thoại">
+                            <input id="SDT" name="sdt" type="number" class="form-control" placeholder="Nhập Số Điện Thoại">
                         </div>
                         <div class="form-group">
                             <input name="password" type="password" class="form-control" placeholder="Mật Khẩu">
@@ -45,7 +43,8 @@
     </div>
     <!-- footer  -->
     <script src="{{ asset('backend/js/jquery-3.4.1.min.js') }}"></script>
-    <script>
+    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script type="text/javascript">
         $(document).ready(function() {
             $("#SDT").keypress(function() {
                 if (this.value.length == 10) {
@@ -53,6 +52,14 @@
                 }
             })
         });
+        window.onload = function() {
+            if ($('#Successful_message').hasClass('Successful_message')) {
+                alertify.success($('#Successful_message').val());
+            }
+            if ($('#Failure_message').hasClass('Failure_message')) {
+                alertify.error($('#Failure_message').val());
+            }
+        };
     </script>
 </body>
 
