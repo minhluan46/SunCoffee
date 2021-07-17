@@ -13,7 +13,7 @@
                     <div class="nav_icon_small">
                         <img src="{{ asset('backend/img/menu-icon/dashboard.svg') }}" alt="">
                     </div>
-                    <div class="nav_title">
+                    <div @yield('active_thongke') class="nav_title">
                         <span>Thông Kê</span>
                     </div>
                 </a>
@@ -24,7 +24,7 @@
                 <div class="nav_icon_small">
                     <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                 </div>
-                <div class="nav_title">
+                <div @yield('active_laphoadon') class="nav_title">
                     <span>Lập Hoá Đơn</span>
                 </div>
             </a>
@@ -34,8 +34,8 @@
                 <div class="nav_icon_small">
                     <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                 </div>
-                <div class="nav_title">
-                    <span>Hóa Đơn Chưa Xử Lý <span class="badge bg-danger" id="soluongcanxu"></span></span>
+                <div @yield('active_hoadonchuasuly') class="nav_title">
+                    <span>Hóa Đơn Chưa Xử Lý <span class="badge bg-danger" id="soluongcanxu" style="color: white"></span></span>
                 </div>
             </a>
         </li>
@@ -46,11 +46,15 @@
                         url: '/admin/hoa-don/so-luong',
                         method: 'GET',
                         success: function(data) {
-                            $('#soluongcanxu').text(data);
+                            if (data != 0) {
+                                $('#soluongcanxu').text(data);
+                            } else {
+                                $('#soluongcanxu').text("");
+                            }
                         }
-                    })
+                    });
                 };
-                countHoaDonCanXuLy(); // luôn gọi để lấy số lượng hóa đơn cần xử lý.
+                countHoaDonCanXuLy();
             </script>
         @endsection
         @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
@@ -59,18 +63,37 @@
                     <div class="nav_icon_small">
                         <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                     </div>
-                    <div class="nav_title">
-                        <span>Quản Lý Sản Phẩm</span>
+                    <div @yield('active_quanlysanpham') class="nav_title">
+                        <span>Quản Lý Sản Phẩm <span class="badge bg-danger soluongsanphamhethang" style="color: white"></span></span>
                     </div>
                 </a>
             </li>
+            @section('countSanPhamHetHang')
+                <script type="text/javascript">
+                    function countSanPhamHetHang() {
+                        $.ajax({
+                            url: '/admin/san-pham/so-luong-het-hang',
+                            method: 'GET',
+                            success: function(data) {
+                                if (data != 0) {
+                                    $('.soluongsanphamhethang').text(data);
+                                } else {
+                                    $('.soluongsanphamhethang').text("");
+
+                                }
+                            }
+                        });
+                    };
+                    countSanPhamHetHang();
+                </script>
+            @endsection
         @endif
         <li class="">
             <a href="{{ route('khuyen-mai.index') }}" aria-expanded="false">
                 <div class="nav_icon_small">
                     <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                 </div>
-                <div class="nav_title">
+                <div @yield('active_quanlykhuyenmai') class="nav_title">
                     <span>Quản Lý Khuyến mãi</span>
                 </div>
             </a>
@@ -81,7 +104,7 @@
                     <div class="nav_icon_small">
                         <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                     </div>
-                    <div class="nav_title">
+                    <div @yield('active_quanlynhanvien') class="nav_title">
                         <span>Quản Lý Nhân Viên</span>
                     </div>
                 </a>
@@ -91,7 +114,7 @@
                     <div class="nav_icon_small">
                         <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                     </div>
-                    <div class="nav_title">
+                    <div @yield('active_quanlykhachhang') class="nav_title">
                         <span>Quản Lý Khách Hàng</span>
                     </div>
                 </a>

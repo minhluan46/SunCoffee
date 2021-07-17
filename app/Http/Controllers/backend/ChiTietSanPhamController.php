@@ -21,7 +21,7 @@ class ChiTietSanPhamController extends Controller
         $viewData = [
             'SanPham' => $SanPham,
             'LoaiSanPham' => $LoaiSanPham,
-            'QuyCach' => QuyCach::where('id_loaisanpham', $LoaiSanPham->id)->get(),
+            'QuyCach' => QuyCach::where([['id_loaisanpham', $LoaiSanPham->id], ['trangthai', '!=', 0]])->get(),
         ];
         return view('backend.ChiTietSanPham.create_ChiTietSanPham', $viewData);
     }
@@ -96,7 +96,7 @@ class ChiTietSanPhamController extends Controller
         $viewData = [
             'ChiTietSanPham' =>  $ChiTietSanPham,
             'LoaiSanPham' => $LoaiSanPham,
-            'QuyCach' => QuyCach::where('id_loaisanpham', $LoaiSanPham->id)->get(),
+            'QuyCach' => QuyCach::where([['id_loaisanpham', $LoaiSanPham->id], ['trangthai', '!=', 0]])->get(),
         ];
         return view('backend.ChiTietSanPham.edit_ChiTietSanPham', $viewData);
     }

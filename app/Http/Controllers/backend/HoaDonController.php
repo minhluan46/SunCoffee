@@ -18,31 +18,93 @@ use App\Models\ThongKe;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Mail;
 
 class HoaDonController extends Controller
 {
-    public function print_bill($id)
+    /////////////////////////////////////////////////////////////////////////////////////////// gửi email.
+    public function email($id, $TT)
+    {
+        $HoaDon = HoaDon::find($id);
+        $to_name = "SUN COFFEE";
+        $to_email = $HoaDon->emailkhachhang;
+        $viewData = [
+            'HoaDon' =>  $HoaDon,
+            'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
+            'KhachHang' => KhachHang::where('id', $HoaDon->id_khachhang)->first(),
+
+            'ChiTietHoaDon' => ChiTietHoaDon::where('chi_tiet_hoa_don.id_hoadon', $id)
+                ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_hoa_don.id_chitietsanpham')
+                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+                ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+                ->select(
+                    'chi_tiet_hoa_don.*',
+                    'chi_tiet_san_pham.giasanpham',
+                    'quy_cach.tenquycach',
+                    'san_pham.tensanpham',
+                )
+                ->get(),
+        ];
+        if ($TT == 1) {
+            return view('backend.Email.send_email', $viewData);
+        } else {
+            return view('backend.Email.send_email_cancel', $viewData);
+        }
+    }
+    public function send_email($id, $TT)
+    {
+        $HoaDon = HoaDon::find($id);
+        $to_name = "SUN COFFEE";
+        $to_email = $HoaDon->emailkhachhang;
+        $viewData = [
+            'HoaDon' =>  $HoaDon,
+            'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
+            'KhachHang' => KhachHang::where('id', $HoaDon->id_khachhang)->first(),
+
+            'ChiTietHoaDon' => ChiTietHoaDon::where('chi_tiet_hoa_don.id_hoadon', $id)
+                ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_hoa_don.id_chitietsanpham')
+                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+                ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+                ->select(
+                    'chi_tiet_hoa_don.*',
+                    'chi_tiet_san_pham.giasanpham',
+                    'quy_cach.tenquycach',
+                    'san_pham.tensanpham',
+                )
+                ->get(),
+        ];
+        if ($TT == 1) {
+            Mail::send('backend.Email.send_email', $viewData, function ($message) use ($to_name, $to_email) {
+                $message->to($to_email)->subject('Thông Báo Đã Xác Nhận Đơn Hàng');
+                $message->from($to_email, $to_name);
+            });
+        } else {
+            Mail::send('backend.Email.send_email_cancel', $viewData, function ($message) use ($to_name, $to_email) {
+                $message->to($to_email)->subject('Thông Báo Đơn Hàng Của Bạn Bị Hủy');
+                $message->from($to_email, $to_name);
+            });
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// in hóa đơn.
+    public function print_bill($id) // xem trước khi in.
     {
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($this->print_order_convert($id));
         return $pdf->stream();
         // return $pdf->download('invoice.pdf');
     }
-
-    public function download_bill($id)
+    public function download_bill($id) // tải file.
     {
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($this->print_order_convert($id));
         // return $pdf->stream();
         return $pdf->download('invoice.pdf');
     }
-
-    public function print_order_convert($id)
+    public function print_order_convert($id) // in hóa đơn.
     {
         $HoaDon = HoaDon::find($id);
         $NhanVien = NhanVien::where('id', $HoaDon->id_nhanvien)->first();
 
-        $SanPham = SanPham::all();
         $ChiTietHoaDon = ChiTietHoaDon::where('chi_tiet_hoa_don.id_hoadon', $id)
             ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_hoa_don.id_chitietsanpham')
             ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
@@ -188,27 +250,6 @@ class HoaDonController extends Controller
 
         return $output;
     }
-
-    public function preview_order()
-    {
-        $HoaDon = HoaDon::find('HD20210715103826');
-        $viewData = [
-            'HoaDon' => $HoaDon,
-            'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
-        ];
-        // dd($viewData);
-        return view('backend.Print.print_order', $viewData);
-    }
-    // public function downloadPDF()
-    // {
-    //     $HoaDon = HoaDon::find('HD20210715103826');
-    //     $viewData = [
-    //         'HoaDon' => $HoaDon,
-    //         'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
-    //     ];
-    //     $pdf = PDF::loadView('backend.Print.print_order', $viewData);
-    //     return $pdf->download('invoice.pdf');
-    // }
     /////////////////////////////////////////////////////////////////////////////////////////// danh sách hóa đơn.
     public function index() //danh sách hóa đơn.
     {
@@ -341,9 +382,10 @@ class HoaDonController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////// Thêm giỏ hàng
     public function create() // đến trang thêm sản phẩm vào giỏ hàng.
     {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
         $viewData = [
             'SanPham' => SanPham::where('trangthai', 1)->orderBy('created_at', 'desc')->get(),
-            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
+            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.hansudung', '>=', $today], ['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->select(
                     'chi_tiet_san_pham.*',
@@ -450,12 +492,13 @@ class HoaDonController extends Controller
     public function searchProduct(Request $request) //tìm sản phẩm.
     {
         $keyword = $request->keyword;
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
         $viewData = [
             'SanPham' => SanPham::where([
                 ['tensanpham', 'like', '%' . $keyword . '%'],
                 ['trangthai', 1],
             ])->orderBy('created_at', 'desc')->get(),
-            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
+            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.hansudung', '>=', $today],['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->select(
                     'chi_tiet_san_pham.*',
@@ -581,9 +624,8 @@ class HoaDonController extends Controller
 
     public function countHandleDelivery() // lấy số lượng hóa đơn cần được xác nhận.
     {
-        $HoaDon = HoaDon::where('trangthai', 2)->get();
-        $count = count($HoaDon);
-        echo $count;
+        $HoaDon = HoaDon::where('trangthai', 2)->count();
+        echo $HoaDon;
     }
 
     public function updateDelivery(Request $request, $id) // xác nhận hóa đơn, cộng điểm tích lũy, cập nhật số lượng sản phẩm {xử lý gửi email, in hóa đơn khi trang thái = 2}
@@ -685,6 +727,5 @@ class HoaDonController extends Controller
     {
         ChiTietHoaDon::where('id_hoadon', $id)->delete();
         HoaDon::where('id', $id)->delete();
-        // return response()->json(['success' => "Đã Hủy Đơn Hàng"]);
     }
 }

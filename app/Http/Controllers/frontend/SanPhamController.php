@@ -5,6 +5,8 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\SanPham;
 use App\Models\ChiTietSanPham;
+use App\Models\KhuyenMai;
+use App\Models\ChiTietKhuyenMai;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -15,49 +17,55 @@ class SanPhamController extends Controller
         return view('frontend.sanpham.index');
     }
 
-    public function show($id) // xem chi tiết.
+    public function show($id) // xem chi tiết. {sản phẩm đã được kiểm tra trạng thái bằng 1 ở những nơi liên kết đến}
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $CTSP = ChiTietSanPham::where([
+            ['chi_tiet_san_pham.id_sanpham', $id],
+            ['chi_tiet_san_pham.hansudung', '>=', $today],
+            ['chi_tiet_san_pham.trangthai', '=', '1'],
+            ['chi_tiet_san_pham.soluong', '>', '0'],
+        ])->orderBy('giasanpham', 'desc')->get(); // lấy CTKM-> id SP,HSD, TT=1, SL>0 và sắp xếp giá giảm dần
+        if ($CTSP != null) {
+            foreach ($CTSP as $key => $item) { // sử dụng từng CTSP để lấy khuyến mãi được tạo trước và đang áp dụng.
+                $COKM = ChiTietSanPham::where('chi_tiet_san_pham.id', $item->id)
+                    ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+                    ->Join('chi_tiet_khuyen_mai', 'chi_tiet_khuyen_mai.id_chitietsanpham', '=', 'chi_tiet_san_pham.id')
+                    ->Join('khuyen_mai', 'chi_tiet_khuyen_mai.id_khuyenmai', '=', 'khuyen_mai.id')
+                    ->where([
+                        ['khuyen_mai.trangthai', '!=', '0'],
+                        ['khuyen_mai.thoigianketthuc', '>=', $today],
+                        ['khuyen_mai.thoigianbatdau', '<=', $today],
+                    ])
+                    ->select(
+                        'chi_tiet_san_pham.id',
+                        'chi_tiet_san_pham.giasanpham',
+                        'quy_cach.tenquycach',
+                        'chi_tiet_khuyen_mai.muckhuyenmai',
+                    )
+                    ->orderBy('khuyen_mai.created_at', 'asc')
+                    ->first();
+                if ($COKM != null) { // nếu đúng kiều kiện có KM.
+                    $ArrayCTSP[] =  $COKM;
+                } else { // không có khuyến mãi.
+                    $KOKM = ChiTietSanPham::where('chi_tiet_san_pham.id', $item->id)
+                        ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+                        ->leftJoin('chi_tiet_khuyen_mai', 'chi_tiet_khuyen_mai.id_chitietsanpham', '=', 'chi_tiet_san_pham.id')
+                        ->select(
+                            'chi_tiet_san_pham.id',
+                            'chi_tiet_san_pham.giasanpham',
+                            'quy_cach.tenquycach',
+                            'chi_tiet_khuyen_mai.muckhuyenmai',
+                        )
+                        ->first();
+                    $ArrayCTSP[] =  $KOKM;
+                }
+            }
+        }
         $viewData = [
-            'SanPham' => SanPham::where('san_pham.id', $id) // sản phẩm được chọn và có chi tiết SP giá cao nhất
-                ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
-                ->select(
-                    'san_pham.*',
-                    'chi_tiet_san_pham.id',
-                    'chi_tiet_san_pham.kichthuoc',
-                    'quy_cach.tenquycach',
-                    'chi_tiet_san_pham.giasanpham',
-                )
-                ->orderBy('giasanpham', 'desc')
-                ->first(),
-            'ChiTietSanPham' => ChiTietSanPham::where( // chi tiết sản phẩm kiểm tra HSD và giá giảm dần.
-                [
-                    ['id_sanpham', $id],
-                    ['hansudung', '>=', $today]
-                ]
-            )->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
-                ->select(
-                    'chi_tiet_san_pham.*',
-                    'quy_cach.tenquycach',
-                )->orderBy('giasanpham', 'desc')->get(),
-
-            // lấy thêm sản phẩm liên quan(loại sp). cái dưới để demo.
-            'CaPheBanChayNhatHienNay' => SanPham::join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
-                ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')  // lấy loại cà phê hạt.
-                ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-                ->where([
-                    ['chi_tiet_san_pham.kichthuoc', '=', '500G'], // lấy sản phẩm có khối lượng 500G.
-                    ['chi_tiet_san_pham.hansudung', '>=', $today], // kiểm tra còn hạng sử dụng hay không.
-                ])->select(
-                    'san_pham.*',
-                    'loai_san_pham.tenloaisanpham',
-                    'chi_tiet_san_pham.kichthuoc',
-                    'chi_tiet_san_pham.soluong',
-                    'chi_tiet_san_pham.giasanpham',
-                )->get(),
+            'ChiTietSanPham' => $ArrayCTSP,
+            'SanPham' => SanPham::find($id),
         ];
-        // dd($viewData);
         return view('frontend.sanpham.show', $viewData);
     }
 

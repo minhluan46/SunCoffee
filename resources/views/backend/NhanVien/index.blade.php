@@ -1,11 +1,14 @@
 @extends('layouts.backend_layout')
+@section('active_quanlynhanvien')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" href="{{ route('nhan-vien.create') }}">Thêm Mới</a>
-                <a class="btn btn-info" href="{{ route('loai-nhan-vien.index') }}">Loại Nhân Viên</a>
+                <a class="btn btn-success" href="{{ route('nhan-vien.create') }}">Thêm Nhân Viên</a>
+                <a class="btn btn-info" href="{{ route('loai-nhan-vien.index') }}">Xem Loại Nhân Viên</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">

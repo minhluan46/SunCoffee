@@ -75,6 +75,7 @@
     <script src="{{ asset('backend/js/bootstrap.min.js') }}"></script>
     @yield('script')
     @yield('countHoaDonCanXuLy')
+    @yield('countSanPhamHetHang')
 
     {{-- <script src="{{ asset('backend/js/upload.js') }}"></script> --}}
 

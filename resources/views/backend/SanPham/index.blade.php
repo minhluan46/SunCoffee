@@ -1,11 +1,17 @@
 @extends('layouts.backend_layout')
+@section('active_quanlysanpham')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a class="btn btn-success" href="{{ route('san-pham.create') }}">Thêm Mới</a>
-                <a class="btn btn-info" href="{{ route('loai-san-pham.index') }}">Loại Sản Phẩm</a>
+                <a class="btn btn-success" href="{{ route('san-pham.create') }}">Thêm Sản Phẩm</a>
+                <a class="btn btn-info" href="{{ route('loai-san-pham.index') }}">Xem Loại Sản Phẩm</a>
+                <a class="btn btn-primary" href="{{ route('san-pham.expiredProduct') }}">Sản Phẩm Hết Hạng
+                    <span class="badge bg-danger soluongsanphamhethang"></span>
+                </a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
@@ -237,13 +243,13 @@
                         if (response.errors) {
                             alert(response.errors);
                         } else {
+                            countSanPhamHetHang();
                             $("#exampleModal").modal('hide');
                             alertify.success(response.success);
                             Show(url);
                         }
                     },
                     error: function(response) {
-
                         alertify.error("Lỗi Thêm Mới");
                     }
                 })
@@ -363,6 +369,7 @@
                         } else {
                             $("#exampleModal").modal('hide');
                             Show(url);
+                            countSanPhamHetHang();
                             alertify.success(response.success);
                         }
                     },
@@ -406,6 +413,7 @@
                         alert(response.errors);
                     } else {
                         Show("san-pham/" + idsp + "/show");
+                        countSanPhamHetHang();
                         alertify.success(response.success);
                     }
                 },

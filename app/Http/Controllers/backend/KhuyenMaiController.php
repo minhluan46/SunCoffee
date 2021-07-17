@@ -37,7 +37,7 @@ class KhuyenMaiController extends Controller
             [
                 'tenkhuyenmai' => 'required',
                 'thoigianbatdau' => 'required|date',
-                'thoigianketthuc' => 'required|date|after:thoigianbatdau',
+                'thoigianketthuc' => 'required|date|after_or_equal:thoigianbatdau',
                 'mota' => 'required',
             ],
             [
@@ -48,7 +48,7 @@ class KhuyenMaiController extends Controller
 
                 'thoigianketthuc.required' => 'Thời Gian Kết Thúc Không Được Để Trống',
                 'thoigianketthuc.date' => 'Thời Gian Kết Thúc Không Đúng Đinh Dạng Ngày',
-                'thoigianketthuc.after' => 'Thời Gian Kết Thúc Phải Sau Thời Gian Bắt Đầu',
+                'thoigianketthuc.after_or_equal' => 'Thời Gian Kết Thúc Phải Bằng Hoặc Sau Thời Gian Bắt Đầu',
 
                 'mota.required' => 'Mô Tả Không Được Để Trống',
             ]

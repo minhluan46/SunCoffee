@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_laphoadon')
+    class="nav-item active"
+@endsection
 @section('content')
     {{-- thông báo --}}
     @if (session('message'))
@@ -11,7 +14,7 @@
         <div class="btn-pm">
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" onclick="showModalAddProduct()" href="javascript:(0)"><span class="btn-label"></span>Thêm Sản Phẩm</a>
-                <a class="btn btn-info" href="{{ route('hoa-don.index') }}">Danh Sách Hóa Đơn</a>
+                <a class="btn btn-info" href="{{ route('hoa-don.index') }}">Xem Danh Sách Hóa Đơn</a>
             </div>
         </div>
         <div class="row" style="justify-content: flex-end;">
@@ -340,6 +343,9 @@
                 success: function(data) {
                     $('#giaban' + idSP).html(data);
                     $('#them' + idSP).attr("onclick", "addcart('" + value + "')");
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
                 }
             })
             $.ajax({ //ajax lấy khuyến mãi.
@@ -347,6 +353,9 @@
                 method: "GET",
                 success: function(data) {
                     $('#giamgia' + idSP).html(data);
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
                 }
             })
         }
@@ -358,6 +367,9 @@
                 success: function(data) {
                     LoadTotal(data);
                     alertify.success('Đã Thêm');
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Thêm Vào Giỏ Hàng");
                 }
             })
         }
@@ -383,7 +395,7 @@
                         },
                         success: function(response) {
                             LoadTotal(response);
-                            alertify.success("Cập Nhật Giỏ Hàng");
+                            alertify.success("Đã Cập Nhật Giỏ Hàng");
                         },
                         error: function(response) {
                             alertify.error("Không Thể Cập Nhật");
@@ -405,7 +417,7 @@
                         },
                         success: function(response) {
                             LoadTotal(response);
-                            alertify.success("Xóa Giỏ Hàng");
+                            alertify.success("Đã Xóa Giỏ Hàng");
                         },
                         error: function(response) {
                             alertify.error("Không Thể Xóa");
@@ -423,7 +435,10 @@
                     method: "GET",
                     success: function(data) {
                         LoadTotal(data);
-                        alertify.success('Đã Xóa');
+                        alertify.success('Đã Bỏ San Phẩm');
+                    },
+                    errors: function(data) {
+                        alertify.error("Lỗi Bỏ Sản Phẩm");
                     }
                 })
             }
@@ -463,6 +478,9 @@
                     $('#listProduct').html(data);
                     $('#keyword').val("");
                     alertify.success('Đã Tìm');
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Tìm Kiếm");
                 }
             })
         }

@@ -151,6 +151,9 @@
                     $("#content-HD").html(data);
                     $("#exampleModalLabel").text("Chi Tiết Hóa Đơn");
                     $("#exampleModal").modal('show');
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Tải Trang");
                 }
             })
         };
@@ -168,6 +171,9 @@
                 success: function(data) {
                     $("#" + id).html(data);
                     alertify.success("Đã Cập Nhật");
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Cập Nhật");
                 }
             })
         };
@@ -187,6 +193,9 @@
                 success: function(data) {
                     $("#" + id).html("");
                     alertify.success("Đã Xóa");
+                },
+                errors: function(data) {
+                    alertify.error("Hóa Đơn Này Đã Được Sử Dụng");
                 }
             })
         };
