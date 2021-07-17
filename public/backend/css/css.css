@@ -50,5 +50,7 @@ input::-webkit-inner-spin-button {
   border-top: 0 !important;
   border-bottom: 1px solid #ffffff00;
 }
-
+.active span {
+  color: #f65365;
+}
 

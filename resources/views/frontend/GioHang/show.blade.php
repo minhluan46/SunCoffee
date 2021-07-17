@@ -21,97 +21,49 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 ftco-animate">
-                    <form action="{{ route('GioHang.orderOnline') }}" method="POST" class="billing-form ftco-bg-dark ftco-bg-dark-info p-3 p-md-5">
-                        @csrf
-                        <h3 class="mb-4 billing-heading billing-heading-center">Thông Tin Khách Mua Hàng</h3>
-                        <div class="row align-items-end">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="firstname">Họ Tên<b style="color:red"> *</b></label>
-                                    <input type="text" name="hoten" id="hoten" class="form-control form-control-info" required>
+                    <div class="billing-form ftco-bg-dark ftco-bg-dark-info p-3 p-md-5">
+                        <form action="{{ route('GioHang.orderOnline') }}" method="POST" class="">
+                            @csrf
+                            <h3 class="mb-4 billing-heading billing-heading-center">Thông Tin Khách Mua Hàng</h3>
+                            <div class="row align-items-end">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="firstname">Họ Tên<b style="color:red"> *</b></label>
+                                        <input type="text" name="hoten" id="hoten" class="form-control form-control-info" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="firstname">Số Điện Thoại<b style="color:red"> *</b></label>
+                                        <input id="SDT" name="sdt" type="number" class="form-control form-control-info" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="firstname">email<b style="color:red"> *</b></label>
+                                        <input name="email" id="email" type="email" class="form-control form-control-info" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="firstname">Địa Chỉ<b style="color:red"> *</b></label>
+                                        <input type="text" name="diachi" id="diachi" class="form-control form-control-info" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="firstname">Ghi Chú</label>
+                                        <textarea name="ghichu" class="form-control form-control-info" cols="30" rows="7"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="submit" value="Đặt Hàng" id="dathang" class="btn btn-primary py-3 px-5" style="margin-left: 335px;width: 300px;margin-bottom: -77px;">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="firstname">Số Điện Thoại<b style="color:red"> *</b></label>
-                                    <input id="SDT" name="sdt" type="number" class="form-control form-control-info" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="firstname">email<b style="color:red"> *</b></label>
-                                    <input name="email" id="email" type="email" class="form-control form-control-info" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="firstname">Địa Chỉ<b style="color:red"> *</b></label>
-                                    <input type="text" name="diachi" id="diachi" class="form-control form-control-info" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="firstname">Ghi Chú</label>
-                                    <textarea name="ghichu" class="form-control form-control-info" cols="30" rows="7"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12 d-flex">
-                                <input type="submit" value="Xem Sản Phẩm" id="xemsanpham" class="btn btn-primary py-3 px-5">
-                                <input type="submit" value="Đặt Hàng" id="dathang" class="btn btn-primary py-3 px-5" style="margin-left: 63px;">
-                            </div>
-                        </div>
-                    </form><!-- END -->
-                    {{-- @if (Session::has('GioHangOnline') != null)
-                        <div class="billing-form ftco-bg-dark ftco-bg-dark-info p-3 p-md-5">
-                            <h3 class="mb-4 billing-heading billing-heading-center">Thông Tin Giỏ Hàng</h3>
-                            <table class="info-product ">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th>Sản Phẩm</th>
-                                        <th>Giá Bán</th>
-                                        <th>SL</th>
-                                        <th>Tổng</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="info-product-tbody">
-                                    @foreach (Session::get('GioHangOnline')->products as $item)
-                                        <tr class="text-center">
-                                            <td class="text-left">
-                                                <span> {{ $item['SanPham']->tensanpham . ' (' . $item['CTSP']->kichthuoc . ')' }}</span>
-                                            </td>
-                                            <td>
-                                                @if ($item['GiamGia'] > 0)
-                                                    <span>{{ number_format($item['CTSP']->giasanpham - $item['GiamGia'], 0, ',', '.') . ' VNĐ' }}</span><br>
-                                                    <span class="discount">{{ number_format($item['CTSP']->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
-                                                @else
-                                                    <span>{{ number_format($item['CTSP']->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <span>{{ $item['SoLuong'] }}</span>
-                                            </td>
-                                            <td><span>{{ number_format($item['TongGia'] - $item['GiamGia'] * $item['SoLuong'], 0, ',', '.') . ' VNĐ' }}</span></td>
-                                        </tr><!-- END TR-->
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <table class="info-product2">
-                                <thead>
-                                    <th>Tổng Tiền</th>
-                                    <th>Giảm Giá</th>
-                                    <th>Thành Tiền</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ number_format(Session::get('GioHangOnline')->totalPrice, 0, ',', '.') . ' VNĐ' }}</td>
-                                        <td>{{ number_format(Session::get('GioHangOnline')->totalDiscount, 0, ',', '.') . ' VNĐ' }}</td>
-                                        <td class="info-product2-color">{{ number_format(Session::get('GioHangOnline')->Total, 0, ',', '.') . ' VNĐ' }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif --}}
+                        </form><!-- END -->
+                        <button class="btn btn-primary py-3 px-5" id="xemsanpham" style="width: 300px;">Xem Sản Phẩm</button>
+                    </div>
+
                 </div> <!-- .col-md-8 -->
                 <div class="col-xl-4 sidebar ftco-animate">
                     <div class="cart-detail ftco-bg-dark ftco-bg-dark-info ftco-bg-dark-sale p-3 p-md-4 category">
@@ -237,36 +189,68 @@
 
     </style>
 @endsection
-@section('script')
-    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() { // nhập 10 số.
-            $("#SDT").keypress(function() {
-                if (this.value.length == 10) {
+@section('modal')
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button style="outline: none" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="dataxemsanpham">
+                </div>
+            </div>
+        </div>
+    @endsection
+    @section('script')
+        <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() { // nhập 10 số.
+                $("#SDT").keypress(function() {
+                    if (this.value.length == 10) {
+                        return false;
+                    }
+                })
+            });
+
+            function validate() {
+                if (remember.checked == 1) {
+                    alert("checked");
+                }
+            };
+
+            $('#dathang').on('click', function() { // kiểm tra trước khi gửi.
+                var hoten2 = $('#hoten').val();
+                var SDTa = $('#SDT').val();
+                var email = $('#email').val();
+                var diachi = $('#diachi').val();
+                if (hoten2.length > 0 && SDTa.length > 0 && email.length > 0 && diachi.length > 0) {
+                    var value = document.getElementById('SDT').value;
+                    if (value.length == 10) {
+                        return true;
+                    }
+                    alertify.warning("Số Điện Thoại Không Đúng Định Dạng");
                     return false;
                 }
             })
-        });
 
-        function validate() {
-            if (remember.checked == 1) {
-                alert("checked");
-            }
-        };
+            $('#xemsanpham').on('click', function() { // xem giỏ hàng và kiểm tra thành viên.
+                $.ajax({
+                    url: "xem-gio-hang",
+                    method: "GET",
+                    data: {
+                        sdt: $("input[name='sdt']").val(),
+                    },
+                    success: function(data) {
+                        $('#dataxemsanpham').html(data);
+                        $('#exampleModal').modal('show');
+                    },
+                    errors: function(data) {
+                        alertify.error("Lỗi Tải Trang");
+                    }
+                })
 
-        $('#dathang').on('click', function() { // kiểm tra trước khi gửi.
-            var hoten2 = $('#hoten').val();
-            var SDTa = $('#SDT').val();
-            var email = $('#email').val();
-            var diachi = $('#diachi').val();
-            if (hoten2.length > 0 && SDTa.length > 0 && email.length > 0 && diachi.length > 0) {
-                var value = document.getElementById('SDT').value;
-                if (value.length == 10) {
-                    return true;
-                }
-                alertify.warning("Số Điện Thoại Chưa Đủ");
-                return false;
-            }
-        })
-    </script>
-@endsection
+            })
+        </script>
+    @endsection

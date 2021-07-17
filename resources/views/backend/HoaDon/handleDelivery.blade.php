@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_hoadonchuasuly')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
@@ -36,7 +39,7 @@
                                             @foreach ($HoaDon as $value)
                                                 <tr id="{{ $value->id }}">
                                                     <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ $value->ngaylap }}</td>
+                                                    <td>{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
                                                     <td>{{ $value->sdtkhachhang }}</td>
                                                     <td>
                                                         {{ $value->tenkhachhang }}
@@ -119,7 +122,7 @@
             ShowHoaDon($(this).data('id'));
         });
 
-        function UpdateStatus(id, message) { //cập nhật trạng thái và tăng điểm tích lũy.
+        function UpdateStatus(id, message) { //xác nhận đơn hàng và tăng điểm tích lũy.
             $.ajax({
                 url: '/admin/hoa-don/cap-nhat-xu-ly/' + id,
                 method: 'PUT',
@@ -134,11 +137,20 @@
                         ShowHoaDon(id);
                         countHoaDonCanXuLy();
                         alertify.success(message);
-                        //////////////////////////// gửi email.
+                        /////////////////////////////////////////////////////////////////////////////// gửi email.
+                        $.ajax({
+                            url: '/admin/hoa-don/send-email/' + id + "/" + 1,
+                            method: "GET",
+                            success: function(data) {
+                                alertify.success('Đã Gửi Email Thông báo');
+                            },
+                            errors: function(data) {
+                                alertify.error("Lỗi Gửi email");
+                            }
+                        });
                     }
                 },
                 error: function(response) {
-
                     alertify.error("Lỗi Cập Nhật");
                 }
 
@@ -149,13 +161,69 @@
                 UpdateStatus($(this).data('id'), "Đã Xác Nhận");
             }
         })
+
+        function UpdateStatus2(id, message) { //cập nhật trạng thái.
+            $.ajax({
+                url: 'hoa-don/updateStatus/' + id,
+                method: 'PUT',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                },
+                success: function(data) {
+                    if (data.errors) {
+                        alertify.error(data.errors);
+                    } else {
+                        $("#" + id).html(data);
+                        countHoaDonCanXuLy();
+                        alertify.success(message);
+                    }
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Cập Nhật");
+                }
+
+            })
+        };
         $(document).on('click', '.form-updatestatus', function() { // dành cho sau khi xử lý hóa đơn.
             if (confirm("Cập Nhật Trạng Thái?")) {
-                UpdateStatus($(this).data('id'), "Đã Cập Nhật");
+                UpdateStatus2($(this).data('id'), "Đã Cập Nhật");
             }
         })
 
-        function Delete(id, message) { //xóa.
+        function Delete(id, message) { // hủy đơn hàng.
+            /////////////////////////////////////////////////////////////////////////////// gửi email.
+            alertify.success('Đang Tiến hành');
+            $.ajax({
+                url: '/admin/hoa-don/send-email/' + id + "/" + 2,
+                method: "GET",
+                success: function(data) {
+                    alertify.success('Đã Gửi Email Thông báo');
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Gửi email");
+                }
+            });
+            /////////////////////////////////////////////////////////////////////////////// hủy đơn hàng.
+            $.ajax({
+                url: 'xoa-xu-ly/' + id,
+                method: 'GET',
+                success: function(data) {
+                    $("#" + id).html("");
+                    countHoaDonCanXuLy();
+                    alertify.success(message);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Hủy Đơn Hàng");
+                }
+            });
+        };
+        $(document).on('click', '.form-delete-xl', function() { // dành cho xử lý hóa đơn.
+            if (confirm("Hủy Đơn Hàng?")) {
+                Delete($(this).data('id'), "Đã Hủy Đơn Hàng");
+            }
+        });
+
+        function Delete2(id, message) { //xóa hóa đơn.
             $.ajax({
                 url: 'xoa-xu-ly/' + id,
                 method: 'GET',
@@ -166,18 +234,13 @@
                 },
                 error: function(response) {
 
-                    alertify.error("Lỗi Hủy Đơn Hàng");
+                    alertify.error("Lỗi Xóa Đơn Hàng");
                 }
             })
         };
-        $(document).on('click', '.form-delete-xl', function() { // dành cho xử lý hóa đơn.
-            if (confirm("Hủy Đơn Hàng?")) {
-                Delete($(this).data('id'), "Đã Hủy Đơn Hàng");
-            }
-        });
         $(document).on('click', '.form-delete', function() { // dành cho sau khi xử lý hóa đơn.
             if (confirm("Đồng Ý Để Xóa?")) {
-                Delete($(this).data('id'), "Đã Xóa Đơn Hàng");
+                Delete2($(this).data('id'), "Đã Xóa Đơn Hàng");
             }
         });
     </script>

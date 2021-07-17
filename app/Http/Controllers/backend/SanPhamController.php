@@ -10,6 +10,7 @@ use App\Models\LoaiSanPham;
 use App\Models\ChiTietSanPham;
 use App\http\Requests\SanPhamRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class SanPhamController extends Controller
 {
@@ -143,5 +144,100 @@ class SanPhamController extends Controller
             ];
         }
         return view('backend.SanPham.load_SanPham', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// search
+    public function expiredProductQuantity() //số lượng sản phẩm hết hạng.
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $ChiTietSanPham = ChiTietSanPham::where('hansudung', '<', $today)->count();
+        echo $ChiTietSanPham;
+    }
+    public function expiredProduct() // sản phẩm hết hạng.
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $viewData =  [
+            'SanPhamHetHang' => ChiTietSanPham::where('hansudung', '<', $today)
+                ->join('san_pham', 'san_pham.id', 'chi_tiet_san_pham.id_sanpham')
+                ->join('quy_cach', 'quy_cach.id', 'chi_tiet_san_pham.kichthuoc')
+                ->select(
+                    'chi_tiet_san_pham.id',
+                    'chi_tiet_san_pham.soluong',
+                    'chi_tiet_san_pham.ngaysanxuat',
+                    'chi_tiet_san_pham.hansudung',
+                    'chi_tiet_san_pham.trangthai',
+                    'san_pham.tensanpham',
+                    'san_pham.hinhanh',
+                    'quy_cach.tenquycach',
+
+                )->paginate(10),
+        ];
+        return view('backend.SanPham.exprired_SanPham', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// search
+    public function updateExpiredProduct(Request $request, $id) //cập nhật chi tiết.
+    {
+        $validator = Validator::make(
+            $request->all(), // kiểm tra dữ liệu nhập.
+            [
+                'kichthuoc' => 'required',
+                'soluong' => 'required',
+                'giasanpham' => 'required',
+                'ngaysanxuat' => 'required|date',
+                'hansudung' => 'required|date|after:ngaysanxuat',
+            ],
+            [
+                'kichthuoc.required' => 'Kích Thước Không Được Để Trống',
+
+                'soluong.required' => 'Số Lượng Không Được Để Trống',
+
+                'giasanpham.required' => 'Giá Sản Phẩm Không Được Để Trống',
+
+                'ngaysanxuat.required' => 'Ngày Sản Xuất Không Được Để Trống',
+                'ngaysanxuat.date' => 'Ngày Sản Xuất Không Đúng Định Dạng Ngày',
+
+                'hansudung.required' => 'Hạng Sử Dụng Không Được Để Trống',
+                'hansudung.date' => 'Hạng Sử Dụng Không Đúng Định Dạng Ngày',
+                'hansudung.after' => 'Hạng Sử Dụng Phải Sau Ngày Sản Xuất',
+            ]
+        );
+        if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
+            return Response()->json(['errors' => $validator->errors()->all()]);
+        }
+        $soluong = filter_var($request->soluong, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
+        if ($soluong > 2000000000) { // trả về nếu lớn hơn 2 tỷ.
+            return Response()->json(['errors' => 'Số Lượng Phải Nằm Trong Khoảng 0 Đến 2.000.000.000']);
+        }
+        $giasanpham = filter_var($request->giasanpham, FILTER_SANITIZE_NUMBER_INT); // tách dấu phẩy và ký tự.
+        if ($giasanpham > 2000000000) { // trả về nếu lớn hơn 2 tỷ.
+            return Response()->json(['errors' => 'Giá Sản Phẩm Phải Nằm Trong Khoảng 0 Đến 2.000.000.000']);
+        }
+
+        $data['kichthuoc'] = $request->kichthuoc;
+        $data['soluong'] = $soluong;
+        $data['giasanpham'] = $giasanpham;
+        $data['ngaysanxuat'] = $request->ngaysanxuat;
+        $data['hansudung'] = $request->hansudung;
+        $data['id_sanpham'] = $request->id_sanpham;
+        $OldChiTietSanPham = ChiTietSanPham::find($id);
+        if ($OldChiTietSanPham->trangthai == 0) {
+            if ($request->trangthai == "1") {
+                $data['trangthai'] = 1;
+            } else {
+                $data['trangthai'] = 0;
+            }
+        } else {
+            if ($request->trangthai == "2") {
+                $data['trangthai'] = 1;
+            } else {
+                $data['trangthai'] = 0;
+            }
+        }
+        ChiTietSanPham::where('id', $id)->update($data);
+        $KTChiTietSanPham = ChiTietSanPham::where('id', $id)->first();
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        if ($KTChiTietSanPham->hansudung < $today) {
+            return response()->json(['warning' => 'Sản Phẩm Vẫn Trong Trạng Thái Hết Hạng']);
+        }
+        return response()->json(['success' => 'Thành Công Rồi']);
     }
 }

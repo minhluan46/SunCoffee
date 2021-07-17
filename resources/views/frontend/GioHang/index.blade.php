@@ -1,10 +1,5 @@
 @extends('layouts.frontend_layout')
 @section('content')
-    {{-- Thông báo thêm thành công --}}
-    {{-- @if (session('messsge'))
-        <input type="text" class="success-updateQuantityOnline" id="success-updateQuantityOnline" value="{{ session('messsge') }}" hidden>
-    @endif --}}
-    {{--  --}}
     <section class="home-slider owl-carousel">
         <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});" data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
@@ -12,7 +7,7 @@
                 <div class="row slider-text justify-content-center align-items-center">
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
                         <h1 class="mb-3 mt-5 bread">GIỎ HÀNG</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Trang chủ</a></span> <span>GIỎ HÀNG</span></p>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('Trangchu.index') }}">Trang chủ</a></span> <span>GIỎ HÀNG</span></p>
                     </div>
                 </div>
             </div>
@@ -69,10 +64,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <p class="text-center"><a href="javascript:(0)" class="update-all btn btn-primary py-3 px-4">Cập Nhật Số Lượng</a></p>
                         </div>
                     </div>
                 </div>
-                <p class="text-center"><a href="javascript:(0)" class="update-all btn btn-primary py-3 px-4">Cập Nhật Số Lượng</a></p>
+
                 <div class="row justify-content-end">
                     <div class="col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate">
                         <div class="cart-total mb-3"> {{-- danh sách sản phẩm --}}
@@ -96,44 +92,51 @@
                 </div>
                 <div id="removed-value"></div>
             </div>
-        @else
-            khi không có sản phẩm trong giỏ hàng. (note)
-        @endif
     </section>
-
-    <section class="ftco-section ftco-section-bottom">
+@else
+    <div class="notproduct">
+        <p>Giỏ Hàng Không có sản phẩm</p>
+    </div>
+    <section class="ftco-section">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center pb-3">
                 <div class="col-md-7 heading-section ftco-animate text-center">
-                    <span class="subheading">Khám Phá</span>
-                    <h2 class="mb-4">Những sảm phẩm liên quang</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                        the blind texts.</p>
+                    <span class="subheading">Khám phá</span>
+                    <h2 class="mb-4">Cà phê bán chạy nhất hiện nay</h2>
+                    <p>Cà phê là thức uống quen thuộc mỗi buổi sáng giúp tôi có thể cảm nhận được cả thế giới chuyển động
+                        trong cơ thể.</p>
                 </div>
             </div>
+            {{--  --}}
             <div class="productnew-slider owl-carousel">
-                @isset($CaPheBanChayNhatHienNay)
-                    @foreach ($CaPheBanChayNhatHienNay as $item)
+                @isset($CaPheHatBanChayNhat)
+                    @foreach ($CaPheHatBanChayNhat as $item)
                         <div class="menu-entry menu-entry-slider">
                             <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
                             <div class="text text-center pt-4">
                                 <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                 <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
                                 </p>
-                                <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ</a></p>
                             </div>
                         </div>
                     @endforeach
                 @endisset
             </div>
+            {{--  --}}
         </div>
     </section>
+    @endif
 
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
     <style>
+        .notproduct p {
+            text-align: center;
+            font-size: 50px;
+        }
+
         .menu-entry-slider .img {
             display: block;
             height: 300px;
@@ -178,11 +181,6 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
-        // window.onload = function() {
-        //     if ($('#success-updateQuantityOnline').hasClass('success-updateQuantityOnline')) {
-        //         alertify.message($('#success-updateQuantityOnline').val());
-        //     }
-        // };
         $('.removed_all').on('click', function() { // xóa  tất cả.
             if (confirm("Bỏ Tất Cả Sản Phẩm")) {
                 $.ajax({
@@ -193,7 +191,6 @@
                     },
                     success: function(response) {
                         location.reload();
-                        alertify.message("Đang Xóa Giỏ Hàng");
                     }
                 });
             }
@@ -209,13 +206,7 @@
                         _token: $("input[name='_token']").val(),
                     },
                     success: function(response) {
-                        $('#removed-value').html(response);
-                        $('#cart-quantity').text($('#soluong').val());
-                        $('#cart-totalPrice').text($('#tongcong').val());
-                        $('#cart-totalDiscount').text($('#giamgia').val());
-                        $('#cart-Total').text($('#thanhtien').val());
-                        $('#' + id).html("");
-                        alertify.warning("Đã Bỏ " + name);
+                        location.reload();
                     }
                 });
             }
@@ -241,7 +232,6 @@
                     },
                     success: function(response) {
                         location.reload();
-                        alertify.message("Đang Cập Nhật Giỏ Hàng");
                     }
                 });
             }

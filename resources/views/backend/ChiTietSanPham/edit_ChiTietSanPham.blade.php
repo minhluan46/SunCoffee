@@ -12,7 +12,7 @@
                     </div>
                     <div class="form-group">
                         <label>Kích Thước<b style="color:red"> *</b></label>
-                        <select class="form-control" name="kichthuoc">
+                        <select class="form-control" name="kichthuoc" id="kichthuocquycach">
                             @isset($QuyCach)
                                 @foreach ($QuyCach as $itemQC)
                                     <option value="{{ $itemQC->id }}" {{ $ChiTietSanPham->kichthuoc == $itemQC->id ? 'selected' : '' }}>{{ $itemQC->tenquycach }}</option>

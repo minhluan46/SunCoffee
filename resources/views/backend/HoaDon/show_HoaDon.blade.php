@@ -3,8 +3,12 @@
         <div class="col-6 col-sm-6">
             <h4><b>Mã: </b> <span>({{ $HoaDon->id }})</span></h4>
             <h4><b>Ngày Lập: </b> <span>{{ Date_format(Date_create($HoaDon->ngaylap), 'd/m/Y H:i:s') }}</span></h4>
+            <h4><b>Người Lập: </b> <span>{{ $NhanVien->tennhanvien }}</span></h4>
             <h4><b>Tổng Tiền: </b> <span>{{ number_format($HoaDon->tongtienhoadon, 0, ',', '.') }} VNĐ</span></h4>
             <h4><b>Giảm Giá: </b> <span>{{ number_format($HoaDon->giamgia, 0, ',', '.') }} VNĐ</span></h4>
+            @if ($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien != 0)
+                <h4><b>Giảm Giá Thành Viên: </b> <span>{{ number_format($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien, 0, ',', '.') }} VNĐ</span></h4>
+            @endif
             <h4><b>Thành Tiền: </b> <span>{{ number_format($HoaDon->thanhtien, 0, ',', '.') }} VNĐ</span></h4>
             <h4><b>Trạng Thái: </b>
                 @if ($HoaDon->trangthai == 2)
@@ -18,10 +22,10 @@
             </h4>
         </div>
         <div class="col-6 col-sm-6">
-            <h4><b>Nhân Viên: </b> <span>{{ $NhanVien->tennhanvien }}</span></h4>
             <h4><b>Khách Hàng: </b> <span>{{ $HoaDon->tenkhachhang }}</span></h4>
+            <h4><b>Email: </b> <span>{{ $HoaDon->emailkhachhang }}</span></h4>
             <h4><b>SĐT Khách Hàng: </b> <span>{{ $HoaDon->sdtkhachhang }}</span></h4>
-            <h4><b>ĐC Khách Hàng: </b> <span>{{ $HoaDon->diachikhachhang }}</span></h4>
+            <h4><b>Địa Chỉ Khách Hàng: </b> <span>{{ $HoaDon->diachikhachhang }}</span></h4>
             <h4><b>Điểm Tích Lũy: </b> <span>{{ number_format($HoaDon->diemtichluy, 0, ',', '.') }} Điểm</span></h4>
             <h4><b>Khách Hàng Ghi Chú: </b> <span>{{ $HoaDon->ghichukhachhang }}</span></h4>
         </div>
