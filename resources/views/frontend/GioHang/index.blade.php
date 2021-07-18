@@ -97,7 +97,13 @@
                 <div id="removed-value"></div>
             </div>
         @else
-            khi không có sản phẩm trong giỏ hàng. (note)
+        <div class="row">{{-- phần của khuyến mãi --}}
+            <div class="col-md-12 heading-section ftco-animate text-center">
+            <span class="subheading mb-5">Hiện tại không có sản phẩm nào trong giỏ hàng.</span>
+            <p><a href="{{ route('SanPham.index') }}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Mua ngay</a>
+
+            </div>
+        </div>
         @endif
     </section>
 

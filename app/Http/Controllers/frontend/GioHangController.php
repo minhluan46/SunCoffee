@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SanPham;
 use App\Models\ChiTietSanPham;
 use App\Models\KhuyenMai;
+use App\Models\QuyCach;
 use App\Models\ChiTietKhuyenMai;
 use App\Models\KhachHang;
 use Illuminate\Http\Request;
@@ -20,23 +21,39 @@ class GioHangController extends Controller
     public function index()
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-        $viewData = [
-            // lấy thêm sản phẩm liên quan(loại sp). cái dưới để demo.
-            'CaPheBanChayNhatHienNay' => SanPham::join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
-                ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')  // lấy loại cà phê hạt.
-                ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-                ->where([
-                    ['chi_tiet_san_pham.kichthuoc', '=', '500G'], // lấy sản phẩm có khối lượng 500G.
-                    ['chi_tiet_san_pham.hansudung', '>=', $today], // kiểm tra còn hạng sử dụng hay không.
-                ])->select(
-                    'san_pham.*',
-                    'loai_san_pham.tenloaisanpham',
-                    'chi_tiet_san_pham.kichthuoc',
-                    'chi_tiet_san_pham.soluong',
-                    'chi_tiet_san_pham.giasanpham',
-                )->get(),
-        ];
+        // lấy ra sản phẩm "cà phê hạt" với quy cách = 2.
+        $QuyCach = QuyCach::where('quy_cach.trangthai', 2)
+            ->join('loai_san_pham', 'quy_cach.id_loaisanpham', '=', 'loai_san_pham.id')
+            ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')
+            ->select(
+                'quy_cach.*',
+            )->first();
+        if (Session('GioHangOnline') == null) {
+            $viewData = [
+                'CaPheHatBanChayNhat' => SanPham::where('san_pham.the', '=', 'BÁN CHẠY NHẤT')
+                    ->join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
+                    ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')  // lấy loại cà phê hạt.
+                    ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+                    ->where('chi_tiet_san_pham.kichthuoc', '=', $QuyCach->id)
+                    ->select(
+                        'san_pham.id',
+                        'san_pham.tensanpham',
+                        'san_pham.hinhanh',
+                        'san_pham.the', // thẻ = bán chạy nhất.
+                        'loai_san_pham.tenloaisanpham',
+                        'chi_tiet_san_pham.giasanpham',
+                    )->get(),
+            ];
+        } else {
+            $viewData = [];
+        }
+        // dd($viewData);
         return view('frontend.giohang.index', $viewData);
+    }
+
+    public function show() // trang tiến hành thanh toán.
+    {
+        return view('frontend.giohang.show');
     }
 
     function addCartOnline(Request $request) // thêm từ trang chi tiết.
@@ -49,29 +66,26 @@ class GioHangController extends Controller
                 'chi_tiet_san_pham.*',
                 'quy_cach.tenquycach',
             )->first();
-
-
         $SanPham = SanPham::where('id', $ChiTietSanPham->id_sanpham)->first();
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-        $ChiTietKhuyenMai = ChiTietKhuyenMai::where('id_chitietsanpham', $ID)->orderBy('created_at', 'asc')->get(); // sắp xếp thời gian tạo giảm.
-        if (count($ChiTietKhuyenMai) > 0) { // kiểm tra khuyến mãi.
-            $ApDungKhuyenMai = 0; // giữ nguyên 0% nếu không đúng với điều kiện.
-            foreach ($ChiTietKhuyenMai as $item) {
-                $KhuyenMai = KhuyenMai::where('id', $item->id_khuyenmai)->first(); // lấy ra từng khuyến mãi.
-                if (!($KhuyenMai->thoigianketthuc < $today) && $KhuyenMai->trangthai == 1 &&  !($KhuyenMai->thoigianbatdau > $today)) { //kiểm tra còn hạng, không khóa, chưa bắt đầu.
-                    $ApDungKhuyenMai = ChiTietKhuyenMai::where(
-                        [
-                            ['id_chitietsanpham', $ID],
-                            ['id_khuyenmai', $KhuyenMai->id]
-                        ]
-                    )->first();
-                    $ApDungKhuyenMai = $ApDungKhuyenMai->muckhuyenmai; // gắn lạy phần trăm giảm giá.
-                    break; // áp dụng khuyến mãi tạo trước.
-                }
-            }
+        $ChiTietKhuyenMai = ChiTietKhuyenMai::where('id_chitietsanpham', $ID)
+            ->join('khuyen_mai', 'khuyen_mai.id', '=', 'chi_tiet_khuyen_mai.id_khuyenmai')
+            ->where([
+                ['khuyen_mai.trangthai', '!=', '0'],
+                ['khuyen_mai.thoigianketthuc', '>=', $today],
+                ['khuyen_mai.thoigianbatdau', '<=', $today],
+            ])->select(
+                'khuyen_mai.*',
+                'chi_tiet_khuyen_mai.muckhuyenmai'
+            )
+            ->orderBy('created_at', 'asc')
+            ->first(); // lấy khuyến mãi được Thêm vào đầu tiên.
+        if ($ChiTietKhuyenMai != null) { // kiểm tra khuyến mãi.
+            $ApDungKhuyenMai = $ChiTietKhuyenMai->muckhuyenmai; // gắn lạy phần trăm giảm giá.
         } else {
             $ApDungKhuyenMai = 0; // 0% nếu không tìm thấy chi tiết khuyến mãi.
         }
+
         $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null; // kiểm tra session và gắn lại khi đã có.
         $newCart = new Cart($odlCart); // khỏi tạo class Cart.
 
@@ -105,20 +119,16 @@ class GioHangController extends Controller
         $newCart->deleteItemCart($id);
         if (count($newCart->products) > 0) {
             $request->session()->put('GioHangOnline', $newCart);
-            $output = "<input type='text' id='soluong' value='" . Session::get('GioHangOnline')->totalQuanty . "'>
-            <input type='text' id='tongcong' value='" . number_format(Session::get('GioHangOnline')->totalPrice, 0, ',', '.') . ' VNĐ' . "'>
-            <input type='text' id='giamgia' value='" . number_format(Session::get('GioHangOnline')->totalDiscount, 0, ',', '.') . ' VNĐ' . "'>
-            <input type='text' id='thanhtien' value='" . number_format(Session::get('GioHangOnline')->Total, 0, ',', '.') . ' VNĐ' . "'>";
         } else {
             $request->Session()->forget('GioHangOnline');
-            $output = "<input type='text' id='soluong' value='0'>";
         }
-        return $output;
+        return true;
     }
 
     public function deleteCartOnline(Request $request)
     {
         $request->Session()->forget('GioHangOnline');
+        return true;
     }
 
     public function updateQuantityOnline(Request $request)
@@ -129,11 +139,7 @@ class GioHangController extends Controller
             $newCart->quantityChange($item['id'], $item['sl']);
             $request->session()->put('GioHangOnline', $newCart);
         }
-    }
-
-    public function discountMemberOnline(Request $request)
-    {
-        dd($request->sdt);
+        return true;
     }
 
     public function orderOnline(Request $request)
@@ -229,12 +235,29 @@ class GioHangController extends Controller
         return redirect()->route('Trangchu.index', $viewData);
     }
 
-
-
-    public function show()
+    public function viewCart(Request $request) // xem lại giỏ hàng và giảm giá thành viên nếu có.
     {
-        return view('frontend.giohang.show');
+        $KhachHang = KhachHang::where('sdt', $request->sdt)->first();
+        $odlCart = Session('GioHangOnline') ? Session('GioHangOnline') : null;
+        $newCart = new Cart($odlCart);
+        if ($KhachHang != null) {
+            $newCart->DiscountMember($KhachHang->diemtichluy, $KhachHang->sdt);
+            $request->session()->put('GioHangOnline', $newCart);
+        } else {
+            $newCart->DiscountMember(0, null);
+            $request->session()->put('GioHangOnline', $newCart);
+        }
+        return view('frontend.giohang.datacart');
     }
+
+
+
+
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *

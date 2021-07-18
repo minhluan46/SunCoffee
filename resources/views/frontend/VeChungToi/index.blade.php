@@ -11,8 +11,9 @@
                 <div class="row slider-text justify-content-center align-items-center">
 
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
-                        <h1 class="mb-3 mt-5 bread">About Us</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>About</span>
+                        <h1 class="mb-3 mt-5 bread">VỀ CHÚNG TÔI</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{route('Trangchu.index')}}">TRANG CHỦ</a></span> <span>VỀ CHÚNG
+                                TÔI</span>
                         </p>
                     </div>
 
@@ -25,54 +26,154 @@
         <div class="one-half ftco-animate fadeInUp ftco-animated">
             <div class="overlap2">
                 <div class="heading-section ftco-animate fadeInUp ftco-animated">
-                    <span class="subheading">Discover</span>
-                    <h2 class="mb-4">Our Story</h2>
+                    <span class="subheading">Khám phá</span><br />
+                    <h2 class="mb-4">Câu chuyện của chúng tôi</h2>
                 </div>
                 <div>
-                    <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would
-                        have been rewritten a thousand times and everything that was left from its origin would be the word
-                        "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing
-                        the copy said could convince her and so it didn’t take long until a few insidious Copy Writers
-                        ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they
-                        abused her for their.</p>
+                    <p>“Cà phê nhé" - Một lời hẹn rất riêng của người Việt. Một lời ngỏ mộc mạc để mình ngồi lại bên nhau và
+                        sẻ chia câu chuyện của riêng mình.</p>
+                    <p>
+                        Tại Sun Coffee, chúng tôi luôn trân trọng những câu chuyện và đề cao giá trị Kết nối con người.
+                        Chúng tôi mong muốn Sun Coffee sẽ trở thành “Nhà Cà Phê", nơi mọi người xích lại gần nhau và tìm
+                        thấy niềm vui, sự sẻ chia thân tình bên những tách cà phê đượm hương, chất lượng.</p>
                 </div>
             </div>
         </div>
-        <div class="one-half img" style="background-image: url({{ asset('frontend/images/about.jpg') }});"></div>
+        <div class="one-half img" style="background-image: url({{ asset('frontend/images/cauchuyencaphe.jpg') }});"></div>
     </section>
     {{--  --}}
     <section class="ftco-section img " id="ftco-testimony"
-        style="background-image: url(&quot;{{ asset('frontend/images/bg_1.jpg') }}&quot;); background-position: 50% -65.025px;"
+        style="background-image: url(&quot;{{ asset('frontend/images/lichsucaphe.jpg') }}&quot;); background-position: 50% -65.025px;"
         data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-7 heading-section text-center ftco-animate fadeInUp ftco-animated">
-                    <span class="subheading">Testimony</span>
-                    <h2 class="mb-4">Customers Says</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                        the blind texts.</p>
+                    <span class="subheading">Quá trình hình thành</span>
+                    <h2 class="mb-4">01/2020 - Ra mắt Sun Coffee</h2>
+                    <p>Sun Coffee bắt đầu quá trình hình thành của mình.</p>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-7 heading-section text-center ftco-animate fadeInUp ftco-animated">
                     {{-- <span class="subheading">Testimony</span> --}}
-                    <h2 class="mb-4">Customers Says</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                        the blind texts.</p>
+                    <h2 class="mb-4">04/2020 - Sau 3 tháng phát triển</h2>
+                    <p>Sun Coffee được đón nhận và có thêm nhiều người thưởng thức cà phê chất lượng biết đến.</p>
                 </div>
             </div>
             <div class="row justify-content-center mb-5 pb-5">
                 <div class="col-md-7 heading-section text-center ftco-animate fadeInUp ftco-animated">
                     {{-- <span class="subheading">Testimony</span> --}}
-                    <h2 class="mb-4">Customers Says</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                        the blind texts.</p>
+                    <h2 class="mb-4">10/2020 - Mở rộng quy mô trang trại</h2>
+                    <p>Sau khi bộ phận Cà Phê của Cầu Đất Farm được sáp nhập vào Sun Coffee, dải
+                        sơn nguyên 1,650m trên cao sẽ là nơi chúng tôi gieo nên ước mơ đem hạt cà phê
+                        Việt ra ngoài thế giới</p>
                 </div>
             </div>
         </div>
 
     </section>
+
+
+
+
+    <section class="ftco-section ftco-services">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-choices"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Mua hàng dễ dàng</h3>
+                            <p>Giao diện dễ thao tác và đội ngũ nhân viên phụ vụ nhiệt tình.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-delivery-truck"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Dịch vụ chu đáo, nhanh chóng</h3>
+                            <p>Sun Coffee luôn hỗ trợ khách hàng một cách nhanh nhất.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 ftco-animate">
+                    <div class="media d-block text-center block-6 services">
+                        <div class="icon d-flex justify-content-center align-items-center mb-5">
+                            <span class="flaticon-coffee-bean"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Chất lượng cà phê thượng hạng</h3>
+                            <p>Hạt cà phê được chọn lọc kĩ lưỡng để luôn mang đến hương vị đậm đà nhất.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="ftco-about d-md-flex">
+        <div class="one-half img" style="background-image: url({{ asset('frontend/images/dedangmuahang.jpg') }});"></div>
+        <div class="one-half ftco-animate">
+            <div class="overlap">
+                <div class="heading-section ftco-animate ">
+                    <h2 class="mb-4">Mua hàng dễ dàng</h2>
+                </div>
+                <div>
+                    <p>Khách hàng dễ dàng mua hàng thông qua website bán hàng của chúng tôi. Cho dù bạn có ở đâu thì chỉ với
+                        một cú click chuột bạn đã sở hữu ngay sản phẩm mà mình yêu thích trong một thời gian cực kì ngắn.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-about d-md-flex mb-5">
+        <div class="one-half ftco-animate fadeInUp ftco-animated">
+            <div class="overlap2">
+                <div class="heading-section ftco-animate fadeInUp ftco-animated">
+                    <h2 class="mb-4">Dịch vụ chu đáo, nhanh chóng</h2>
+                </div>
+                <div>
+                    <p>
+                        Tại Sun Coffee, chúng tôi luôn trân trọng những câu chuyện và đề cao giá trị Kết nối con người.Do đó
+                        nhân viên luôn hỗ trợ nhiệt tình thông qua nhiều phương tiện liên lạc khác nhau để hỗ trợ, giải đáp
+                        thắc mắc của khách hàng một cách nhanh và tốt nhất có thể.</p>
+                </div>
+            </div>
+        </div>
+        <div class="one-half img" style="background-image: url({{ asset('frontend/images/hotronhiettinh.jpg') }});"></div>
+    </section>
+
+    <section class="ftco-about d-md-flex">
+        <div class="one-half img" style="background-image: url({{ asset('frontend/images/minhhoacaphe.jpg') }});"></div>
+        <div class="one-half ftco-animate">
+            <div class="overlap">
+                <div class="heading-section ftco-animate ">
+                    <h2 class="mb-4">Chất lượng cà phê thượng hạng</h2>
+                </div>
+                <div>
+                    <p>Có bao giờ bạn tự hỏi, ly cà phê thơm ngát trên tay mình đã trải qua những chặng đường nào? Khi
+                        nhân viên phục vụ mang đến cho bạn một ly cà phê, đó chỉ là hành động cuối cùng của một hành
+                        trình dài và kỳ diệu: từ việc chọn vùng đất hợp thổ nhưỡng, sàng lọc giống, tới trồng cây, chăm
+                        bón và thu hái.
+                    </p>
+                    <p>Từ những cửa hàng đầu tiên, chúng tôi đã bắt đầu hợp tác với Cầu Đất Farm để trồng cà phê theo
+                        tiêu chuẩn riêng. Vùng đất phủ sương nằm ở độ cao 1.650m so với mặt nước biển này là nơi tốt
+                        nhất để trồng giống cà phê Arabica ở Việt Nam. Chính “độ cao vàng” ấy đã cho ra hạt cà phê
+                        Arabica thơm nhẹ, chua thanh tuyệt hảo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{--  --}}
     <section class="ftco-counter ftco-bg-dark img" id="section-counter"
         style="background-image: url(&quot;{{ asset('frontend/images/bg_2.jpg') }}&quot;); background-position: 50% -111.225px;"
@@ -87,8 +188,8 @@
                             <div class="block-18 text-center">
                                 <div class="text">
                                     <div class="icon"><span class="flaticon-coffee-cup"></span></div>
-                                    <strong class="number" data-number="100">100</strong>
-                                    <span>Coffee Branches</span>
+                                    <strong class="number" data-number=" {{ number_format(count($KhuyenMai), 0, ',', '.') }}"> {{ number_format(count($KhuyenMai), 0, ',', '.') }}</strong>
+                                    <span>Khuyến mãi</span>
                                 </div>
                             </div>
                         </div>
@@ -97,8 +198,8 @@
                             <div class="block-18 text-center">
                                 <div class="text">
                                     <div class="icon"><span class="flaticon-coffee-cup"></span></div>
-                                    <strong class="number" data-number="85">85</strong>
-                                    <span>Number of Awards</span>
+                                    <strong class="number" data-number="{{ number_format(count($HoaDonOnline), 0, ',', '.') + number_format(count($HoaDon), 0, ',', '.') }}">{{ number_format(count($HoaDonOnline), 0, ',', '.') + number_format(count($HoaDon), 0, ',', '.') }}</strong>
+                                    <span>Hóa đơn đã đặt</span>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +208,8 @@
                             <div class="block-18 text-center">
                                 <div class="text">
                                     <div class="icon"><span class="flaticon-coffee-cup"></span></div>
-                                    <strong class="number" data-number="10567">10,567</strong>
-                                    <span>Happy Customer</span>
+                                    <strong class="number" data-number="{{ number_format(count($KhachHang) - 1, 0, ',', '.') }}">{{ number_format(count($KhachHang) - 1, 0, ',', '.') }}</strong>
+                                    <span>Khách Hàng Thành Viên</span>
                                 </div>
                             </div>
                         </div>
@@ -117,8 +218,8 @@
                             <div class="block-18 text-center">
                                 <div class="text">
                                     <div class="icon"><span class="flaticon-coffee-cup"></span></div>
-                                    <strong class="number" data-number="900">900</strong>
-                                    <span>Staff</span>
+                                    <strong class="number" data-number="{{ number_format(count($NhanVien) - 2, 0, ',', '.') }}">{{ number_format(count($NhanVien) - 2, 0, ',', '.') }}</strong>
+                                    <span>Nhân Viên</span>
                                 </div>
                             </div>
                         </div>

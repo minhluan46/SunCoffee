@@ -1,20 +1,18 @@
 @extends('layouts.frontend_layout')
 @section('content')
-    {{-- @foreach ($posts as $key => $value) --}}
     <section class="home-slider owl-carousel">
         <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});" data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
                 <div class="row slider-text justify-content-center align-items-center">
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
-                        <h1 class="mb-3 mt-5 bread">Product Detail</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Product Detail</span></p>
+                        <h1 class="mb-3 mt-5 bread">Chi tiết sản phẩm</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('Trangchu.index') }}">Trang chủ</a></span> <span>Chi tiết sản phẩm</span></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <section class="ftco-section">
         <div class="container">
             <div class="row">
@@ -26,7 +24,14 @@
                     <div class="col-lg-6 product-details pl-md-5 ftco-animate">
                         <h3>{{ $SanPham->tensanpham }}</h3>
                         <p class="price"><span>
-                                {{ number_format($SanPham->giasanpham, 0, ',', '.') . ' VNĐ  (' . $SanPham->tenquycach . ')' }}
+                                @isset($ChiTietSanPham)
+                                    @if ($ChiTietSanPham[0]->muckhuyenmai != null)
+                                        <span style="text-decoration: line-through;">{{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>{{ ' - ' . $ChiTietSanPham[0]->tenquycach }}<br>
+                                        {{ number_format($ChiTietSanPham[0]->giasanpham * (1 - $ChiTietSanPham[0]->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ  (-' . $ChiTietSanPham[0]->muckhuyenmai . '%)' }}
+                                    @else
+                                        {{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ - ' . $ChiTietSanPham[0]->tenquycach }}
+                                    @endif
+                                @endisset
                             </span></p>
                         <p>{{ $SanPham->mota }}</p>
                         <div class="row mt-4">
@@ -36,9 +41,14 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <div class="radio">
-                                                    <label><input type="radio" class="optradio" name="optradio" class="mr-2" {{ $stt == 0 ? 'checked' : '' }}
-                                                            value="{{ $item->id }}">
-                                                        {{ $item->tenquycach . ' (' . number_format($item->giasanpham, 0, ',', '.') . ' VNĐ)' }}</label>
+                                                    <label><input type="radio" class="optradio" name="optradio" class="mr-2" {{ $stt == 0 ? 'checked' : '' }} value="{{ $item->id }}">
+                                                        {{-- {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ  (' . $item->tenquycach . ')' }} --}}
+                                                        @if ($item->muckhuyenmai != null)
+                                                            {{ number_format($item->giasanpham * (1 - $item->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ - ' . $item->tenquycach . ' (-' . $item->muckhuyenmai . '%)' }}
+                                                        @else
+                                                            {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ - ' . $item->tenquycach }}
+                                                        @endif
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,13 +64,12 @@
                                 </div>
                                 <div class="col-md-6 d-flex mb-3">
                                     @isset($ChiTietSanPham)
-                                        <input type="text" name="id_product_details" id="id_product_details" value="{{ $SanPham->id }}" hidden>
+                                        <input type="text" name="id_product_details" id="id_product_details" value="{{ $ChiTietSanPham[0]->id }}" hidden>
                                         <input type="submit" value="Thêm Vào Giỏ Hàng" class="btn btn-primary py-3 px-5">
                                     @endisset
                                 </div>
                             </form>
                         </div>
-                        {{-- <p><a id="abx" href="javascript:(0)" class="btn btn-primary py-3 px-5">test</a></p> --}}
                     </div>
                 @endisset
             </div>
@@ -80,8 +89,7 @@
                 @isset($CaPheBanChayNhatHienNay)
                     @foreach ($CaPheBanChayNhatHienNay as $item)
                         <div class="menu-entry menu-entry-slider">
-                            <a href="{{ route('SanPham.show', $item->id) }}" class="img"
-                                style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
+                            <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
                             <div class="text text-center pt-4">
                                 <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                 <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span></p>
@@ -143,16 +151,9 @@
             var checkbox = document.getElementsByName("optradio");
             for (var i = 0; i < checkbox.length; i++) {
                 if (checkbox[i].checked === true) {
-                    // alertify.message(checkbox[i].value);
                     $('#id_product_details').val(checkbox[i].value);
                 }
             }
         });
-        // $('#abx').on('click', function() {
-        //     var quantity = $('#quantity').val();
-        //     var id_product_details = $('#id_product_details').val();
-        //     alertify.message(id_product_details);
-        //     alertify.message(quantity);
-        // });
     </script>
 @endsection
