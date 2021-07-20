@@ -14,7 +14,7 @@
                     <div class="white_card card_height_100 mb_30">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Thêm Nhân Viên</h3>
+                                <h2 class="m-0">Thêm Nhân Viên</h2>
                             </div>
                         </div>
                         <div class="white_card_body">

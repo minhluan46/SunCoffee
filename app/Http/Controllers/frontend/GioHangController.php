@@ -30,7 +30,7 @@ class GioHangController extends Controller
             )->first();
         if (Session('GioHangOnline') == null) {
             $viewData = [
-                'CaPheHatBanChayNhat' => SanPham::where('san_pham.the', '=', 'BÁN CHẠY NHẤT')
+                'CaPheHatBanChayNhat' => SanPham::where([['san_pham.the', '=', 'BÁN CHẠY NHẤT'], ['san_pham.trangthai', '!=', '0']])
                     ->join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
                     ->where('loai_san_pham.tenloaisanpham', '=', 'Cà Phê Hạt')  // lấy loại cà phê hạt.
                     ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
@@ -232,7 +232,7 @@ class GioHangController extends Controller
                     'chi_tiet_san_pham.giasanpham',
                 )->get(),
         ];
-        return redirect()->route('Trangchu.index', $viewData);
+        return redirect()->route('Trangchu.index', $viewData)->with('success', 'Thành Công Rồi');
     }
 
     public function viewCart(Request $request) // xem lại giỏ hàng và giảm giá thành viên nếu có.

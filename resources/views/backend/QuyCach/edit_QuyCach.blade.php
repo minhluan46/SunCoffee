@@ -11,7 +11,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Tên Quy Cách<b style="color:red"> *</b></label>
+                <label>Quy Cách<b style="color:red"> *</b></label>
                 <input type="text" class='form-control' maxlength="50" name="tenquycach" value="{{ $QuyCach->tenquycach }}">
             </div>
             <button id="form-editQC" data-url="{{ route('quy-cach.update', $QuyCach->id) }}" type="submit" class="btn btn-success" style="width: 100%">Cập Nhật</button>

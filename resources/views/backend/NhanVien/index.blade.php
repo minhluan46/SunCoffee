@@ -29,7 +29,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Nhân Viên</h3>
+                                <h2 class="m-0">Danh Sách Nhân Viên</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -42,8 +42,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Hình Ảnh</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Hình Ảnh</th>
                                             <th scope="col">Tên Nhân Viên</th>
                                             <th scope="col">Số điện thoại</th>
                                             <th scope="col">Loại Nhân Viên</th>
@@ -55,8 +55,8 @@
                                         @if (isset($NhanVien))
                                             @foreach ($NhanVien as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td><img src="{{ asset('uploads/NhanVien/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;"></td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left"><img src="{{ asset('uploads/NhanVien/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;"></td>
                                                     <td>{{ $value->tennhanvien }}</td>
                                                     <td>{{ $value->sdt }}</td>
                                                     <td>
@@ -69,7 +69,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Còn Làm' : 'Đã Nghỉ' }}</span>
                                                     </td>
                                                     <td>
@@ -102,7 +102,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

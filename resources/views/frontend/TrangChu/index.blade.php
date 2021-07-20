@@ -3,6 +3,10 @@
     class="nav-item active"
 @endsection
 @section('content')
+    {{-- Thông báo thêm thành công --}}
+    @if (session('success'))
+        <input type="text" class="Successful_message" id="Successful_message" value="{{ session('success') }}" hidden>
+    @endif
     {{-- Slider --}}
     <section class="home-slider owl-carousel">
         <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_1.jpg') }});">
@@ -188,9 +192,32 @@
         </div>
     </section>
 @endsection
+@section('modal')
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button style="outline: none" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="dataxemsanpham">
+                    <div class="billing-form ftco-bg-dark ftco-bg-dark-info p-3 p-md-5">
+                        <h3 class="mb-4 billing-heading billing-heading-center">Đặt Hàng Thành Công</h3>
+                        <h4 class="mb-4 billing-heading billing-heading-center">Chúng Tôi Sẽ Xác Nhận Đơn Hàng Của Bạn</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('css')
 
     <style>
+        .billing-heading-center {
+            text-align: center;
+        }
+
         .menu-entry-slider .img {
             display: block;
             height: 300px;
@@ -206,4 +233,13 @@
         }
 
     </style>
+@endsection
+@section('script')
+    <script type="text/javascript">
+        window.onload = function() {
+            if ($('#Successful_message').hasClass('Successful_message')) {
+                $('#exampleModal').modal('show');
+            }
+        };
+    </script>
 @endsection

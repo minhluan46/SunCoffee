@@ -139,9 +139,12 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::put('/{id}/update', 'SanPhamController@update')->name('san-pham.update'); //cập nhật (chưa ajax)
         Route::get('/{id}/destroy', 'SanPhamController@destroy')->name('san-pham.destroy'); // xóa.
         Route::get('/search', 'SanPhamController@search')->name('san-pham.search'); // tìm.
-        Route::get('/so-luong-het-hang', 'SanPhamController@expiredProductQuantity')->name('san-pham.expiredProductQuantity'); // sản phẩm hết hạng.
-        Route::get('/het-hang', 'SanPhamController@expiredProduct')->name('san-pham.expiredProduct'); // sản phẩm hết hạng.
-        Route::put('/cap-nhat-het-hang/{id}', 'SanPhamController@updateExpiredProduct')->name('san-pham.updateExpiredProduct'); // sản phẩm hết hạng.
+        Route::get('/so-luong-xu-ly', 'SanPhamController@handledProductQuantity')->name('san-pham.handledProductQuantity'); // sản phẩm hết hạng.
+        Route::get('/so-luong-het-han-su-dung', 'SanPhamController@expiredProductQuantity')->name('san-pham.expiredProductQuantity'); // sản phẩm hết hạng.
+        Route::get('/so-luong-het-hang', 'SanPhamController@outOfProductQuantity')->name('san-pham.outOfProductQuantity'); // sản phẩm hết hàng.
+        Route::get('/het-han-su-dung', 'SanPhamController@expiredProduct')->name('san-pham.expiredProduct'); // sản phẩm hết hạng.
+        Route::get('/het-hang', 'SanPhamController@outOfProduct')->name('san-pham.outOfProduct'); // sản phẩm hết hàng.
+        Route::put('/cap-nhat-xu-ly/{id}', 'SanPhamController@updateHandledProduct')->name('san-pham.updateHandledProduct'); // sản phẩm hết hàng.
     });
     // chi tiết san phẩm
 

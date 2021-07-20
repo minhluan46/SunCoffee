@@ -16,7 +16,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Cập Nhật Sản Phẩm</h3>
+                                <h2 class="m-0">Cập Nhật Sản Phẩm</h2>
                             </div>
                         </div>
                         <div class="white_card_body">

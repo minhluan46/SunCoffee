@@ -9,8 +9,11 @@
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" href="{{ route('san-pham.create') }}">Thêm Sản Phẩm</a>
                 <a class="btn btn-info" href="{{ route('loai-san-pham.index') }}">Xem Loại Sản Phẩm</a>
-                <a class="btn btn-primary" href="{{ route('san-pham.expiredProduct') }}">Sản Phẩm Hết Hạng
-                    <span class="badge bg-danger soluongsanphamhethang"></span>
+                <a class="btn btn-danger" href="{{ route('san-pham.expiredProduct') }}">Sản Phẩm Hết Hạn Sử Dụng
+                    <span class="badge bg-warning text-dark countSanPhamHetHanSuDung"></span>
+                </a>
+                <a class="btn btn-warning" href="{{ route('san-pham.outOfProduct') }}">Sản Phẩm Hết Hàng
+                    <span class="badge bg-danger countSanPhamHetHang"></span>
                 </a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
@@ -32,7 +35,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Sản Phẩm</h3>
+                                <h2 class="m-0">Danh Sách Sản Phẩm</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -45,8 +48,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Hình Ảnh</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Hình Ảnh</th>
                                             <th scope="col">Tên Sản Phẩm</th>
                                             <th scope="col">thẻ</th>
                                             <th scope="col">Loại Sản Phẩm</th>
@@ -58,8 +61,9 @@
                                         @if (isset($SanPham))
                                             @foreach ($SanPham as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td><img src="{{ asset('uploads/SanPham/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;"></td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left"><img src="{{ asset('uploads/SanPham/' . $value->hinhanh) }}" style="width: 100px; height: 100px; border-radius: 5px;">
+                                                    </td>
                                                     <td>{{ $value->tensanpham }}</td>
                                                     <td>{{ $value->the }}</td>
                                                     <td>
@@ -72,21 +76,24 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Đang Bán' : 'Ngừng Bán' }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}"
-                                                            data-id="{{ $value->id }}"><i class="fas fa-plus-square"></i></a>
+                                                        <div class="d-flex">
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}"
+                                                                data-id="{{ $value->id }}"><i class="fas fa-plus-square"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('san-pham.show', $value->id) }}" data-id="{{ $value->id }}">
-                                                            <i class="fas fa-eye"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 view-show" data-url="{{ route('san-pham.show', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-eye"></i></a>
 
-                                                        <a href="{{ route('san-pham.edit', $value->id) }}" class="action_btn mr_10"><i class="fas fa-edit"></i></a>
+                                                            <a href="{{ route('san-pham.edit', $value->id) }}" class="action_btn mr_10"><i class="fas fa-edit"></i></a>
 
-                                                        <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('san-pham.destroy', $value->id) }}"
-                                                            data-id="{{ $value->id }}">
-                                                            <i class="fas fa-trash-alt"></i></a>
+                                                            <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('san-pham.destroy', $value->id) }}"
+                                                                data-id="{{ $value->id }}">
+                                                                <i class="fas fa-trash-alt"></i></a>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -113,7 +120,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -126,12 +133,12 @@
             </div>
         </div>
     </div>
-    {{-- modal 800px --}}
+    {{-- modal 1140px --}}
     <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel2">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -152,11 +159,43 @@
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
     <script type="text/javascript">
-        window.onload = function() {
+        window.onload = function() { // hiện Thông báo.
             if ($('#alert-success').hasClass('alert-success')) {
                 alertify.success($('#alert-success').val());
             }
         };
+
+        function countSanPhamHetHanSuDung() { 
+            $.ajax({
+                url: '/admin/san-pham/so-luong-het-han-su-dung',
+                method: 'GET',
+                success: function(data) {
+                    if (data != 0) {
+                        $('.countSanPhamHetHanSuDung').text(data);
+                    } else {
+                        $('.countSanPhamHetHanSuDung').text("");
+
+                    }
+                }
+            });
+        };
+        countSanPhamHetHanSuDung();
+
+        function countSanPhamHetHang() {
+            $.ajax({
+                url: '/admin/san-pham/so-luong-het-hang',
+                method: 'GET',
+                success: function(data) {
+                    if (data != 0) {
+                        $('.countSanPhamHetHang').text(data);
+                    } else {
+                        $('.countSanPhamHetHang').text("");
+
+                    }
+                }
+            });
+        };
+        countSanPhamHetHang();
 
         function Money() { // định dạng tiền.
             (function($) {
@@ -243,7 +282,9 @@
                         if (response.errors) {
                             alert(response.errors);
                         } else {
+                            countSanPhamHetHanSuDung();
                             countSanPhamHetHang();
+                            countSanPhamCanXuLy();
                             $("#exampleModal").modal('hide');
                             alertify.success(response.success);
                             Show(url);
@@ -264,7 +305,6 @@
                     id: id
                 },
                 success: function(response) {
-
                     $('.modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Sản Phẩm");
                     $("#exampleModal").modal('show');
@@ -308,6 +348,9 @@
                 method: 'GET',
                 success: function(response) {
                     $('#' + id).html("");
+                    countSanPhamHetHanSuDung();
+                    countSanPhamHetHang();
+                    countSanPhamCanXuLy();
                     alertify.success(response.success);
                 },
                 error: function(response) {
@@ -369,7 +412,9 @@
                         } else {
                             $("#exampleModal").modal('hide');
                             Show(url);
+                            countSanPhamHetHanSuDung();
                             countSanPhamHetHang();
+                            countSanPhamCanXuLy();
                             alertify.success(response.success);
                         }
                     },
@@ -413,7 +458,9 @@
                         alert(response.errors);
                     } else {
                         Show("san-pham/" + idsp + "/show");
+                        countSanPhamHetHanSuDung();
                         countSanPhamHetHang();
+                        countSanPhamCanXuLy();
                         alertify.success(response.success);
                     }
                 },

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-4 col-sm-4">
+                <div class="col-3 col-sm-3">
                     <img src="{{ asset('uploads/SanPham/' . $SanPham->hinhanh) }}" style="width: 250px; height: 250px; border-radius: 5px;">
                 </div>
                 <div class="col-8 col-sm-8">
@@ -53,7 +53,7 @@
                                 <td>{{ Date_format(Date_create($valuectsp->ngaysanxuat), 'd/m/Y') }}</td>
                                 <td>{{ Date_format(Date_create($valuectsp->hansudung), 'd/m/Y') }}</td>
                                 <td>
-                                    <span class="badge rounded-pill {{ $valuectsp->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                    <span class="badge {{ $valuectsp->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                         {{ $valuectsp->trangthai == 1 ? 'Còn Bán' : 'Hết Bán' }}</span>
                                 </td>
                                 <td>
@@ -94,7 +94,7 @@
                                 </td>
                                 <td>{{ number_format($valuectsp->giasanpham, 0, ',', '.') . ' VNĐ' }}</td>
                                 <td>
-                                    <span class="badge rounded-pill {{ $valuectsp->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                    <span class="badge {{ $valuectsp->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                         {{ $valuectsp->trangthai == 1 ? 'Còn Bán' : 'Hết bán' }}</span>
                                 </td>
                                 <td>

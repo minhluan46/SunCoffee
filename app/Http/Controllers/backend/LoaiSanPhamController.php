@@ -95,15 +95,14 @@ class LoaiSanPhamController extends Controller
     {
         $LoaiSanPham = LoaiSanPham::find($id);
         if ($LoaiSanPham->trangthai == 1) {
-            $trangthai = "<span class='badge rounded-pill bg-primary'>Sản phẩm Có Hạng Sử Dụng</span>";
+            $trangthai = "<span class='badge bg-primary'>Sản phẩm Có Hạng Sử Dụng</span>";
         } elseif ($LoaiSanPham->trangthai == 2) {
-            $trangthai = "<span class='badge rounded-pill bg-success'>Sản Phẩm Dùng Trong Ngày</span>";
+            $trangthai = "<span class='badge bg-success'>Sản Phẩm Dùng Trong Ngày</span>";
         } else {
-            $trangthai = "<span class='badge rounded-pill bg-danger'>Không Được Phép Thêm Sản Phẩm</span>";
+            $trangthai = "<span class='badge bg-danger'>Không Được Phép Thêm Sản Phẩm</span>";
         }
-        $output = "<td style='text-align: left'>" . $LoaiSanPham->id . "
-        </td>
-        <td>" . $LoaiSanPham->tenloaisanpham . "</td>
+        $output = "
+        <td style='text-align: left'>" . $LoaiSanPham->tenloaisanpham . "</td>
         <td>" . $trangthai . "
             
         </td>

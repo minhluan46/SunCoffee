@@ -202,55 +202,56 @@
                 </div>
             </div>
         </div>
-    @endsection
-    @section('script')
-        <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
-        <script type="text/javascript">
-            $(document).ready(function() { // nhập 10 số.
-                $("#SDT").keypress(function() {
-                    if (this.value.length == 10) {
-                        return false;
-                    }
-                })
-            });
-
-            function validate() {
-                if (remember.checked == 1) {
-                    alert("checked");
-                }
-            };
-
-            $('#dathang').on('click', function() { // kiểm tra trước khi gửi.
-                var hoten2 = $('#hoten').val();
-                var SDTa = $('#SDT').val();
-                var email = $('#email').val();
-                var diachi = $('#diachi').val();
-                if (hoten2.length > 0 && SDTa.length > 0 && email.length > 0 && diachi.length > 0) {
-                    var value = document.getElementById('SDT').value;
-                    if (value.length == 10) {
-                        return true;
-                    }
-                    alertify.warning("Số Điện Thoại Không Đúng Định Dạng");
+    </div>
+@endsection
+@section('script')
+    <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() { // nhập 10 số.
+            $("#SDT").keypress(function() {
+                if (this.value.length == 10) {
                     return false;
                 }
             })
+        });
 
-            $('#xemsanpham').on('click', function() { // xem giỏ hàng và kiểm tra thành viên.
-                $.ajax({
-                    url: "xem-gio-hang",
-                    method: "GET",
-                    data: {
-                        sdt: $("input[name='sdt']").val(),
-                    },
-                    success: function(data) {
-                        $('#dataxemsanpham').html(data);
-                        $('#exampleModal').modal('show');
-                    },
-                    errors: function(data) {
-                        alertify.error("Lỗi Tải Trang");
-                    }
-                })
+        function validate() {
+            if (remember.checked == 1) {
+                alert("checked");
+            }
+        };
 
+        $('#dathang').on('click', function() { // kiểm tra trước khi gửi.
+            var hoten2 = $('#hoten').val();
+            var SDTa = $('#SDT').val();
+            var email = $('#email').val();
+            var diachi = $('#diachi').val();
+            if (hoten2.length > 0 && SDTa.length > 0 && email.length > 0 && diachi.length > 0) {
+                var value = document.getElementById('SDT').value;
+                if (value.length == 10) {
+                    return true;
+                }
+                alertify.warning("Số Điện Thoại Không Đúng Định Dạng");
+                return false;
+            }
+        })
+
+        $('#xemsanpham').on('click', function() { // xem giỏ hàng và kiểm tra thành viên.
+            $.ajax({
+                url: "xem-gio-hang",
+                method: "GET",
+                data: {
+                    sdt: $("input[name='sdt']").val(),
+                },
+                success: function(data) {
+                    $('#dataxemsanpham').html(data);
+                    $('#exampleModal').modal('show');
+                },
+                errors: function(data) {
+                    alertify.error("Lỗi Tải Trang");
+                }
             })
-        </script>
-    @endsection
+
+        })
+    </script>
+@endsection

@@ -28,7 +28,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Khuyến Mãi</h3>
+                                <h2 class="m-0">Danh Sách Khuyến Mãi</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -37,8 +37,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Tên Khuyến Mãi</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Tên Khuyến Mãi</th>
                                             <th scope="col">Bắt đầu</th>
                                             <th scope="col">Kết Thúc</th>
                                             <th scope="col">Tình Trạng</th>
@@ -49,20 +49,20 @@
                                         @if (isset($KhuyenMai))
                                             @foreach ($KhuyenMai as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ $value->tenkhuyenmai }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ $value->tenkhuyenmai }}</td>
                                                     <td>{{ Date_format(Date_create($value->thoigianbatdau), 'd/m/Y') }}</td>
                                                     <td>{{ Date_format(Date_create($value->thoigianketthuc), 'd/m/Y') }}</td>
                                                     <td>
                                                         @isset($today)
                                                             @if ($value->thoigianketthuc < $today)
-                                                                <span class="badge rounded-pill bg-danger">Kết Thúc</span>
+                                                                <span class="badge bg-danger">Kết Thúc</span>
                                                             @elseif ($value->trangthai == 0 && $value->thoigianketthuc >= $today)
-                                                                <span class="badge rounded-pill bg-warning">Đã Khóa</span>
+                                                                <span class="badge bg-warning">Đã Khóa</span>
                                                             @elseif ($value->thoigianbatdau > $today )
-                                                                <span class="badge rounded-pill bg-info">Sắp Đến</span>
+                                                                <span class="badge bg-info">Sắp Đến</span>
                                                             @else
-                                                                <span class="badge rounded-pill bg-primary">Đang Áp Dụng</span>
+                                                                <span class="badge bg-primary">Đang Áp Dụng</span>
                                                             @endif
                                                         @endisset
                                                     </td>
@@ -114,7 +114,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -129,10 +129,10 @@
     </div>
     {{-- modal 800px --}}
     <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel2">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

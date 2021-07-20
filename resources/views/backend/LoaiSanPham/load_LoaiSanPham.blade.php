@@ -1,16 +1,15 @@
 @if (isset($LoaiSanPham))
     @foreach ($LoaiSanPham as $value)
         <tr id="{{ $value->id }}">
-            <td style="text-align: left">{{ $value->id }}
-            </td>
-            <td>{{ $value->tenloaisanpham }}</td>
+            {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+            <td style="text-align: left">{{ $value->tenloaisanpham }}</td>
             <td>
                 @if ($value->trangthai == 1)
-                    <span class="badge rounded-pill bg-primary">Sản phẩm Có Hạng Sử Dụng</span>
+                    <span class="badge bg-primary">Sản phẩm Có Hạng Sử Dụng</span>
                 @elseif($value->trangthai == 2)
-                    <span class="badge rounded-pill bg-success">Sản Phẩm Dùng Trong Ngày</span>
+                    <span class="badge bg-success">Sản Phẩm Dùng Trong Ngày</span>
                 @else
-                    <span class="badge rounded-pill bg-danger">Không Được Phép Thêm Sản Phẩm</span>
+                    <span class="badge bg-danger">Không Được Phép Thêm Sản Phẩm</span>
                 @endif
             </td>
             <td>

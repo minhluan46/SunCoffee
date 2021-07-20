@@ -21,7 +21,7 @@
         <table class="table" style="text-align: center">
             <thead>
                 <tr>
-                    <th scope="col" style="text-align: left">Tên Quy Cách</th>
+                    <th scope="col" style="text-align: left">Quy Cách</th>
                     <th scope="col">Trạng Thái</th>
                     <th scope="col">Thao Tác</th>
                 </tr>
@@ -32,11 +32,11 @@
                         <td style=" text-align: left">{{ $valueqc->tenquycach }}</td>
                         <td>
                             @if ($valueqc->trangthai == 1)
-                                <span class="badge rounded-pill bg-primary">Được Phép Thêm Sản Phẩm</span>
+                                <span class="badge bg-primary">Được Phép Thêm Sản Phẩm</span>
                             @elseif($valueqc->trangthai == 2)
-                                <span class="badge rounded-pill bg-success">Hiện Trên Website</span>
+                                <span class="badge bg-success">Hiện Trên Website</span>
                             @else
-                                <span class="badge rounded-pill bg-danger">Không Được Phép Thêm Sản Phẩm</span>
+                                <span class="badge bg-danger">Không Được Phép Thêm Sản Phẩm</span>
                             @endif
                         </td>
                         <td>

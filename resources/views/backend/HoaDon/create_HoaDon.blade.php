@@ -14,7 +14,6 @@
         <div class="btn-pm">
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" onclick="showModalAddProduct()" href="javascript:(0)"><span class="btn-label"></span>Thêm Sản Phẩm</a>
-                <a class="btn btn-info" href="{{ route('hoa-don.index') }}">Xem Danh Sách Hóa Đơn</a>
             </div>
         </div>
         <div class="row" style="justify-content: flex-end;">
@@ -23,7 +22,7 @@
                     <div class="card-body QA_table ">
                         {{-- Item sản phẩm --}}
                         <div class="table-responsive shopping-cart " id="itemHoaDon">
-                            <table class="table mb-0" style="text-align: center">
+                            <table class="table mb-0" style="text-align: right">
                                 <thead>
                                     <tr>
                                         <th class="border-top-0" style="text-align: left">Sản Phẩm</th>
@@ -31,7 +30,7 @@
                                         <th class="border-top-0">Giảm Giá</th>
                                         <th class="border-top-0">Số Lượng</th>
                                         <th class="border-top-0">Tổng Cộng</th>
-                                        <th class="border-top-0">Thao Tác</th>
+                                        <th class="border-top-0" style="text-align: center">Thao Tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="value-update-all">
@@ -39,7 +38,7 @@
                                         @foreach (Session::get('GioHang')->products as $item)
                                             <tr>
                                                 <td style="text-align: left"><img src="{{ asset('uploads/SanPham/' . $item['SanPham']->hinhanh) }}" alt="image" width="60" height="60">
-                                                    <p style="padding-left: 10px" class="d-inline-block align-middle mb-0 f_s_16 f_w_600 color_theme2">
+                                                    <p style="padding-left: 10px" class="d-inline-block align-middle mb-0 f_s_19 f_w_700 color_theme2">
                                                         {{ $item['SanPham']->tensanpham }}<br><span class="text-muted font_s_13">{{ $item['CTSP']->tenquycach }}</span>
                                                     </p>
                                                 </td>
@@ -47,15 +46,15 @@
                                                 </td>
                                                 <td>
                                                     @if ($item['GiamGia'] > 0)
-                                                        {{ '-' . number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
+                                                        {{  number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
                                                     @else
 
                                                     @endif
                                                 </td>
-                                                <td style="width: 70px"><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}" type="number" class="form-control" value="{{ $item['SoLuong'] }}">
+                                                <td style="width: 70px;padding-left: 30px;"><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}" type="number" class="form-control" value="{{ $item['SoLuong'] }}">
                                                 </td>
                                                 <td>{{ number_format($item['TongGia'], 0, ',', '.') }} VNĐ</td>
-                                                <td>
+                                                <td style="text-align: center">
                                                     <a href="javascript:(0)" data-id="{{ $item['CTSP']->id }}" class="action_btn deleteItemHoaDon">
                                                         <i class="fas fa-times-circle"></i></a>
                                                 </td>
@@ -76,9 +75,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4  mt_30">{{-- Tổng Tiền --}}
+            <div class="col-lg-5  mt_30">{{-- Tổng Tiền --}}
                 <div class="total-payment p-3">
-                    <h4 class="header-title">Tổng Cộng</h4>
+                    <h3 class="header-title">Tổng Cộng</h3>
                     <table class="table">
                         @if (Session::has('GioHang') != null)
                             <tbody id="TienHangTT">
@@ -97,13 +96,13 @@
                                 <tr>
                                     <td class="payment-title">Giảm Giá</td>
                                     <td id="totalDiscountCart">
-                                        {{ '-' . number_format(Session::get('GioHang')->totalDiscount, 0, ',', '.') . ' VNĐ' }}
+                                        {{ number_format(Session::get('GioHang')->totalDiscount, 0, ',', '.') . ' VNĐ' }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="payment-title">Giảm Giá Thành Viên</td>
                                     <td id="DiscountMemberCart">
-                                        {{ '-' . number_format(Session::get('GioHang')->DiscountMember, 0, ',', '.') . ' VNĐ' }}
+                                        {{  number_format(Session::get('GioHang')->DiscountMember, 0, ',', '.') . ' VNĐ' }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -160,7 +159,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm Sản Phẩm</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Thêm Sản Phẩm</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -202,7 +201,7 @@
                                 @foreach ($SanPham as $item)
                                     <tr>
                                         <td><img src="{{ asset('uploads/SanPham/' . $item->hinhanh) }}" alt="image" height="60" width="60">
-                                            <p class="d-inline-block align-middle mb-0 f_s_16 f_w_600 color_theme2" style="padding-left: 10px">{{ $item->tensanpham }}</p>
+                                            <p class="d-inline-block align-middle mb-0 f_s_19 f_w_700 color_theme2" style="padding-left: 10px">{{ $item->tensanpham }}</p>
                                         </td>
                                         <td>
                                             <select onchange="kichthuoc(this,'{{ $item->id }}')" data-ia="{{ $item->id }}" class="form-control">
@@ -239,7 +238,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tìm Khách Mua Hàng</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tìm Khách Mua Hàng</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -266,7 +265,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm khách hàng</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Thêm khách hàng</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -447,8 +446,8 @@
         function LoadTotal(data) { //cập nhật giao diện.
             $('#itemHoaDon').html(data);
             $('#totalPriceCart').text($('#tongcong').val() + " VNĐ");
-            $('#totalDiscountCart').text("-" + $('#giamgia').val() + " VNĐ");
-            $('#DiscountMemberCart').text("-" + $('#giamgiathanhvien').val() + " VNĐ");
+            $('#totalDiscountCart').text($('#giamgia').val() + " VNĐ");
+            $('#DiscountMemberCart').text($('#giamgiathanhvien').val() + " VNĐ");
             $('#TotalCart').text($('#thanhtien').val() + " VNĐ");
             $('#totalQuanty').text($('#soluong').val());
             UpdateAll();

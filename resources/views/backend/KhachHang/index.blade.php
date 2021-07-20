@@ -9,17 +9,29 @@
             <div class="mb-3 btn-1">
                 <a onclick="Create('{{ route('khach-hang.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Khách Hàng</a>
             </div>
-            <div class="serach_field-area d-flex align-items-center mb-3">
-                <div class="search_inner">
-                    <form method="GET">
-                        <div class="search_field">
-                            <input type="text" placeholder="Tên, sđt..." name="search">
-                        </div>
-                        <button id="form-search" data-url="{{ route('khach-hang.search') }}" type="submit">
-                            <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
-                    </form>
+            <div class="d-flex">
+                <div class="form-group">
+                    <select class="form-control" name="locdiem" id="locdiem">
+                        <option value="1">Lọc Điểm Tích Lũy</option>
+                        <option value="1">0 - 1.000</option>
+                        <option value="0">1.000 - 5.000</option>
+                        <option value="0">5.000 - 10.000</option>
+                        <option value="0">10.000 - 100.000</option>
+                    </select>
+                </div>
+                <div class="serach_field-area d-flex align-items-center mb-3">
+                    <div class="search_inner">
+                        <form method="GET">
+                            <div class="search_field">
+                                <input type="text" placeholder="Tên, sđt..." name="search">
+                            </div>
+                            <button id="form-search" data-url="{{ route('khach-hang.search') }}" type="submit">
+                                <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
+                        </form>
+                    </div>
                 </div>
             </div>
+
         </div>
         {{-- content --}}
         <div class="container-fluid p-0">
@@ -28,7 +40,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Khách Hàng</h3>
+                                <h2 class="m-0">Danh Sách Khách Hàng</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -37,9 +49,9 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Họ Tên</th>
-                                            <th scope="col">Số Điện Thoại</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Họ Tên</th>
+                                            <th scope="col">SĐT</th>
                                             <th scope="col">Địa Chỉ</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Điểm</th>
@@ -51,17 +63,17 @@
                                         @if (isset($KhachHang))
                                             @foreach ($KhachHang as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ $value->tenkhachhang }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ $value->tenkhachhang }}</td>
                                                     <td>{{ $value->sdt }}</td>
                                                     <td style="text-align: left; width: 20%">{{ $value->diachi }}</td>
                                                     <td style="text-align: left">{{ $value->email }}</td>
                                                     <td>{{ number_format($value->diemtichluy, 0, ',', '.') }}</td>
                                                     <td>
                                                         @if ($value->trangthai == 1)
-                                                            <span class="badge rounded-pill bg-success">Được Dùng</span>
+                                                            <span class="badge bg-success">Được Dùng</span>
                                                         @else
-                                                            <span class="badge rounded-pill bg-danger">Đã Khoá</span>
+                                                            <span class="badge bg-danger">Đã Khoá</span>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -99,7 +111,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

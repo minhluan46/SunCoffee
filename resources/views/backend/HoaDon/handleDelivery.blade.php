@@ -18,7 +18,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Hóa Đơn Cần Được Xác Nhận</h3>
+                                <h2 class="m-0">Danh Sách Hóa Đơn Cần Được Xác Nhận</h2   >
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -26,8 +26,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Thời Gian Đặt Hàng</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Thời Gian Đặt Hàng</th>
                                             <th scope="col">SĐT Khách Hàng</th>
                                             <th scope="col">Tên Khách Hàng</th>
                                             <th scope="col">Trạng Thái</th>
@@ -38,17 +38,17 @@
                                         @if (isset($HoaDon))
                                             @foreach ($HoaDon as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
                                                     <td>{{ $value->sdtkhachhang }}</td>
                                                     <td>
                                                         {{ $value->tenkhachhang }}
                                                     </td>
                                                     <td>
                                                         @if ($value->trangthai == 2)
-                                                            <span class='badge rounded-pill bg-primary'>Cần Xác Nhận</span>
+                                                            <span class='badge bg-primary'>Cần Xác Nhận</span>
                                                         @else
-                                                            <span class='badge rounded-pill bg-danger'>Đã Đống</span>
+                                                            <span class='badge bg-danger'>Đã Đống</span>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -82,10 +82,10 @@
 @endsection
 @section('modal')
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hóa Đơn</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Hóa Đơn</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -94,7 +94,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -162,34 +161,6 @@
             }
         })
 
-        function UpdateStatus2(id, message) { //cập nhật trạng thái.
-            $.ajax({
-                url: 'hoa-don/updateStatus/' + id,
-                method: 'PUT',
-                data: {
-                    _token: $("input[name='_token']").val(),
-                },
-                success: function(data) {
-                    if (data.errors) {
-                        alertify.error(data.errors);
-                    } else {
-                        $("#" + id).html(data);
-                        countHoaDonCanXuLy();
-                        alertify.success(message);
-                    }
-                },
-                error: function(response) {
-                    alertify.error("Lỗi Cập Nhật");
-                }
-
-            })
-        };
-        $(document).on('click', '.form-updatestatus', function() { // dành cho sau khi xử lý hóa đơn.
-            if (confirm("Cập Nhật Trạng Thái?")) {
-                UpdateStatus2($(this).data('id'), "Đã Cập Nhật");
-            }
-        })
-
         function Delete(id, message) { // hủy đơn hàng.
             /////////////////////////////////////////////////////////////////////////////// gửi email.
             alertify.success('Đang Tiến hành');
@@ -220,27 +191,6 @@
         $(document).on('click', '.form-delete-xl', function() { // dành cho xử lý hóa đơn.
             if (confirm("Hủy Đơn Hàng?")) {
                 Delete($(this).data('id'), "Đã Hủy Đơn Hàng");
-            }
-        });
-
-        function Delete2(id, message) { //xóa hóa đơn.
-            $.ajax({
-                url: 'xoa-xu-ly/' + id,
-                method: 'GET',
-                success: function(data) {
-                    $("#" + id).html("");
-                    countHoaDonCanXuLy();
-                    alertify.success(message);
-                },
-                error: function(response) {
-
-                    alertify.error("Lỗi Xóa Đơn Hàng");
-                }
-            })
-        };
-        $(document).on('click', '.form-delete', function() { // dành cho sau khi xử lý hóa đơn.
-            if (confirm("Đồng Ý Để Xóa?")) {
-                Delete2($(this).data('id'), "Đã Xóa Đơn Hàng");
             }
         });
     </script>

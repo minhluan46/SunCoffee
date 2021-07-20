@@ -17,7 +17,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h2 class="m-0">Danh Sách Sản Phẩm Hết Hạn Sử Dụng</h2>
+                                <h2 class="m-0">Danh Sách Sản Phẩm Hết Hàng</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
