@@ -5,10 +5,15 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\SanPham;
 use App\Models\ChiTietSanPham;
+<<<<<<< HEAD
 use App\Models\QuyCach;
 use App\Models\KhuyenMai;
 use App\Models\ChiTietKhuyenMai;
 use App\Models\LoaiSanPham;
+=======
+use App\Models\KhuyenMai;
+use App\Models\ChiTietKhuyenMai;
+>>>>>>> abd88cb0f2355e84cf61b1d0efe78ed6310f6b0d
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -52,7 +57,10 @@ class SanPhamController extends Controller
         return view('frontend.sanpham.index',$viewData);
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> abd88cb0f2355e84cf61b1d0efe78ed6310f6b0d
     public function show($id) // xem chi tiết. {sản phẩm đã được kiểm tra trạng thái bằng 1 ở những nơi liên kết đến}
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.

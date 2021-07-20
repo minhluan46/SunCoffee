@@ -4,8 +4,8 @@
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a onclick="Create('{{ route('loai-san-pham.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Mới</a>
-                <a class="btn btn-info" href="{{ route('san-pham.index') }}">Sản Phẩm</a>
+                <a onclick="Create('{{ route('loai-san-pham.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Loại Sản Phẩm</a>
+                <a class="btn btn-info" href="{{ route('san-pham.index') }}">Xem Sản Phẩm</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">

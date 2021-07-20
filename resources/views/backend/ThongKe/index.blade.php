@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_thongke')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         <div class="row ">
@@ -22,6 +25,38 @@
                         <div class="col-xl-4">
                             <div class="col-xl-12 pt-3">
                                 <div class="row">
+                                    <div class="col-xl-2" style="background: #FF7EA5;margin: 5px 0px;">
+
+                                    </div>
+                                    <div class="col-xl-10">
+                                        Doanh Số
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-2" style="background: #20DEFF;margin: 5px 0px;">
+
+                                    </div>
+                                    <div class="col-xl-10">
+                                        Lợi Nhuận
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-2" style="background: #C388F6;margin: 5px 0px;">
+
+                                    </div>
+                                    <div class="col-xl-10">
+                                        Số Lượng Đã Bán
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-bottom: 40px;">
+                                    <div class="col-xl-2" style="background: #8BC34A;margin: 5px 0px;">
+
+                                    </div>
+                                    <div class="col-xl-10">
+                                        Số Lượng Đơn Hàng
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-xl-6">
                                         <div class="form-group">
                                             <label>Từ Ngày</label>
@@ -36,10 +71,6 @@
                                     </div>
                                     <div class="col-xl-12"><button id="filer_from_to" type="button" class="btn-w100 btn btn-outline-primary">Tìm Thống Kê</button></div>
                                 </div>
-                                {{-- <button type="button" class="btn btn-outline-primary">Hôm nay</button>
-                                <button type="button" class="btn btn-outline-primary">Tuần này</button>
-                                <button type="button" class="btn btn-outline-primary">Tháng này</button>
-                                <button type="button" class="btn btn-outline-primary">Năm này</button> --}}
                             </div>
                         </div>
                     </div>
@@ -211,7 +242,7 @@
             // ID of the element in which to draw the chart.
             element: 'myfirstchart',
             //
-            barColors: ['#FF7EA5', '#20DEFF', '#C388F6', '#F5F5FF', '#ff004d'],
+            barColors: ['#FF7EA5', '#20DEFF', '#C388F6', '#8BC34A', '#FF004D'],
             // lineColors:['#FF7EA5', '#20DEFF', '#C388F6', '#F5F5FF', '#ff004d'],
             parsrTime: false,
             hideHover: 'auto',

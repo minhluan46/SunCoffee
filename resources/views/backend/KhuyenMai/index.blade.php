@@ -1,11 +1,13 @@
 @extends('layouts.backend_layout')
+@section('active_quanlykhuyenmai')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a onclick="Create('{{ route('khuyen-mai.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm
-                    Mới</a>
+                <a onclick="Create('{{ route('khuyen-mai.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Khuyến Mãi</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
@@ -205,6 +207,9 @@
                 method: 'GET',
                 success: function(response) {
                     $('#dataSheet').html(response);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
                 }
             });
         };
@@ -360,6 +365,9 @@
                 method: 'GET',
                 success: function(response) {
                     $('#' + id).html(response);
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Tải Dữ Liệu");
                 }
             });
         };
