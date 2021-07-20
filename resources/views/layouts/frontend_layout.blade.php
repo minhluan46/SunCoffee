@@ -36,17 +36,23 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('Trangchu.index') }}">Sun<small>coffee</small></a>
             {{-- ? --}}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             {{-- /? --}}
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}" class="nav-link">Trang Chủ</a></li>
-                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}" class="nav-link">Sản Phẩm</a></li>
-                    <li @yield('active_dichvu') class="nav-item"><a href="{{ route('DichVu.index') }}" class="nav-link">Dịch Vụ</a></li>
-                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}" class="nav-link">Về Chúng Tôi</a></li>
-                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}" class="nav-link">Liên Lạc</a></li>
+                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}"
+                            class="nav-link">Trang Chủ</a></li>
+                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}"
+                            class="nav-link">Sản Phẩm</a></li>
+                    <li @yield('active_menu') class="nav-item"><a href="{{ route('Menu.index') }}"
+                            class="nav-link">Menu</a></li>
+                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}"
+                            class="nav-link">Về Chúng Tôi</a></li>
+                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}"
+                            class="nav-link">Liên Lạc</a></li>
                     <li class="nav-item cart">
                         <a href="{{ route('GioHang.index') }}" class="nav-link">
                             <span class="icon icon-shopping_cart"></span>
@@ -71,7 +77,9 @@
 
 
 
-
+    <button style="width: fit-content;
+            height: fit-content;" id="myBtn" title="Lên đầu trang"  ><img style="border-radius: 25%"
+            src='{{ asset('frontend/images/back_to_top.png') }}' title='lên đầu trang' width='50px' /></button>
 
     <footer class="ftco-footer ftco-section img">
         <div class="overlay"></div>
@@ -79,17 +87,18 @@
             <div class="row mb-5">
                 <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">About Us</h2>
-                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-                            there live the blind texts.</p>
+                        <h2 class="ftco-heading-2">Về chúng tôi</h2>
+                        <p>Sun Coffee là chuỗi cà phê được thành lập vào năm 2020 nhưng với tư duy sáng tạo và phong
+                            cách
+                            mới mẻ đã đem đến những hương vị mới về cà phê.</p>
                         <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                            <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                            <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                            <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                            {{-- <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li> --}}
+                            {{-- <li class="ftco-animate"><a href="https://www.facebook.com/Sun-Coffee-101268012234926"><span class="icon-facebook"></span></a></li> --}}
+                            {{-- <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li> --}}
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
+                {{-- <div class="col-lg-4 col-md-6 mb-5 mb-md-5">
                     <div class="ftco-footer-widget mb-4">
                         <h2 class="ftco-heading-2">Recent Blog</h2>
                         <div class="block-21 mb-4 d-flex">
@@ -116,28 +125,47 @@
                             </div>
                         </div>
                     </div>
+                </div> --}}
+                <div style="text-align: center" class="col-lg-4 col-md-6 mb-5 mb-md-5">
+                    <div class="ftco-footer-widget mb-4 ml-md-4">
+                        <h2 class="ftco-heading-2">Dịch vụ</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="py-2 d-block">Mua hàng dễ dàng</a></li>
+                            <li><a href="#" class="py-2 d-block">Dịch vụ chu đáo, nhanh chóng</a></li>
+                            <li><a href="#" class="py-2 d-block">Chất lượng cà phê thượng hạgn</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
                     <div class="ftco-footer-widget mb-4 ml-md-4">
-                        <h2 class="ftco-heading-2">Services</h2>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="py-2 d-block">Cooked</a></li>
-                            <li><a href="#" class="py-2 d-block">Deliver</a></li>
-                            <li><a href="#" class="py-2 d-block">Quality Foods</a></li>
-                            <li><a href="#" class="py-2 d-block">Mixed</a></li>
-                        </ul>
+                        <h2 class="ftco-heading-2">Bản đồ</h2>
+                        <div>
+                            <iframe style="height:100%; width: 100%"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.410462746698!2d106.70980511462409!3d10.932334692215882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175281ca7aa9583%3A0xbd4e60821b659919!2zQUVPTiBNQUxMIELDjE5IIETGr8agTkcgQ0FOQVJZ!5e0!3m2!1sen!2s!4v1625337665714!5m2!1sen!2s"
+                                style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                        {{-- <ul class="list-unstyled">
+                            <li><a href="#" class="py-2 d-block">Mua hàng dễ dàng</a></li>
+                            <li><a href="#" class="py-2 d-block">Dịch vụ chu đáo, nhanh chóng</a></li>
+                            <li><a href="#" class="py-2 d-block">Chất lượng cà phê thượng hạgn</a></li>
+                        </ul> --}}
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">Have a Questions?</h2>
+                        <h2 class="ftco-heading-2"><a href="{{ route('LienLac.index') }}">Liên hệ với chúng tôi</a>
+                        </h2>
                         <div class="block-23 mb-3">
                             <ul>
-                                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain
-                                        View, San Francisco, California, USA</span></li>
-                                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929
-                                            210</span></a></li>
-                                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+                                <li><span class="icon icon-map-marker"></span><span class="text"><a
+                                            href="{{ route('LienLac.index') }}">137/3C, khu phố 2, phường
+                                            An Phú, thành phố Thuận An, tỉnh Bình Dương</a> </span></li>
+                                <li><a href="{{ route('LienLac.index') }}"><span class="icon icon-phone"></span><span
+                                            class="text">+84 916 105
+                                            406</span></a></li>
+                                <li><a href="{{ route('LienLac.index') }}"><span
+                                            class="icon icon-envelope"></span><span class="text">
+                                            SunCoffee137@gmail.com</span></a></li>
                             </ul>
                         </div>
                     </div>
@@ -149,20 +177,28 @@
                     <p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         <script>
-                            document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            // document.write(new Date().getFullYear());
+                        </script> Quán cà phê Sun Coffee được thành lập <i class="icon-heart"
+                            aria-hidden="true"></i> bởi <a href="https://colorlib.com" target="_blank">Lê Minh Luân và
+                            Hoàng Tuấn</a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
             </div>
         </div>
+        <div id="back-to-top" class="back-to-top" data-toggle="tooltip" data-placement="left" title="Trở lên đầu trang">
+            <span class="glyphicon glyphicon-circle-arrow-up text-primary"></span>
+        </div>
+
     </footer>
+
 
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen">
         <svg class="circular" width="48px" height="48px">
             <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00" />
         </svg>
     </div>
     @yield('modal')
@@ -185,9 +221,31 @@
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     @yield('script')
     {{-- Zalo chat --}}
-    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!" data-autopopup="600" data-width="350" data-height="420"></div>
+    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!"
+        data-autopopup="600" data-width="350" data-height="420"></div>
 
     <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+
+    {{-- Button back to top --}}
+    <script>
+        window.onscroll = function() {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+
+            if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+                document.getElementById("myBtn").style.display = "block";
+            } else {
+                document.getElementById("myBtn").style.display = "none";
+            }
+        }
+
+        document.getElementById('myBtn').addEventListener("click", function() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+    </script>
 
 </body>
 

@@ -92,6 +92,18 @@
                 </div>
                 <div id="removed-value"></div>
             </div>
+<<<<<<< HEAD
+        @else
+        <div class="row">{{-- phần của khuyến mãi --}}
+            <div class="col-md-12 heading-section ftco-animate text-center">
+            <span class="subheading mb-5">Hiện tại không có sản phẩm nào trong giỏ hàng.</span>
+            <p><a href="{{ route('SanPham.index') }}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Mua ngay</a>
+
+            </div>
+        </div>
+        @endif
+=======
+>>>>>>> abd88cb0f2355e84cf61b1d0efe78ed6310f6b0d
     </section>
 @else
     <div class="notproduct">

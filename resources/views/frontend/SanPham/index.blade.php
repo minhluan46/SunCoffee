@@ -5,27 +5,33 @@
 @section('content')
     {{-- Thông báo thêm thành công --}}
     @if (session('success'))
-        <input type="text" class="success-addCartOnline" id="success-addCartOnline" value="{{ session('success') }}" hidden>
+        <input type="text" class="success-addCartOnline" id="success-addCartOnline" value="{{ session('success') }}"
+            hidden>
     @endif
     @if (session('error'))
         <input type="text" class="error-addCartOnline" id="error-addCartOnline" value="{{ session('errors') }}" hidden>
     @endif
     @if (session('warning'))
-        <input type="text" class="warning-addCartOnline" id="warning-addCartOnline" value="{{ session('warning') }}" hidden>
+        <input type="text" class="warning-addCartOnline" id="warning-addCartOnline" value="{{ session('warning') }}"
+            hidden>
     @endif
     @if (session('message'))
-        <input type="text" class="message-addCartOnline" id="message-addCartOnline" value="{{ session('message') }}" hidden>
+        <input type="text" class="message-addCartOnline" id="message-addCartOnline" value="{{ session('message') }}"
+            hidden>
     @endif
     {{--  --}}
     <section class="home-slider owl-carousel">
-        <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});" data-stellar-background-ratio="0.5">
+        <div class="slider-item" style="background-image: url({{ asset('frontend/images/bg_3.jpg') }});"
+            data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
                 <div class="row slider-text justify-content-center align-items-center">
 
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
-                        <h1 class="mb-3 mt-5 bread">Order Online</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+                        <h1 class="mb-3 mt-5 bread">SẢN PHẨM</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('Trangchu.index') }}">Home</a></span>
+                            <span>Shop</span>
+                        </p>
                     </div>
 
                 </div>
@@ -41,32 +47,41 @@
                         <div class="col-md-4 col-lg-3 ">
                             <div class="border-search category">
                                 <div class="">
-                                    <form action="#" class="search-form">
+                                    <form action="{{ route('SanPham.search_sanpham') }}" class="search-form"
+                                        method="POST">
+                                        {{ csrf_field() }}
                                         <div class="form-group">
                                             <div class="icon">
                                                 <button type="submit"><span class="icon-search"></span></button>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="Tìm Kiếm...">
+                                            <input type="text" name="keyword" id="keyword" class="form-control"
+                                                placeholder="Tìm Kiếm...">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="">{{-- gắng cứng --}}
-                                    <button class="btn btn-primary btn-outline-primary btn-search">Sản Phẩm Mới</button>
+                                    <a href="{{ route('SanPham.the', 'MỚI') }}"><button
+                                            class="btn btn-primary btn-outline-primary btn-search">Sản Phẩm Mới</button></a>
                                 </div>
                                 <div class="">{{-- gắng cứng --}}
-                                    <button class="btn btn-primary btn-outline-primary btn-search">Sản Phẩm Bán
-                                        Chạy</button>
+                                    <a href="{{ route('SanPham.the', 'BÁN CHẠY NHẤT') }}"> <button
+                                            class="btn btn-primary btn-outline-primary btn-search">Sản Phẩm Bán
+                                            Chạy</button></a>
                                 </div>
                                 <div class="">{{-- cần kiểm tra xem có khuyến mãi không --}}
-                                    <button class="btn btn-primary btn-outline-primary btn-search">Sản Phẩm Khuyến
-                                        Mãi</button>
+                                    <a href="{{ route('SanPham.status') }}"><button
+                                            class="btn btn-primary btn-outline-primary btn-search"> Sản Phẩm Khuyến
+                                            Mãi</button></a>
                                 </div>
-                                <div class="">{{-- vòng lập loại sản phẩm --}}
-                                    <button class="btn btn-primary btn-outline-primary btn-search">Cà Phê Hạt</button>
-                                </div>
-                                <div class="">{{-- vòng lập loại sản phẩm --}}
-                                    <button class="btn btn-primary btn-outline-primary btn-search">Nước Uống</button>
-                                </div>
+
+                                @if (isset($LoaiSP))
+                                    @foreach ($LoaiSP as $LSP)
+                                        <div class="">{{-- vòng lập loại sản phẩm --}}
+                                            <a href="{{ route('SanPham.lsp', $LSP->id) }}"><button
+                                                    class="btn btn-primary btn-outline-primary btn-search">{{ $LSP->tenloaisanpham }}</button></a>
+                                        </div>
+                                    @endforeach
+                                @endif
                                 <div class="">{{-- thêm 1 đoạn cho nó khớp với khung hình --}}
                                     <h4 class="subheading-search">Cà Phê Nhé</h4>
                                     <p>Một lời hẹn rất riêng của người Việt. Một lời ngỏ mộc mạc để mình ngồi
@@ -77,167 +92,100 @@
                         </div>
 
                         <div class="col-12 col-md-8 col-lg-9"> {{-- thêm 1 cái id để khi tìm kiếm sẽ thay đổi nó --}}
-                            <div class="row">{{-- phần của khuyến mãi --}}
-                                <div class="col-md-12 heading-section ftco-animate text-center">
-                                    <span class="subheading mb-5">Khuyến mãi ngày hè</span>{{-- tên khuyến mãi --}}
-                                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere eveniet voluptas
-                                        mollitia ipsam fugiat, culpa soluta earum, dolorum, magni aliquam provident?
-                                        Numquam, ex. Blanditiis explicabo nisi eius ratione inventore provident.
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere eveniet voluptas
-                                        mollitia ipsam fugiat, culpa soluta earum, dolorum, magni aliquam provident?
-                                        Numquam, ex. Blanditiis explicabo nisi eius ratione inventore provident.
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere eveniet voluptas
-                                        mollitia ipsam fugiat, culpa soluta earum, dolorum, magni aliquam provident?
-                                        Numquam, ex. Blanditiis explicabo nisi eius ratione inventore provident.</p>
-                                    {{-- nội dung --}}
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
+                            @if ($OnlyKM)
+                                @foreach ($OnlyKM as $OnlyKM)
+                                    <div class="row">{{-- phần của khuyến mãi --}}
+                                        <div class="col-md-12 heading-section ftco-animate text-center">
+                                            <span class="subheading mb-5">{{ $OnlyKM->mota }}</span>
+                                             <p>Bắt đầu từ: {{ $OnlyKM->thoigianbatdau }} -> kết thúc lúc :
+                                        {{ $OnlyKM->thoigianketthuc }}</p> 
+                                        <p>{{$OnlyKM->mota}}</p>
+                                            {{-- nội dung --}}
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        @if (isset($CaPheKM))
+                                            @foreach ($CaPheKM as $CaPhe)
+                                            @if($CaPhe->id_khuyenmai == $OnlyKM->id)
+                                                <div class="col-md-4  menu-t">
+                                                    <div class="menu-entry">
+                                                        <a href="{{ route('SanPham.show', $CaPhe->id_sanpham) }}" class="img"
+                                                            style="background-image: url({{ asset('uploads/SanPham/' . $CaPhe->hinhanh) }});"><span
+                                                            class="badge badge-pill badge-info ban">{{ $CaPhe->the == 'THƯỜNG' ? '' : $CaPhe->the }}</span></a>
+                                                        <div class="text text-center pt-4">
+                                                            <h3><a href="{{ route('SanPham.show', $CaPhe->id_sanpham) }}">{{ $CaPhe->tensanpham }} <br />
+                                                                    {{ $CaPhe->tenquycach }}</a></h3>
+                                                            <p class="price">
+                                                                <span>{{ number_format($CaPhe->giasanpham, 0, ',', '.') }}VNĐ
+                                                                    ( -
+                                                                    {{ $CaPhe->muckhuyenmai }} %)</span>
+                                                            </p>
+                                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm
+                                                                    Vào Giỏ
+                                                                    Hàng</a></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
 
-                            <div class="row"> {{-- phần của cà phê hạt --}}
-                                <div class="col-md-12 heading-section ftco-animate text-center">
-                                    <span class="subheading mb-5">Cà Phê Hạt</span>
-                                    {{-- <h2 class="mb-4">Cà Phê Hạt</h2> --}}
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    @endforeach
+                                @endif
 
-                            <div class="row"> {{-- phần của nước uống --}}
-                                <div class="col-md-12 heading-section ftco-animate text-center">
-                                    <span class="subheading mb-5">Nước Uống</span>
-                                    {{-- <h2 class="mb-4">Cà Phê Hạt</h2> --}}
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
+                                    <div class="row"> {{-- phần của cà phê hạt --}}
+                                        @if (isset($LoaiSP))
+                                            @foreach ($LoaiSP as $LSP)
+                                                <div class="row"> {{-- phần của cà phê hạt --}}
+                                                    <div class="col-md-12 heading-section ftco-animate text-center">
+                                                        <span
+                                                            class="subheading mb-5">{{ $LSP->tenloaisanpham }}</span>{{-- tên khuyến mãi --}}
+
+                                                        {{-- nội dung --}}
+                                                    </div>
+                                                    @if (isset($SanPham))
+                                                        @foreach ($SanPham as $SP)
+                                                            @if ($LSP->id == $SP->id_loaisanpham)
+                                                                <div class="col-md-4  menu-t">
+                                                                    <div class="menu-entry">
+                                                                        <a href="{{ route('SanPham.show', $SP->id) }}"
+                                                                            class="img"
+                                                                            style="background-image: url({{ asset('uploads/SanPham/' . $SP->hinhanh) }});"><span
+                                                                                class="badge badge-pill badge-info ban">{{ $SP->the == 'THƯỜNG' ? '' : $SP->the }}</span></a>
+                                                                        <div class="text text-center pt-4">
+                                                                            <h3><a
+                                                                                    href="{{ route('SanPham.show', $SP->id) }}">{{ $SP->tensanpham }}</a>
+                                                                            </h3>
+                                                                            {{-- {{$SPQC}} --}}
+                                                                            @if (isset($SPQC))
+                                                                                @foreach ($SPQC as $QC)
+                                                                                    @if ($QC->id_sanpham == $SP->id)
+                                                                                        <p>{{ $QC->tenquycach }} -
+                                                                                            {{ number_format($QC->giasanpham, 0, ',', '.') }}
+                                                                                            VNĐ</p>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                            {{-- <p class="price"><span>{{ $SP->giasanpham }} -> <b
+                                                                            style="font-size: 1.3em">{{ $SP->giasanpham - $SP->giasanpham * ($SP->muckhuyenmai / 100) }}</b></span> --}}
+                                                                            </p>
+                                                                            <p><a href="#"
+                                                                                    class="btn btn-primary btn-outline-primary">Thêm
+                                                                                    Vào
+                                                                                    Giỏ
+                                                                                    Hàng</a></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        @endif
+
                                     </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4  menu-t">
-                                    <div class="menu-entry">
-                                        <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                        <div class="text text-center pt-4">
-                                            <h3><a href="#">Coffee Capuccino</a></h3>
-                                            <p class="price"><span>10.000 VNĐ</span></p>
-                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ
-                                                    Hàng</a></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+
 
                         </div>
                     </div>

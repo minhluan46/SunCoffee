@@ -12,9 +12,19 @@ Route::group(['namespace' => 'frontend'], function () {
 
     Route::get('/san-pham', 'SanPhamController@index')->name('SanPham.index');
     Route::get('/chi-tiet/{id}', 'SanPhamController@show')->name('SanPham.show');
+
+    Route::get('/san-pham-km', 'SanPhamController@showStatus')->name('SanPham.status');// Sản phẩm khuyến mãi
+    Route::get('/san-pham-the/{the}', 'SanPhamController@showThe')->name('SanPham.the');// Sản phẩm theo thẻ
+    Route::get('/san-pham-lsp/{lsp}', 'SanPhamController@showLsp')->name('SanPham.lsp');// Sản phẩm theo loại sản phẩm
+    Route::get('/dialog_detail/{id}', 'SanPhamController@dialogDetail')->name('SanPham.dialog_detail');// Sản phẩm theo loại sản phẩm
+    Route::post('/search-san-pham', 'SanPhamController@searchSanPham')->name('SanPham.search_sanpham');// Sản phẩm theo loại sản phẩm
     // Dịch Vụ
 
     Route::get('/dich-vu', 'DichVuController@index')->name('DichVu.index');
+
+    //Menu 
+    Route::get('/menu', 'MenuController@index')->name('Menu.index');
+
     // Về Chúng Tôi
 
     Route::get('/ve-chung-toi', 'VeChungToiController@index')->name('VeChungToi.index');
@@ -232,3 +242,10 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/email/{id}/{TT}', 'HoaDonController@email')->name('hoa-don.email'); // xem gửi email.
     });
 });
+<<<<<<< HEAD
+
+// in hóa đơn.9
+// thông báo qua email.(dành cho thành viên: thông báo về đểm tích lũy,...)
+// activa. 
+=======
+>>>>>>> abd88cb0f2355e84cf61b1d0efe78ed6310f6b0d

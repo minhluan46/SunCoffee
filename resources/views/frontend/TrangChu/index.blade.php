@@ -66,21 +66,21 @@
                         <div class="col-md-4 d-flex ftco-animate">
                             <div class="icon"><span class="icon-phone"></span></div>
                             <div class="text">
-                                <h3>000 (123) 456 7890</h3>
-                                <p>A small river named Duden flows by their place and supplies.</p>
+                                <h3>+84916105408</h3>
+                                <p>Sun Coffee - Mang lại hương vị cà phê Việt.</p>
                             </div>
                         </div>
                         <div class="col-md-4 d-flex ftco-animate">
                             <div class="icon"><span class="icon-my_location"></span></div>
                             <div class="text">
-                                <h3>198 West 21th Street</h3>
-                                <p> 203 Fake St. Mountain View, San Francisco, California, USA</p>
+                                <h3>Địa chỉ</h3>
+                                <p> 137/3, khu phố 2, phường An Phú, thành phố Thuận An, Bình Dương.</p>
                             </div>
                         </div>
                         <div class="col-md-4 d-flex ftco-animate">
                             <div class="icon"><span class="icon-clock-o"></span></div>
                             <div class="text">
-                                <h3>Open Monday-Friday</h3>
+                                <h3>Mở cửa từ thứ 2 - thứ 7</h3>
                                 <p>8:00am - 9:00pm</p>
                             </div>
                         </div>
@@ -136,7 +136,6 @@
                                 <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                 <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
                                 </p>
-                                <p><a href="#" class="btn btn-primary btn-outline-primary">Thêm Vào Giỏ Hàng</a></p>
                             </div>
                         </div>
                     @endforeach
@@ -162,12 +161,16 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row">
+                        @isset($CaPheHatBanChayNhat)
+                        @for ($i =0; $i < 4; $i++)
                         <div class="col-md-6">
                             <div class="menu-entry">
-                                <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
+                                <a href="{{ route('SanPham.show', $CaPheHatBanChayNhat[$i]->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $CaPheHatBanChayNhat[$i]->hinhanh) }});"></a>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        @endfor
+                        @endisset
+                        {{-- <div class="col-md-6">
                             <div class="menu-entry mt-lg-4">
                                 <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-2.jpg') }});"></a>
                             </div>
@@ -181,7 +184,7 @@
                             <div class="menu-entry mt-lg-4">
                                 <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-4.jpg') }});"></a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
