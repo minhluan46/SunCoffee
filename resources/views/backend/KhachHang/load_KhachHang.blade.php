@@ -1,17 +1,17 @@
 @if (isset($KhachHang))
     @foreach ($KhachHang as $value)
         <tr id="{{ $value->id }}">
-            <td style="text-align: left">{{ $value->id }}</td>
-            <td>{{ $value->tenkhachhang }}</td>
+            {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+            <td style="text-align: left">{{ $value->tenkhachhang }}</td>
             <td>{{ $value->sdt }}</td>
             <td style="text-align: left; width: 20%">{{ $value->diachi }}</td>
             <td style="text-align: left">{{ $value->email }}</td>
             <td>{{ number_format($value->diemtichluy, 0, ',', '.') }}</td>
             <td>
                 @if ($value->trangthai == 1)
-                    <span class="badge rounded-pill bg-success">Được Dùng</span>
+                    <span class="badge bg-success">Được Dùng</span>
                 @else
-                    <span class="badge rounded-pill bg-danger">Đã Khoá</span>
+                    <span class="badge bg-danger">Đã Khoá</span>
                 @endif
             </td>
             <td>

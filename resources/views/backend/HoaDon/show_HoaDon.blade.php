@@ -1,6 +1,6 @@
 @if (isset($HoaDon))
     <div class="row">
-        <div class="col-6 col-sm-6">
+        <div class="col-4 col-sm-4">
             <h4><b>Mã: </b> <span>({{ $HoaDon->id }})</span></h4>
             <h4><b>Ngày Lập: </b> <span>{{ Date_format(Date_create($HoaDon->ngaylap), 'd/m/Y H:i:s') }}</span></h4>
             <h4><b>Người Lập: </b> <span>{{ $NhanVien->tennhanvien }}</span></h4>
@@ -21,7 +21,7 @@
                 </span>
             </h4>
         </div>
-        <div class="col-6 col-sm-6">
+        <div class="col-8 col-sm-8">
             <h4><b>Khách Hàng: </b> <span>{{ $HoaDon->tenkhachhang }}</span></h4>
             <h4><b>Email: </b> <span>{{ $HoaDon->emailkhachhang }}</span></h4>
             <h4><b>SĐT Khách Hàng: </b> <span>{{ $HoaDon->sdtkhachhang }}</span></h4>
@@ -60,13 +60,13 @@
                     <td>
                         @foreach ($ChiTietSanPham as $itemCTSP)
                             @if ($itemCTSP->id == $item->id_chitietsanpham)
-                                {{ number_format($itemCTSP->giasanpham, 0, ',', '.') }}VNĐ
+                                {{ number_format($itemCTSP->giasanpham, 0, ',', '.') }} VNĐ
                             @endif
                         @endforeach
                     </td>
-                    <td>{{ number_format($item->giamgia, 0, ',', '.') }}VNĐ</td>
+                    <td>{{ number_format($item->giamgia, 0, ',', '.') }} VNĐ</td>
                     <td>{{ number_format($item->soluong, 0, ',', '.') }}</td>
-                    <td>{{ number_format($item->tonggia, 0, ',', '.') }}VNĐ</td>
+                    <td>{{ number_format($item->tonggia, 0, ',', '.') }} VNĐ</td>
                 </tr>
             @endforeach
         </tbody>

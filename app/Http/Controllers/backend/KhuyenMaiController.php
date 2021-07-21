@@ -126,7 +126,7 @@ class KhuyenMaiController extends Controller
             [
                 'tenkhuyenmai' => 'required',
                 'thoigianbatdau' => 'required|date',
-                'thoigianketthuc' => 'required|date|after:thoigianbatdau',
+                'thoigianketthuc' => 'required|date|after_or_equal:thoigianbatdau',
                 'mota' => 'required',
             ],
             [
@@ -137,7 +137,7 @@ class KhuyenMaiController extends Controller
 
                 'thoigianketthuc.required' => 'Thời Gian Kết Thúc Không Được Để Trống',
                 'thoigianketthuc.date' => 'Thời Gian Kết Thúc Không Đúng Đinh Dạng Ngày',
-                'thoigianketthuc.after' => 'Thời Gian Kết Thúc Phải Sau Thời Gian Bắt Đầu',
+                'thoigianketthuc.after_or_equal' => 'Thời Gian Kết Thúc Phải Bằng Hoặc Sau Thời Gian Bắt Đầu',
 
                 'mota.required' => 'Mô Tả Không Được Để Trống',
             ]
@@ -177,17 +177,16 @@ class KhuyenMaiController extends Controller
 
 
         if ($KhuyenMai->thoigianketthuc < $today) {
-            $tinhtrang = "<span class='badge rounded-pill bg-danger'>Kết Thúc</span>";
+            $tinhtrang = "<span class='badge bg-danger'>Kết Thúc</span>";
         } elseif ($KhuyenMai->trangthai == 0 && $KhuyenMai->thoigianketthuc >= $today) {
-            $tinhtrang = "<span class='badge rounded-pill bg-warning'>Đã Khóa</span>";
+            $tinhtrang = "<span class='badge bg-warning'>Đã Khóa</span>";
         } elseif ($KhuyenMai->thoigianbatdau > $today) {
-            $tinhtrang = "<span class='badge rounded-pill bg-info'>Sắp Đến</span>";
+            $tinhtrang = "<span class='badge bg-info'>Sắp Đến</span>";
         } else {
-            $tinhtrang = "<span class='badge rounded-pill bg-primary'>Đang Áp Dụng</span>";
+            $tinhtrang = "<span class='badge bg-primary'>Đang Áp Dụng</span>";
         }
         $output = "
-        <td style='text-align: left'>" . $KhuyenMai->id . "</td>
-        <td>" . $KhuyenMai->tenkhuyenmai . "</td>
+        <td style='text-align: left'>" . $KhuyenMai->tenkhuyenmai . "</td>
         <td>" . Date_format(Date_create($KhuyenMai->thoigianbatdau), 'd/m/Y') . "</td>
         <td>" . Date_format(Date_create($KhuyenMai->thoigianketthuc), 'd/m/Y') . "</td>
         <td>" . $tinhtrang . "</td>

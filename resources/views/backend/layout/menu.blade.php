@@ -30,6 +30,16 @@
             </a>
         </li>
         <li class="">
+            <a href="{{ route('hoa-don.index') }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
+                </div>
+                <div @yield('active_danhsachhoadon') class="nav_title">
+                    <span>Danh Sách Hoá Đơn</span>
+                </div>
+            </a>
+        </li>
+        <li class="">
             <a href="{{ route('hoa-don.handleDelivery') }}" aria-expanded="false">
                 <div class="nav_icon_small">
                     <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
@@ -64,27 +74,27 @@
                         <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                     </div>
                     <div @yield('active_quanlysanpham') class="nav_title">
-                        <span>Quản Lý Sản Phẩm <span class="badge bg-danger soluongsanphamhethang" style="color: white"></span></span>
+                        <span>Quản Lý Sản Phẩm <span class="badge bg-danger countSanPhamCanXuLy" style="color: white"></span></span>
                     </div>
                 </a>
             </li>
-            @section('countSanPhamHetHang')
+            @section('countSanPhamCanXuLy')
                 <script type="text/javascript">
-                    function countSanPhamHetHang() {
+                    function countSanPhamCanXuLy() {
                         $.ajax({
-                            url: '/admin/san-pham/so-luong-het-hang',
+                            url: '/admin/san-pham/so-luong-xu-ly',
                             method: 'GET',
                             success: function(data) {
                                 if (data != 0) {
-                                    $('.soluongsanphamhethang').text(data);
+                                    $('.countSanPhamCanXuLy').text(data);
                                 } else {
-                                    $('.soluongsanphamhethang').text("");
+                                    $('.countSanPhamCanXuLy').text("");
 
                                 }
                             }
                         });
                     };
-                    countSanPhamHetHang();
+                    countSanPhamCanXuLy();
                 </script>
             @endsection
         @endif

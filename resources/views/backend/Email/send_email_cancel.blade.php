@@ -55,7 +55,12 @@
                         <td style="text-align: right"><samp>{{ number_format($item->giasanpham, 0, ',', '.') }} VNĐ</samp></td>
                     @endif
                     <td style="text-align: center"><samp>{{ number_format($item->soluong, 0, ',', '.') }}</samp></td>
-                    <td style="text-align: right"><samp>{{ number_format($item->tonggia, 0, ',', '.') }} VNĐ</samp></td>
+                    @if ($item->giamgia != 0)
+                        <td style="text-align: right"><samp>{{ number_format(($item->giasanpham - $item->giamgia) * $item->soluong, 0, ',', '.') }} VNĐ</samp></td>
+                    @else
+                        <td style="text-align: right"><samp>{{ number_format($item->tonggia, 0, ',', '.') }} VNĐ</samp></td>
+                    @endif
+
                 </tr>
             @endforeach
         </tbody>

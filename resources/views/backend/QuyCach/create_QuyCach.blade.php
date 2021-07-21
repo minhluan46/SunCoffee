@@ -11,7 +11,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Tên Quy Cách<b style="color:red"> *</b></label>
+                <label>Quy Cách<b style="color:red"> *</b></label>
                 <input type="text" class='form-control' maxlength="50" name="tenquycach">
             </div>
             <button id="form-createQC" data-url="{{ route('quy-cach.store') }}" type="submit" class="btn btn-success" style="width: 100%">Thêm</button>

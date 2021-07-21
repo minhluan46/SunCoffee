@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_danhsachhoadon')
+    class="nav-item active"
+@endsection
 @section('content')
     {{-- thông báo --}}
     @if (session('success'))
@@ -29,7 +32,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Hóa Đơn</h3>
+                                <h2 class="m-0">Danh Sách Hóa Đơn</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -44,8 +47,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Ngày Lập</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Ngày Lập</th>
                                             <th scope="col">SĐT Khách Hàng</th>
                                             <th scope="col">Khách Hàng</th>
                                             <th scope="col">Người Lập</th>
@@ -57,8 +60,8 @@
                                         @if (isset($HoaDon))
                                             @foreach ($HoaDon as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
                                                     <td>{{ $value->sdtkhachhang }}</td>
                                                     <td>
                                                         {{ $value->tenkhachhang }}
@@ -74,9 +77,9 @@
                                                     </td>
                                                     <td>
                                                         @if ($value->trangthai == 1)
-                                                            <span class='badge rounded-pill bg-success'>Hoàn Thành</span>
+                                                            <span class='badge bg-success'>Hoàn Thành</span>
                                                         @else
-                                                            <span class='badge rounded-pill bg-danger'>Đã Đóng</span>
+                                                            <span class='badge bg-danger'>Đã Đóng</span>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -111,10 +114,10 @@
 @endsection
 @section('modal')
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hóa Đơn</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Hóa Đơn</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -123,7 +126,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

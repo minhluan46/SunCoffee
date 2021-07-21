@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_quanlynhanvien')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
@@ -26,7 +29,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Loại Nhân Viên</h3>
+                                <h2 class="m-0">Danh Sách Loại Nhân Viên</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -35,8 +38,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Tên Loại Nhân Viên</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Tên Loại Nhân Viên</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
@@ -45,10 +48,10 @@
                                         @if (isset($LoaiNhanVien))
                                             @foreach ($LoaiNhanVien as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}</td>
-                                                    <td>{{ $value->tenloainhanvien }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ $value->tenloainhanvien }}</td>
                                                     <td>
-                                                        <span class="badge rounded-pill {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
+                                                        <span class="badge {{ $value->trangthai == 1 ? 'bg-success' : 'bg-danger' }}">
                                                             {{ $value->trangthai == 1 ? 'Hoạt Động' : 'Tạm Dừng' }}</span>
                                                     </td>
                                                     <td>
@@ -83,7 +86,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

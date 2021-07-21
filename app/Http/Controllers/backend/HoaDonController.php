@@ -290,12 +290,12 @@ class HoaDonController extends Controller
         }
         HoaDon::where('id', $id)->update($data);
         if ($data['trangthai'] == 1) {
-            $trangthai =  "<span class='badge rounded-pill bg-success'>Hoàn Thành</span>";
+            $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
         } else {
-            $trangthai =  "<span class='badge rounded-pill bg-danger'>Đã Đóng</span>";
+            $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
-        $output = "<td style='text-align: left'>" . $HoaDon->id . "</td>
-        <td>" . $HoaDon->ngaylap . "</td>
+        $output = "
+        <td style='text-align: left'>" . Date_format(Date_create($HoaDon->ngaylap), 'd/m/Y H:i:s') . "</td>
         <td>" . $HoaDon->sdtkhachhang . "</td>
         <td>" . $KhachHang->tenkhachhang . "</td>
         <td>" . $NhanVien->tennhanvien . "</td>
@@ -342,12 +342,12 @@ class HoaDonController extends Controller
             foreach ($HoaDon as $value) {
                 $NhanVien = NhanVien::find($value->id_nhanvien);
                 if ($value->trangthai == 1) {
-                    $trangthai =  "<span class='badge rounded-pill bg-success'>Hoàn Thành</span>";
+                    $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
                 } else {
-                    $trangthai =  "<span class='badge rounded-pill bg-danger'>Đã Đóng</span>";
+                    $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
                 }
-                $output .= "<tr id=" . $value->id . "> <td style='text-align: left'>" . $value->id . "</td>
-                <td>" . $value->ngaylap . "</td>
+                $output .= "<tr id=" . $value->id . "> 
+                <td style='text-align: left'>" . $value->ngaylap . "</td>
                 <td>" . $value->sdtkhachhang . "</td>
                 <td>" . $value->tenkhachhang . "</td>
                 <td>" . $NhanVien->tennhanvien . "</td>
@@ -362,12 +362,12 @@ class HoaDonController extends Controller
             foreach ($HoaDon as $value) {
                 $NhanVien = NhanVien::find($value->id_nhanvien);
                 if ($value->trangthai == 1) {
-                    $trangthai =  "<span class='badge rounded-pill bg-success'>Hoàn Thành</span>";
+                    $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
                 } else {
-                    $trangthai =  "<span class='badge rounded-pill bg-danger'>Đã Đóng</span>";
+                    $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
                 }
-                $output .= "<tr id=" . $value->id . "> <td style='text-align: left'>" . $value->id . "</td>
-                <td>" . $value->ngaylap . "</td>
+                $output .= "<tr id=" . $value->id . ">
+                <td style='text-align: left'>" . $value->ngaylap . "</td>
                 <td>" . $value->sdtkhachhang . "</td>
                 <td>" . $value->tenkhachhang . "</td>
                 <td>" . $NhanVien->tennhanvien . "</td>
@@ -498,7 +498,7 @@ class HoaDonController extends Controller
                 ['tensanpham', 'like', '%' . $keyword . '%'],
                 ['trangthai', 1],
             ])->orderBy('created_at', 'desc')->get(),
-            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.hansudung', '>=', $today],['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
+            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.hansudung', '>=', $today], ['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->select(
                     'chi_tiet_san_pham.*',
@@ -693,25 +693,12 @@ class HoaDonController extends Controller
         }
         HoaDon::where('id', $id)->update($data);
         if ($data['trangthai'] == 1) {
-            $trangthai =  "<span class='badge rounded-pill bg-success'>Hoàn Thành</span>";
+            $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
         } else {
-            $trangthai =  "<span class='badge rounded-pill bg-danger'>Đã Đóng</span>";
+            $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
-        if (Auth::user()->id_loainhanvien == 'LNV00000000000000') {
-            $output = "<td style='text-align: left'>" . $HoaDon->id . "</td>
-            <td>" . $HoaDon->ngaylap . "</td>
-            <td>" . $HoaDon->sdtkhachhang . "</td>
-            <td>" . $KhachHang->tenkhachhang . "</td>
-            <td>" . $trangthai . "
-            </td>
-            <td>
-            <a data-id='" . $HoaDon->id . "' href='javascript:(0)' class='action_btn mr_10 view-show'> <i class='fas fa-eye'></i></a>
-            <a data-id='" . $HoaDon->id . "' href='javascript:(0)' class='action_btn mr_10 form-updatestatus'> <i class='fas fa-pencil-alt'></i></a>
-            <a data-id='" . $HoaDon->id . "' href='javascript:(0)' class='action_btn form-delete'> <i class='fas fa-trash-alt'></i></a>
-            </td>";
-        } else {
-            $output = "<td style='text-align: left'>" . $HoaDon->id . "</td>
-            <td>" . $HoaDon->ngaylap . "</td>
+        $output = "
+            <td style='text-align: left'>" . $HoaDon->ngaylap . "</td>
             <td>" . $HoaDon->sdtkhachhang . "</td>
             <td>" . $KhachHang->tenkhachhang . "</td>
             <td>" . $trangthai . "
@@ -719,7 +706,6 @@ class HoaDonController extends Controller
             <td>
             <a data-id='" . $HoaDon->id . "' href='javascript:(0)' class='action_btn mr_10 view-show'> <i class='fas fa-eye'></i></a>
             </td>";
-        }
         echo $output;
     }
 

@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_quanlysanpham')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         {{-- header --}}
@@ -26,7 +29,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h3 class="m-0">Loại Sản Phẩm</h3>
+                                <h2 class="m-0">Loại Sản Phẩm</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -35,8 +38,8 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="text-align: left">#</th>
-                                            <th scope="col">Tên Loại Sản Phẩm</th>
+                                            {{-- <th scope="col" style="text-align: left">#</th> --}}
+                                            <th scope="col" style="text-align: left">Tên Loại Sản Phẩm</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
@@ -45,16 +48,15 @@
                                         @if (isset($LoaiSanPham))
                                             @foreach ($LoaiSanPham as $value)
                                                 <tr id="{{ $value->id }}">
-                                                    <td style="text-align: left">{{ $value->id }}
-                                                    </td>
-                                                    <td>{{ $value->tenloaisanpham }}</td>
+                                                    {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
+                                                    <td style="text-align: left">{{ $value->tenloaisanpham }}</td>
                                                     <td>
                                                         @if ($value->trangthai == 1)
-                                                            <span class="badge rounded-pill bg-primary">Sản phẩm Có Hạng Sử Dụng</span>
+                                                            <span class="badge bg-primary">Sản phẩm Có Hạng Sử Dụng</span>
                                                         @elseif($value->trangthai == 2)
-                                                            <span class="badge rounded-pill bg-success">Sản Phẩm Dùng Trong Ngày</span>
+                                                            <span class="badge bg-success">Sản Phẩm Dùng Trong Ngày</span>
                                                         @else
-                                                            <span class="badge rounded-pill bg-danger">Không Được Phép Thêm Sản Phẩm</span>
+                                                            <span class="badge bg-danger">Không Được Phép Thêm Sản Phẩm</span>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -95,12 +97,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tiêu Đề</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Tiêu Đề</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body1">
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel2">Tiêu Đề</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
 
                 </div>
                 <div class="modal-footer">
@@ -323,6 +342,7 @@
                         if (response.errors) {
                             alert(response.errors);
                         } else {
+                            $("#exampleModal").modal('hide');
                             alertify.success(response.success);
                             Show(url);
                         }
@@ -340,9 +360,9 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
-                    $("#exampleModalLabel").text("Chi Tiết Loại Sản Phẩm");
-                    $("#exampleModal").modal('show');
+                    $('#modal-body').html(response);
+                    $("#exampleModalLabel2").text("Chi Tiết Loại Sản Phẩm");
+                    $("#exampleModal2").modal('show');
                 },
                 error: function(response) {
                     alertify.error("Lỗi Tải Trang");
@@ -370,6 +390,7 @@
                         if (response.errors) {
                             alert(response.errors);
                         } else {
+                            $("#exampleModal").modal('hide');
                             Show(url);
                             alertify.success(response.success);
                         }
@@ -387,7 +408,8 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $("#exampleModal2").modal('hide');
+                    $('#modal-body1').html(response);
                     $("#exampleModalLabel").text("Sửa Quy Cách");
                     $("#exampleModal").modal('show');
                     UpdateQC();

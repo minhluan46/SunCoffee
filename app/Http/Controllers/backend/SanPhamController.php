@@ -145,18 +145,32 @@ class SanPhamController extends Controller
         }
         return view('backend.SanPham.load_SanPham', $viewData);
     }
-    /////////////////////////////////////////////////////////////////////////////////////////// search
-    public function expiredProductQuantity() //số lượng sản phẩm hết hạng.
+    /////////////////////////////////////////////////////////////////////////////////////////// sản phẩm cần xử lý.
+    public function handledProductQuantity() //số lượng sản phẩm Cần Xử Lý.
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        $ChiTietSanPham = ChiTietSanPham::where('hansudung', '<', $today)->orWhere('soluong', '=', 0)->count();
+        echo $ChiTietSanPham;
+    }
+
+    public function expiredProductQuantity() //số lượng sản phẩm Hết Hạng.
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
         $ChiTietSanPham = ChiTietSanPham::where('hansudung', '<', $today)->count();
         echo $ChiTietSanPham;
     }
+
+    public function outOfProductQuantity() //số lượng sản phẩm Hết Hạng.
+    {
+        $ChiTietSanPham = ChiTietSanPham::where('soluong', '=', 0)->count();
+        echo $ChiTietSanPham;
+    }
+
     public function expiredProduct() // sản phẩm hết hạng.
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
         $viewData =  [
-            'SanPhamHetHang' => ChiTietSanPham::where('hansudung', '<', $today)
+            'SanPhamHetHang' => ChiTietSanPham::where('chi_tiet_san_pham.hansudung', '<', $today)
                 ->join('san_pham', 'san_pham.id', 'chi_tiet_san_pham.id_sanpham')
                 ->join('quy_cach', 'quy_cach.id', 'chi_tiet_san_pham.kichthuoc')
                 ->select(
@@ -173,8 +187,28 @@ class SanPhamController extends Controller
         ];
         return view('backend.SanPham.exprired_SanPham', $viewData);
     }
-    /////////////////////////////////////////////////////////////////////////////////////////// search
-    public function updateExpiredProduct(Request $request, $id) //cập nhật chi tiết.
+    public function outOfProduct() // sản phẩm hết hạng.
+    {
+        $viewData =  [
+            'SanPhamHetHang' => ChiTietSanPham::where('chi_tiet_san_pham.soluong', '=', '0')
+                ->join('san_pham', 'san_pham.id', 'chi_tiet_san_pham.id_sanpham')
+                ->join('quy_cach', 'quy_cach.id', 'chi_tiet_san_pham.kichthuoc')
+                ->select(
+                    'chi_tiet_san_pham.id',
+                    'chi_tiet_san_pham.soluong',
+                    'chi_tiet_san_pham.ngaysanxuat',
+                    'chi_tiet_san_pham.hansudung',
+                    'chi_tiet_san_pham.trangthai',
+                    'san_pham.tensanpham',
+                    'san_pham.hinhanh',
+                    'quy_cach.tenquycach',
+
+                )->paginate(10),
+        ];
+        return view('backend.SanPham.outof_SanPham', $viewData);
+    }
+
+    public function updateHandledProduct(Request $request, $id) //cập nhật chi tiết.
     {
         $validator = Validator::make(
             $request->all(), // kiểm tra dữ liệu nhập.
@@ -233,10 +267,35 @@ class SanPhamController extends Controller
             }
         }
         ChiTietSanPham::where('id', $id)->update($data);
-        $KTChiTietSanPham = ChiTietSanPham::where('id', $id)->first();
+        $KTChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', $id)
+            ->join('san_pham', 'san_pham.id', 'chi_tiet_san_pham.id_sanpham')
+            ->join('quy_cach', 'quy_cach.id', 'chi_tiet_san_pham.kichthuoc')
+            ->select(
+                'chi_tiet_san_pham.id',
+                'chi_tiet_san_pham.soluong',
+                'chi_tiet_san_pham.ngaysanxuat',
+                'chi_tiet_san_pham.hansudung',
+                'chi_tiet_san_pham.trangthai',
+                'san_pham.tensanpham',
+                'san_pham.hinhanh',
+                'quy_cach.tenquycach',
+
+            )->first();
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-        if ($KTChiTietSanPham->hansudung < $today) {
-            return response()->json(['warning' => 'Sản Phẩm Vẫn Trong Trạng Thái Hết Hạng']);
+        if ($KTChiTietSanPham->hansudung < $today || $KTChiTietSanPham->soluong < 1) {
+            $output = "<td><img src='" . asset('uploads/SanPham/' . $KTChiTietSanPham->hinhanh) . "' style='width: 100px; height: 100px; border-radius: 5px;'></td>
+            <td>" . $KTChiTietSanPham->tensanpham . "</td>
+            <td>" . $KTChiTietSanPham->tenquycach . "</td>
+            <td>" . number_format($KTChiTietSanPham->soluong, 0, ',', '.') . "</td>
+            <td>" . Date_format(Date_create($KTChiTietSanPham->ngaysanxuat), 'd/m/Y') . "</td>
+            <td>" . Date_format(Date_create($KTChiTietSanPham->hansudung), 'd/m/Y') . "</td>
+            <td>
+                <a href='javascript:(0)' class='action_btn mr_10 view-edit-CTSP' data-url='" . route('chi-tiet-san-pham.edit', $KTChiTietSanPham->id) . "'
+                    data-id='" . $KTChiTietSanPham->id . "'>
+                    <i class='fas fa-edit'></i></a>
+            </td>";
+            return $output;
+            // return response()->json(['warning' => 'Sản Phẩm Vẫn Trong Trạng Thái Cần xử lý']);
         }
         return response()->json(['success' => 'Thành Công Rồi']);
     }

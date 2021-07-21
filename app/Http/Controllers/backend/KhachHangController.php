@@ -140,13 +140,13 @@ class KhachHangController extends Controller
     {
         $KhachHang = KhachHang::find($id);
         if ($KhachHang->trangthai == 1) {
-            $trangthai = '<span class="badge rounded-pill bg-success">Được Dùng</span>';
+            $trangthai = '<span class="badge bg-success">Được Dùng</span>';
         } else {
-            $trangthai = '<span class="badge rounded-pill bg-danger">Đã Khoá</span>';
+            $trangthai = '<span class="badge bg-danger">Đã Khoá</span>';
         }
 
-        $output = "<td style='text-align: left'>" . $KhachHang->id . "</td>
-        <td>" . $KhachHang->tenkhachhang . "</td>
+        $output = "
+        <td style='text-align: left'>" . $KhachHang->tenkhachhang . "</td>
         <td>" . $KhachHang->sdt . "</td>
         <td style='text-align: left; width: 20%'>" . $KhachHang->diachi . "</td>
         <td style='text-align: left'>" . $KhachHang->email . "</td>
