@@ -11370,7 +11370,7 @@ textarea.form-control {
 .mfp-with-zoom .mfp-container,
 .mfp-with-zoom.mfp-bg {
     opacity: 0;
-    -webkit-backface-visibility: hidden;
+    /* -webkit-backface-visibility: hidden; */
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
@@ -12021,6 +12021,28 @@ textarea.form-control {
     animation: loader-dash 1.5s ease-in-out infinite;
     stroke-linecap: round;
 }
+
+    /* Mui ten lên dau trang */
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 10px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #e5b328;
+  border: 2px solid #ccc;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  opacity: 1;
+  
+  }
+  
+  #myBtn:hover {
+  background-color: #e4e117e7;
+  }
 
 @-webkit-keyframes loader-rotate {
     100% {

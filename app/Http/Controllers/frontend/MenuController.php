@@ -9,14 +9,10 @@ use App\Models\QuyCach;
 use App\Models\KhuyenMai;
 use App\Models\ChiTietKhuyenMai;
 use App\Models\LoaiSanPham;
-use App\Models\NhanVien;
-use App\Models\KhachHang;
-use App\Models\HoaDonOnline;
-use App\Models\HoaDon;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class VeChungToiController extends Controller
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,15 +21,21 @@ class VeChungToiController extends Controller
      */
     public function index()
     {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        //
         $viewData = [
-            'SanPham' => SanPham::all(),
-            'NhanVien' => NhanVien::all(),
-            'KhachHang' => KhachHang::all(),
-            'HoaDonOnline' => HoaDon::where('id_nhanvien', 'NV11111111111111')->get(),
-            'HoaDon' => HoaDon::where('id_nhanvien', '!=', 'NV11111111111111')->get(),
-            'KhuyenMai' => KhuyenMai::all(),
+
+
+            'LoaiSP' => LoaiSanPham::where('trangthai','!=',0)->get(),
+            'SanPham' => SanPham::where('san_pham.trangthai',1)->get(),
+            'SPQC' => SanPham::where('san_pham.trangthai',1)->join('chi_tiet_san_pham','san_pham.id','=','chi_tiet_san_pham.id_sanpham')->where(
+                'chi_tiet_san_pham.hansudung', '>=', $today // kiểm tra còn hạng sử dụng hay không.
+            )->join('quy_cach','chi_tiet_san_pham.kichthuoc','=','quy_cach.id')->select(
+                'chi_tiet_san_pham.*',
+                'quy_cach.tenquycach',
+            )->orderBy('giasanpham', 'desc')->get(),
         ];
-        return view('frontend.vechungtoi.index',$viewData);
+        return view('frontend.sanpham.menu',$viewData);
     }
 
     /**

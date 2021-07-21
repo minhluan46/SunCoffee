@@ -92,10 +92,11 @@
                 </div>
                 <div id="removed-value"></div>
             </div>
+        @else
     </section>
-@else
     <div class="notproduct">
         <p>Giỏ Hàng Không có sản phẩm</p>
+        <p><a href="{{ route('SanPham.index') }}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Mua ngay</a>
     </div>
     <section class="ftco-section">
         <div class="container">
