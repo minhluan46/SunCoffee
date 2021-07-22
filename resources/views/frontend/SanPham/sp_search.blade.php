@@ -78,7 +78,9 @@
 
                                 <div class="row">{{-- phần của khuyến mãi --}}
                                     <div class="col-md-12 heading-section ftco-animate text-center">
-                                        <h2>Kết quá tìm kiếm cho ' <b>{{$keyword}}</b>'</h2>
+                                        
+
+                                        <h2>Kết quá tìm kiếm cho  <b><span class="subheading mb-5">{{$keyword}}</span></b></h2>
                                         {{-- nội dung --}}
                                     </div>
                                     @if(isset($Search))

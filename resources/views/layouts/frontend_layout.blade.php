@@ -78,7 +78,7 @@
 
 
     <button style="width: fit-content;
-            height: fit-content;" id="myBtn" title="Lên đầu trang"  ><img style="border-radius: 25%"
+            height: fit-content;" id="myBtn" title="Lên đầu trang"><img style="border-radius: 25%"
             src='{{ asset('frontend/images/back_to_top.png') }}' title='lên đầu trang' width='50px' /></button>
 
     <footer class="ftco-footer ftco-section img">
@@ -225,6 +225,12 @@
         data-autopopup="600" data-width="350" data-height="420"></div>
 
     <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+
+    {{-- Facebook cmt --}}
+    {{-- <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0&appId=990194298485785&autoLogAppEvents=1"
+        nonce="ww9We3TL"></script> --}}
 
     {{-- Button back to top --}}
     <script>

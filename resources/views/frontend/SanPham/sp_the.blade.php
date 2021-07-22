@@ -78,7 +78,9 @@
 
                                 <div class="row">{{-- phần của khuyến mãi --}}
                                     <div class="col-md-12 heading-section ftco-animate text-center">
-                                        <h2>Sản phẩm {{$the}}</h2>
+                                        <span class="subheading mb-5">Sản phẩm {{$the}}</span>
+
+                                        {{-- <h2>Sản phẩm {{$the}}</h2> --}}
                                         {{-- nội dung --}}
                                     </div>
                                     @if(isset($sp_the))
