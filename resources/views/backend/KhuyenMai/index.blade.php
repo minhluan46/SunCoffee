@@ -7,7 +7,10 @@
         {{-- header --}}
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
-                <a onclick="Create('{{ route('khuyen-mai.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Khuyến Mãi</a>
+                @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
+                    <a onclick="Create('{{ route('khuyen-mai.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Khuyến Mãi</a>
+                @endif
+                <a id="formfilter" class="btn btn-primary" href="javascript:(0)">Lọc & Sắp Xếp</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
@@ -55,14 +58,13 @@
                                                     <td>{{ Date_format(Date_create($value->thoigianketthuc), 'd/m/Y') }}</td>
                                                     <td>
                                                         @isset($today)
-                                                            @if ($value->thoigianketthuc < $today)
-                                                                <span class="badge bg-danger">Kết Thúc</span>
-                                                            @elseif ($value->trangthai == 0 && $value->thoigianketthuc >= $today)
+                                                            @if ($value->trangthai == 0)
                                                                 <span class="badge bg-warning">Đã Khóa</span>
-                                                            @elseif ($value->thoigianbatdau > $today )
-                                                                <span class="badge bg-info">Sắp Đến</span>
-                                                            @else
-                                                                <span class="badge bg-primary">Đang Áp Dụng</span>
+                                                            @elseif ($value->thoigianketthuc < $today) <span class="badge bg-danger">Kết Thúc</span>
+                                                                @elseif ($value->thoigianbatdau > $today )
+                                                                    <span class="badge bg-info">Sắp Đến</span>
+                                                                @else
+                                                                    <span class="badge bg-primary">Đang Áp Dụng</span>
                                                             @endif
                                                         @endisset
                                                     </td>
@@ -119,7 +121,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body">
 
                 </div>
                 <div class="modal-footer">
@@ -137,8 +139,51 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body-2">
 
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- filter --}}
+    <div class="modal fade" id="ModalFilter" tabindex="-1" role="dialog" aria-labelledby="ModalFilterLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="ModalFilterLabel">Lọc & Sắp Xếp</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Tình Trạng</label>
+                                <select class="form-control" name="filtertrangthai" id="filtertrangthai">
+                                    <option value="all">Tất Cả</option>
+                                    <option value="come">Sắp Đến</option>
+                                    <option value="apply">Đang Áp Dụng</option>
+                                    <option value="end">Kết Thúc</option>
+                                    <option value="lock">Đã Khóa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày Khuyến Mãi</label>
+                                <input class="form-control" type="date" name="filterngay" id="filterngay">
+                            </div>
+                            <div class="form-group">
+                                <label>Sắp Xếp</label>
+                                <select class="form-control" name="sort" id="sort">
+                                    <option value="19">Thời Gian Tạo Giảm Dần</option>
+                                    <option value="29">Thời Gian Tạo Tăng Dần</option>
+                                </select>
+                            </div>
+                            <button onclick="filter()" class="btn btn-success" style="width: 100%">Tiến Hành</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                 </div>
@@ -160,7 +205,7 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Khuyến Mãi");
                     $("#exampleModal").modal('show');
                     Store();
@@ -242,7 +287,7 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Khuyến Mãi");
                     $("#exampleModal").modal('show');
                     $(document).ready(function() {
@@ -267,7 +312,7 @@
                 method: 'GET',
                 success: function(response) {
 
-                    $('.modal-body').html(response);
+                    $('#modal-body-2').html(response);
                     $("#exampleModalLabel2").text("Chi Tiết Khuyến Mãi");
                     $("#exampleModal2").modal('show');
                 },
@@ -314,7 +359,7 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Cập Nhật Khuyến Mãi");
                     $("#exampleModal").modal('show');
                     Update();
@@ -396,7 +441,7 @@
                 url: 'chi-tiet-khuyen-mai/' + idctsp + '/' + idkm + '/edit',
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body-2').html(response);
                     $("#exampleModalLabel").text("Cập Nhật Chi Tiết Khuyến Mãi");
                     $("#exampleModal2").modal('hide');
                     $("#exampleModal").modal('show');
@@ -459,6 +504,30 @@
             if (confirm("Đồng Ý Để Xóa?")) {
                 DeleteCTKM($(this).data('idctsp'), $(this).data('idkm'));
             }
+        });
+        /////////////////////////////////////////////////////////////////////////////////////////// lọc
+        function filter() {
+            $.ajax({
+                url: '/admin/khuyen-mai/filter',
+                method: 'GET',
+                data: {
+                    filtertrangthai: $('#filtertrangthai').val(),
+                    filterngay: $('#filterngay').val(),
+                    sort: $('#sort').val(),
+                },
+                success: function(response) {
+                    $("#ModalFilter").modal('hide');
+                    $('.pagination').hide();
+                    $('#dataSheet').html(response);
+                    alertify.success("Đã Lọc");
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Lọc Dữ Liệu");
+                }
+            })
+        }
+        $(document).on('click', '#formfilter', function() {
+            $('#ModalFilter').modal('show');
         });
     </script>
 @endsection

@@ -13,9 +13,8 @@
             </div>
         </div>
     </section>
-
-    <section class="ftco-section ftco-cart">
-        @if (Session::has('GioHangOnline') != null)
+    @if (Session::has('GioHangOnline') != null)
+        <section class="ftco-section ftco-cart mb_5">
             @csrf
             <div class="container">
                 <div class="row">
@@ -70,7 +69,7 @@
                 </div>
 
                 <div class="row justify-content-end">
-                    <div class="col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate">
+                    <div class="col col-lg-4 col-md-6 mt-5 cart-wrap ftco-animate">
                         <div class="cart-total mb-3"> {{-- danh sách sản phẩm --}}
                             <h3>Tổng Giỏ Hàng</h3>
                             <p class="d-flex">
@@ -92,92 +91,48 @@
                 </div>
                 <div id="removed-value"></div>
             </div>
-        @else
-    </section>
-    <div class="notproduct">
-        <p>Giỏ Hàng Không có sản phẩm</p>
-        <p><a href="{{ route('SanPham.index') }}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Mua ngay</a>
-    </div>
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center pb-3">
-                <div class="col-md-7 heading-section ftco-animate text-center">
-                    <span class="subheading">Khám phá</span>
-                    <h2 class="mb-4">Cà phê bán chạy nhất hiện nay</h2>
-                    <p>Cà phê là thức uống quen thuộc mỗi buổi sáng giúp tôi có thể cảm nhận được cả thế giới chuyển động
-                        trong cơ thể.</p>
-                </div>
-            </div>
-            {{--  --}}
-            <div class="productnew-slider owl-carousel">
-                @isset($CaPheHatBanChayNhat)
-                    @foreach ($CaPheHatBanChayNhat as $item)
-                        <div class="menu-entry menu-entry-slider">
-                            <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
-                            <div class="text text-center pt-4">
-                                <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
-                                <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
-                                </p>
-                            </div>
-                        </div>
-                    @endforeach
-                @endisset
-            </div>
-            {{--  --}}
+
+        </section>
+    @else
+        <div class="notproduct">
+            <p>Giỏ Hàng Không có sản phẩm</p>
+            <p><a href="{{ route('SanPham.index') }}" class="btn btn-primary p-3 px-xl-4 py-xl-3">Mua ngay</a>
         </div>
-    </section>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center pb-3">
+                    <div class="col-md-7 heading-section ftco-animate text-center">
+                        <span class="subheading">Khám phá</span>
+                        <h2 class="mb-4">Cà phê bán chạy nhất hiện nay</h2>
+                        <p>Cà phê là thức uống quen thuộc mỗi buổi sáng giúp tôi có thể cảm nhận được cả thế giới chuyển động
+                            trong cơ thể.</p>
+                    </div>
+                </div>
+                {{--  --}}
+                <div class="productnew-slider owl-carousel">
+                    @isset($CaPheHatBanChayNhat)
+                        @foreach ($CaPheHatBanChayNhat as $item)
+                            <div class="menu-entry menu-entry-slider">
+                                <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
+                                <div class="text text-center pt-4">
+                                    <h3><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
+                                    <p class="price"><span>{{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endisset
+                </div>
+                {{--  --}}
+            </div>
+        </section>
     @endif
 
 @endsection
 @section('css')
+    <link rel="stylesheet" href="{{ asset('frontend/css/css.css') }}" />
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/themes/default.min.css') }}">
-    <style>
-        .notproduct p {
-            text-align: center;
-            font-size: 50px;
-        }
-
-        .menu-entry-slider .img {
-            display: block;
-            height: 300px;
-        }
-
-        .menu-entry-slider .text h3 a {
-            color: #fff;
-            font-size: 17px;
-        }
-
-        .icon-close-all {
-            padding: 8px 11px;
-            color: white;
-            border: 1px solid white;
-        }
-
-        .icon-close-all:hover {
-            padding: 8px 11px;
-            color: #343a40;
-            border: 1px solid white;
-            background: white;
-        }
-
-        .product-name-left {
-            text-align: left !important;
-        }
-
-        .price .discount {
-            text-decoration: line-through;
-        }
-
-        .price p {
-            margin-bottom: 0px;
-        }
-
-        .ftco-section-bottom {
-            padding-top: 0px;
-        }
-
-    </style>
 @endsection
 @section('script')
     <script src="{{ asset('frontend/alertifyjs/alertify.min.js') }}"></script>

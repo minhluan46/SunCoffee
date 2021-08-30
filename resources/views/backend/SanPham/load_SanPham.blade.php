@@ -19,7 +19,7 @@
                     {{ $value->trangthai == 1 ? 'Đang Bán' : 'Ngừng Bán' }}</span>
             </td>
             <td>
-                <div class="d-flex">
+                {{-- <div class="d-flex"> --}}
                     <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}" data-id="{{ $value->id }}"><i
                             class="fas fa-plus-square"></i></a>
 
@@ -30,7 +30,7 @@
 
                     <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('san-pham.destroy', $value->id) }}" data-id="{{ $value->id }}">
                         <i class="fas fa-trash-alt"></i></a>
-                </div>
+                {{-- </div> --}}
             </td>
         </tr>
     @endforeach

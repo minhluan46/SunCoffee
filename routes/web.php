@@ -12,12 +12,20 @@ Route::group(['namespace' => 'frontend'], function () {
 
     Route::get('/san-pham', 'SanPhamController@index')->name('SanPham.index');
     Route::get('/chi-tiet/{id}', 'SanPhamController@show')->name('SanPham.show');
+    Route::post('/tim-san-pham', 'SanPhamController@search')->name('SanPham.search');
+    Route::get('/loc-san-pham/{id}', 'SanPhamController@filter')->name('SanPham.filter');
+    Route::get('/the-san-pham/{tag}', 'SanPhamController@tag')->name('SanPham.tag');
+    Route::get('/khuyen-mai', 'SanPhamController@sale')->name('SanPham.sale');
+    Route::get('/hien-san-pham/{id}', 'SanPhamController@showProduct')->name('SanPham.showProduct'); // hiện sản phẩm để thêm vào giỏ hàng.
+    Route::get('/binh-luan-san-pham/{id}', 'SanPhamController@comment')->name('SanPham.comment');
+    Route::get('/danh-gia-san-pham/{id}', 'SanPhamController@review')->name('SanPham.review');
 
-    Route::get('/san-pham-km', 'SanPhamController@showStatus')->name('SanPham.status');// Sản phẩm khuyến mãi
-    Route::get('/san-pham-the/{the}', 'SanPhamController@showThe')->name('SanPham.the');// Sản phẩm theo thẻ
-    Route::get('/san-pham-lsp/{lsp}', 'SanPhamController@showLsp')->name('SanPham.lsp');// Sản phẩm theo loại sản phẩm
-    Route::get('/dialog_detail/{id}', 'SanPhamController@dialogDetail')->name('SanPham.dialog_detail');// Sản phẩm theo loại sản phẩm
-    Route::post('/search-san-pham', 'SanPhamController@searchSanPham')->name('SanPham.search_sanpham');// Sản phẩm theo loại sản phẩm
+
+    Route::get('/san-pham-km', 'SanPhamController@showStatus')->name('SanPham.status'); // Sản phẩm khuyến mãi
+    Route::get('/san-pham-the/{the}', 'SanPhamController@showThe')->name('SanPham.the'); // Sản phẩm theo thẻ
+    Route::get('/san-pham-lsp/{lsp}', 'SanPhamController@showLsp')->name('SanPham.lsp'); // Sản phẩm theo loại sản phẩm
+    Route::get('/dialog_detail/{id}', 'SanPhamController@dialogDetail')->name('SanPham.dialog_detail'); // Sản phẩm theo loại sản phẩm
+    Route::post('/search-san-pham', 'SanPhamController@searchSanPham')->name('SanPham.search_sanpham'); // Sản phẩm theo loại sản phẩm
     // Dịch Vụ
 
     Route::get('/dich-vu', 'DichVuController@index')->name('DichVu.index');
@@ -35,7 +43,7 @@ Route::group(['namespace' => 'frontend'], function () {
 
     Route::get('/gio-hang', 'GioHangController@index')->name('GioHang.index');
     Route::get('/thanh-toan', 'GioHangController@show')->name('GioHang.show');
-
+    Route::post('/them-vao-gio', 'GioHangController@addCart')->name('GioHang.addCart');
     Route::post('/them-vao-gio-hang', 'GioHangController@addCartOnline')->name('GioHang.addCartOnline'); // thêm vào giỏ từ trang chi tiết. (chưa cải thiện từ ngữ trả về )
     Route::post('/loai-bo-san-phan/{id}', 'GioHangController@deleteItemCartOnline')->name('GioHang.deleteItemCartOnline'); // xóa 1 sản phẩm.
     Route::post('/bo-tat-ca', 'GioHangController@deleteCartOnline')->name('GioHang.deleteCartOnline'); // xóa tất cả sản phẩm.
@@ -52,6 +60,52 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('/DangNhap', 'DangNhapController@DangNhap')->name('DangNhap'); // đăng nhập.
     Route::get('/DangXuat', 'DangNhapController@DangXuat')->name('DangXuat');  // đăng xuất.
 });
+//////////////////////////////        interactive (tương tác)        //////////////////////////////
+Route::group(['namespace' => 'interactive'], function () {
+    // bình luận.
+
+    Route::group(['prefix' => 'binh-luan'], function () {
+
+        Route::group(['middleware' => 'auth'], function () {
+
+            Route::get('/', 'BinhLuanController@index')->name('binh-luan.index'); // danh sách.
+            Route::get('/so-luong', 'BinhLuanController@countHandleDelivery')->name('binh-luan.countHandleDelivery');
+            Route::get('/chua-duyet', 'BinhLuanController@handleDelivery')->name('binh-luan.handleDelivery'); // danh sách bình luận cần duyệt.
+            Route::get('/{id}/show', 'BinhLuanController@show')->name('binh-luan.show'); // xem bình luận.
+            Route::post('/reply', 'BinhLuanController@reply')->name('binh-luan.reply'); // trả lời.
+            Route::get('/{id}/destroy', 'BinhLuanController@destroy')->name('binh-luan.destroy'); // Xóa bình luận.
+            Route::get('/{id}/destroyReply', 'BinhLuanController@destroyReply')->name('binh-luan.destroyReply'); // Xóa.
+            Route::get('/search', 'BinhLuanController@search')->name('binh-luan.search'); // tìm.
+            Route::get('/filter', 'BinhLuanController@filter')->name('binh-luan.filter'); // lọc & sắp xếp. 
+            Route::get('/comment-email/{id}/{TT}', 'BinhLuanController@commentEmail')->name('binh-luan.commentEmail'); // gửi email phản hồi.
+        });
+
+        Route::post('/gui', 'BinhLuanController@create')->name('binh-luan.create'); // gửi.
+        Route::post('/tim-kiem', 'BinhLuanController@userSearch')->name('binh-luan.userSearch'); // người dùng tiềm kiếm.
+    });
+    // đánh giá.
+
+    Route::group(['prefix' => 'danh-gia'], function () {
+
+        Route::group(['middleware' => 'auth'], function () {
+
+            Route::get('/', 'DanhGiaController@index')->name('danh-gia.index'); // danh sách.
+            Route::get('/so-luong', 'DanhGiaController@countHandleDelivery')->name('danh-gia.countHandleDelivery');
+            Route::get('/chua-duyet', 'DanhGiaController@handleDelivery')->name('danh-gia.handleDelivery'); // danh sách đánh gia cần duyệt.
+            Route::get('/{id}/show', 'DanhGiaController@show')->name('danh-gia.show'); // xem đánh gia.
+            Route::get('/{id}/approval', 'DanhGiaController@approval')->name('danh-gia.approval'); // duyệt đánh giá.
+            Route::get('/{id}/destroy', 'DanhGiaController@destroy')->name('danh-gia.destroy'); // Xóa đánh gia.
+            Route::get('/search', 'DanhGiaController@search')->name('danh-gia.search'); // tìm.
+            Route::get('/filter', 'DanhGiaController@filter')->name('danh-gia.filter'); // lọc & sắp xếp. 
+        });
+
+        Route::post('/gui', 'DanhGiaController@create')->name('danh-gia.create'); // gửi.
+        Route::post('/tim-kiem', 'DanhGiaController@userSearch')->name('danh-gia.userSearch'); // người dùng tiềm kiếm.
+        Route::get('/loc', 'DanhGiaController@userFilter')->name('danh-gia.userFilter'); // người dùng lọc.
+    });
+});
+
+
 //////////////////////////////        admin       //////////////////////////////
 
 Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'auth'], function () {
@@ -60,7 +114,11 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
 
         Route::get('/', 'ThongKeController@index')->name('thong-ke.index'); // trang chủ.
         Route::post('/thong-ke/tu-den', 'ThongKeController@fromto')->name('thong-ke.fromto'); // thống kê từ ngày đến ngày.
-        Route::post('/thong-ke/thang-nay', 'ThongKeController@statsForThisMonth')->name('thong-ke.statsForThisMonth'); // thông kê trong 3 ngày qua.
+        Route::post('/thong-ke/thang-nay', 'ThongKeController@statsForThisMonth')->name('thong-ke.statsForThisMonth'); // thông kê trong 30 ngày qua.
+        Route::post('/thong-ke/san-pham', 'ThongKeController@product')->name('thong-ke.product'); // thông kê sản phẩm.
+        Route::post('/thong-ke/khach-hang', 'ThongKeController@customer')->name('thong-ke.customer'); // thông kê khách hàng.
+        Route::post('/thong-ke/nhan-vien', 'ThongKeController@satff')->name('thong-ke.satff'); // thông kê nhân viên.
+        Route::post('/thong-ke/hoa-don', 'ThongKeController@bill')->name('thong-ke.bill'); // thông kê hóa đơn.
     });
 
     // loại nhân viên
@@ -75,6 +133,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/{id}/destroy', 'LoaiNhanVienController@destroy')->name('loai-nhan-vien.destroy'); // xóa
         Route::get('/load', 'LoaiNhanVienController@load')->name('loai-nhan-vien.load'); // tải lại.
         Route::get('/search', 'LoaiNhanVienController@search')->name('loai-nhan-vien.search'); // tìm.
+        Route::get('/filter', 'LoaiNhanVienController@filter')->name('loai-nhan-vien.filter'); // lọc & sắp xếp. 
     });
     // nhân viên
 
@@ -90,6 +149,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
             Route::put('/{id}/update', 'NhanVienController@update')->name('nhan-vien.update'); //cập nhật (Chưa ajax)
             Route::get('/{id}/destroy', 'NhanVienController@destroy')->name('nhan-vien.destroy'); // xóa
             Route::get('/search', 'NhanVienController@search')->name('nhan-vien.search'); // tìm.
+            Route::get('/filter', 'NhanVienController@filter')->name('nhan-vien.filter'); // lọc & sắp xếp. 
         });
 
         Route::get('/{id}/myProfile', 'NhanVienController@myProfile')->name('nhan-vien.myProfile'); // Thông tin cá nhân.
@@ -108,6 +168,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
             Route::get('/load', 'KhachHangController@load')->name('khach-hang.load'); // tải lại.
             Route::get('/{id}/loadUpdate', 'KhachHangController@loadUpdate')->name('khach-hang.loadUpdate'); // tải cập nhật.
             Route::get('/search', 'KhachHangController@search')->name('khach-hang.search'); // tìm. 
+            Route::get('/filter', 'KhachHangController@filter')->name('khach-hang.filter'); // lọc & sắp xếp. 
         });
 
         Route::post('/store', 'KhachHangController@store')->name('khach-hang.store'); //thêm. 
@@ -126,6 +187,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/load', 'LoaiSanPhamController@load')->name('loai-san-pham.load'); // tải lại.
         Route::get('/{id}/loadUpdate', 'LoaiSanPhamController@loadUpdate')->name('loai-san-pham.loadUpdate'); // tải cập nhật.
         Route::get('/search', 'LoaiSanPhamController@search')->name('loai-san-pham.search'); // tìm.
+        Route::get('/filter', 'LoaiSanPhamController@filter')->name('loai-san-pham.filter'); // lọc & sắp xếp. 
     });
     // quy cách.
 
@@ -155,6 +217,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/het-han-su-dung', 'SanPhamController@expiredProduct')->name('san-pham.expiredProduct'); // sản phẩm hết hạng.
         Route::get('/het-hang', 'SanPhamController@outOfProduct')->name('san-pham.outOfProduct'); // sản phẩm hết hàng.
         Route::put('/cap-nhat-xu-ly/{id}', 'SanPhamController@updateHandledProduct')->name('san-pham.updateHandledProduct'); // sản phẩm hết hàng.
+        Route::get('/filter', 'SanPhamController@filter')->name('san-pham.filter'); // lọc & sắp xếp. 
     });
     // chi tiết san phẩm
 
@@ -184,6 +247,7 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/', 'KhuyenMaiController@index')->name('khuyen-mai.index'); // danh sách.
         Route::get('/{id}/show', 'KhuyenMaiController@show')->name('khuyen-mai.show'); // trang chi tiết.
         Route::get('/search', 'KhuyenMaiController@search')->name('khuyen-mai.search'); // tìm.
+        Route::get('/filter', 'KhuyenMaiController@filter')->name('khuyen-mai.filter'); // lọc & sắp xếp. 
     });
     // chi tiết khuyến mãi
 
@@ -235,17 +299,21 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::put('/cap-nhat-xu-ly/{id}', 'HoaDonController@updateDelivery')->name('hoa-don.updateDelivery'); // cập nhật giao hàng. {IN HÓA ĐƠN, Thông báo email}
         Route::get('/xoa-xu-ly/{id}', 'HoaDonController@deleteDelivery')->name('hoa-don.deleteDelivery'); // xóa giao hàng. {thông báo email}
         Route::get('/so-luong', 'HoaDonController@countHandleDelivery')->name('hoa-don.countHandleDelivery'); // số lượng hóa đơn cần xử lý.
+        // hóa đơn đã hủy.
+
+        Route::get('/da-huy', 'HoaDonController@cancelled')->name('hoa-don.cancelled'); // danh sách hóa đơn đã hủy.
+        Route::get('/tim-da-huy', 'HoaDonController@searchCancelled')->name('hoa-don.searchCancelled'); // tìm.
         // in hóa đơn.
 
         Route::get('/print-bill/{id}', 'HoaDonController@print_bill')->name('hoa-don.print_bill'); // xem trước khi in.
-        Route::get('/download-bill/{id}', 'HoaDonController@download_bill')->name('hoa-don.download_bill'); // tải file.
+        // Route::get('/download-bill/{id}', 'HoaDonController@download_bill')->name('hoa-don.download_bill'); // tải file.
         //gửi email.
 
         Route::get('/send-email/{id}/{TT}', 'HoaDonController@send_email')->name('hoa-don.send_email'); // email sẽ gửi.
-        Route::get('/email/{id}/{TT}', 'HoaDonController@email')->name('hoa-don.email'); // xem gửi email.
+        // Route::get('/email/{id}/{TT}', 'HoaDonController@email')->name('hoa-don.email'); // xem gửi email.
+        // lọc & sắp xếp.
+
+        Route::get('/filter', 'HoaDonController@filter')->name('hoa-don.filter'); // lọc & sắp xếp. 
+        Route::get('/filter-product', 'HoaDonController@filterProduct')->name('hoa-don.filterProduct'); // lọc & sắp xếp. 
     });
 });
-
-// in hóa đơn.9
-// thông báo qua email.(dành cho thành viên: thông báo về đểm tích lũy,...)
-// activa. 

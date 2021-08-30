@@ -135,4 +135,31 @@ class LoaiSanPhamController extends Controller
         ];
         return view('backend.LoaiSanPham.load_LoaiSanPham', $viewData);
     }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request)
+    {
+        ///////////////////////////////////////// sắp xếp.
+        if ($request->sort == 19) {
+            $sort = 'desc';
+        } else {
+            $sort = 'asc';
+        }
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'all') {
+            $LoaiSanPham = LoaiSanPham::orderBy('created_at', $sort)->get();
+        } elseif ($request->filtertrangthai == 'Expiry') {
+            $LoaiSanPham = LoaiSanPham::where('trangthai', 1)
+                ->orderBy('created_at', $sort)->get();
+        } elseif ($request->filtertrangthai == 'Today') {
+            $LoaiSanPham = LoaiSanPham::where('trangthai', 2)
+                ->orderBy('created_at', $sort)->get();
+        } else {
+            $LoaiSanPham = LoaiSanPham::where('trangthai', 0)
+                ->orderBy('created_at', $sort)->get();
+        }
+        $viewData = [
+            'LoaiSanPham' =>  $LoaiSanPham,
+        ];
+        return view('backend.LoaiSanPham.load_LoaiSanPham', $viewData);
+    }
 }

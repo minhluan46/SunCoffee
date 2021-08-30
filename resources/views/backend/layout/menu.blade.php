@@ -1,7 +1,6 @@
 <nav class="sidebar dark_sidebar">
     <div class="logo d-flex justify-content-between">
-        <a class="large_logo" href="#"><img src="{{ asset('backend/img/logo_white.png') }}" alt=""></a>
-        <a class="small_logo" href="#"><img src="{{ asset('backend/img/mini_logo.png ') }}" alt=""></a>
+        <a class="large_logo" href="#"><img src="{{ asset('uploads/Logo/logo.png') }}" alt=""></a>
         <div class="sidebar_close_icon d-lg-none">
             <i class="ti-close"></i>
         </div>
@@ -104,7 +103,12 @@
                     <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
                 </div>
                 <div @yield('active_quanlykhuyenmai') class="nav_title">
-                    <span>Quản Lý Khuyến mãi</span>
+
+                    @if (Auth::user()->id_loainhanvien == 'LNV00000000000000')
+                        <span>Quản Lý Khuyến mãi</span>
+                    @else
+                        <span>Danh Sách Khuyến mãi</span>
+                    @endif
                 </div>
             </a>
         </li>
@@ -130,5 +134,61 @@
                 </a>
             </li>
         @endif
+        <li class="">
+            <a href="{{ route('binh-luan.index') }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
+                </div>
+                <div @yield('active_binhluan') class="nav_title">
+                    <span>Quản Lý Bình Luận <span class="badge bg-danger soluongbinhluancanxu" style="color: white"></span></span>
+                </div>
+            </a>
+        </li>
+        @section('countBinhLuanCanXuLy')
+            <script type="text/javascript">
+                function countBinhLuanCanXuLy() {
+                    $.ajax({
+                        url: '/binh-luan/so-luong',
+                        method: 'GET',
+                        success: function(data) {
+                            if (data != 0) {
+                                $('.soluongbinhluancanxu').text(data);
+                            } else {
+                                $('.soluongbinhluancanxu').text("");
+                            }
+                        }
+                    });
+                };
+                countBinhLuanCanXuLy();
+            </script>
+        @endsection
+        <li class="">
+            <a href="{{ route('danh-gia.index') }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset('backend/img/menu-icon/2.svg') }}" alt="">
+                </div>
+                <div @yield('active_danhgia') class="nav_title">
+                    <span>Quản Lý Đánh Giá <span class="badge bg-danger soluongdanhgiacanxu" style="color: white"></span></span>
+                </div>
+            </a>
+        </li>
+        @section('countDanhGiaCanXuLy')
+            <script type="text/javascript">
+                function countDanhGiaCanXuLy() {
+                    $.ajax({
+                        url: '/danh-gia/so-luong',
+                        method: 'GET',
+                        success: function(data) {
+                            if (data != 0) {
+                                $('.soluongdanhgiacanxu').text(data);
+                            } else {
+                                $('.soluongdanhgiacanxu').text("");
+                            }
+                        }
+                    });
+                };
+                countDanhGiaCanXuLy();
+            </script>
+        @endsection
     </ul>
 </nav>

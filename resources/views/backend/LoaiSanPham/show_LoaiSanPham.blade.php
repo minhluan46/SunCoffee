@@ -34,13 +34,13 @@
                             @if ($valueqc->trangthai == 1)
                                 <span class="badge bg-primary">Được Phép Thêm Sản Phẩm</span>
                             @elseif($valueqc->trangthai == 2)
-                                <span class="badge bg-success">Hiện Trên Website</span>
+                                <span class="badge bg-success">Hiện Đại Diện Trên Website</span>
                             @else
                                 <span class="badge bg-danger">Không Được Phép Thêm Sản Phẩm</span>
                             @endif
                         </td>
                         <td>
-                            <div class="d-flex">
+                            <div class="d-flex" style="justify-content: center;">
                                 <a href="javascript:(0)" class="action_btn mr_10 view-editQC" data-url="{{ route('quy-cach.edit', $valueqc->id) }}">
                                     <i class="fas fa-edit"></i></a>
 

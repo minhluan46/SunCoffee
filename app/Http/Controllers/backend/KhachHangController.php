@@ -99,7 +99,7 @@ class KhachHangController extends Controller
                 'tenkhachhang' => 'required',
                 'sdt' => 'required|min:10|unique:khach_hang,sdt,' . $id,
                 'diachi' => 'required',
-                'email' => 'required|email:rfc,dns',
+                'email' => 'required|email',
                 'diemtichluy' => 'required',
             ],
             [
@@ -167,12 +167,68 @@ class KhachHangController extends Controller
         return response()->json(['success' => 'Thành Công Rồi']);
     }
     /////////////////////////////////////////////////////////////////////////////////////////// search
-    public function search(Request $request) //tìm.
+    public function search(Request $request)
     {
         $viewData = [
             'KhachHang' => KhachHang::where([['id', '!=', 'KH00000000000000'], ['tenKhachHang', 'like', '%' . $request->search . '%']])
                 ->orwhere([['id', '!=', 'KH00000000000000'], ['sdt', 'like', '%' . $request->search . '%']])
                 ->orderBy('created_at', 'desc')->get(),
+        ];
+        return view('backend.KhachHang.load_KhachHang', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request) //tìm.
+    {
+        ///////////////////////////////////////// diểm tích lũy.
+        if ($request->filterdiem == 1) {
+            $filterdiem[] = [0, 999];
+        } elseif ($request->filterdiem == 2) {
+            $filterdiem[] = [1000, 4999];
+        } elseif ($request->filterdiem == 3) {
+            $filterdiem[] = [5000, 9999];
+        } elseif ($request->filterdiem == 4) {
+            $filterdiem[] = [10000, 99999];
+        } elseif ($request->filterdiem == 5) {
+            $filterdiem[] = [100000, 2000000000];
+        } else {
+            $filterdiem[] = [0, 2000000000];
+        }
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'on') {
+            $filtertrangthai = 0;
+        } elseif ($request->filtertrangthai == 'off') {
+            $filtertrangthai = 1;
+        } else {
+            $filtertrangthai = 9;
+        }
+        ///////////////////////////////////////// sắp xếp.
+        if ($request->sort == 19) {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('created_at', 'desc')->get();
+        } elseif ($request->sort == 29) {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('created_at', 'asc')->get();
+        } elseif ($request->sort == 39) {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('trangthai', 'desc')->get();
+        } elseif ($request->sort == 49) {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('trangthai', 'asc')->get();
+        } elseif ($request->sort == 59) {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('diemtichluy', 'desc')->get();
+        } else {
+            $KhachHang = KhachHang::whereBetween('diemtichluy', $filterdiem)
+                ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                ->orderBy('diemtichluy', 'asc')->get();
+        }
+        $viewData = [
+            'KhachHang' =>  $KhachHang,
         ];
         return view('backend.KhachHang.load_KhachHang', $viewData);
     }

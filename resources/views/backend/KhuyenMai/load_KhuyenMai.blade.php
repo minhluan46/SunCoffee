@@ -7,14 +7,13 @@
             <td>{{ Date_format(Date_create($value->thoigianketthuc), 'd/m/Y') }}</td>
             <td>
                 @isset($today)
-                    @if ($value->thoigianketthuc < $today)
-                        <span class="badge bg-danger">Kết Thúc</span>
-                    @elseif ($value->trangthai == 0 && $value->thoigianketthuc >= $today)
+                    @if ($value->trangthai == 0)
                         <span class="badge bg-warning">Đã Khóa</span>
-                    @elseif ($value->thoigianbatdau > $today )
-                        <span class="badge bg-info">Sắp Đến</span>
-                    @else
-                        <span class="badge bg-primary">Đang Áp Dụng</span>
+                    @elseif ($value->thoigianketthuc < $today) <span class="badge bg-danger">Kết Thúc</span>
+                        @elseif ($value->thoigianbatdau > $today )
+                            <span class="badge bg-info">Sắp Đến</span>
+                        @else
+                            <span class="badge bg-primary">Đang Áp Dụng</span>
                     @endif
                 @endisset
             </td>

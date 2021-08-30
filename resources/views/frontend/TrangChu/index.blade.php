@@ -85,7 +85,7 @@
                             <div class="icon"><span class="icon-clock-o"></span></div>
                             <div class="text">
                                 <h3>Mở cửa từ thứ 2 - thứ 7</h3>
-                                <p>8:00am - 9:00pm</p>
+                                <p>8:00 - 19:00</p>
                             </div>
                         </div>
                     </div>
@@ -105,12 +105,12 @@
                     <h2 class="mb-4">Cùng Sun Coffee</h2>
                 </div>
                 <div>
-                    <p>Có bao giờ bạn tự hỏi, ly cà phê thơm ngát trên tay mình đã trải qua những chặng đường nào? Khi
+                    <p class="justify">Có bao giờ bạn tự hỏi, ly cà phê thơm ngát trên tay mình đã trải qua những chặng đường nào? Khi
                         nhân viên phục vụ mang đến cho bạn một ly cà phê, đó chỉ là hành động cuối cùng của một hành
                         trình dài và kỳ diệu: từ việc chọn vùng đất hợp thổ nhưỡng, sàng lọc giống, tới trồng cây, chăm
                         bón và thu hái.
                     </p>
-                    <p>Từ những cửa hàng đầu tiên, chúng tôi đã bắt đầu hợp tác với Cầu Đất Farm để trồng cà phê theo
+                    <p class="justify">Từ những cửa hàng đầu tiên, chúng tôi đã bắt đầu hợp tác với Cầu Đất Farm để trồng cà phê theo
                         tiêu chuẩn riêng. Vùng đất phủ sương nằm ở độ cao 1.650m so với mặt nước biển này là nơi tốt
                         nhất để trồng giống cà phê Arabica ở Việt Nam. Chính “độ cao vàng” ấy đã cho ra hạt cà phê
                         Arabica thơm nhẹ, chua thanh tuyệt hảo.</p>
@@ -211,27 +211,7 @@
     </div>
 @endsection
 @section('css')
-
-    <style>
-        .billing-heading-center {
-            text-align: center;
-        }
-
-        .menu-entry-slider .img {
-            display: block;
-            height: 300px;
-        }
-
-        .menu-entry-slider .text h3 a {
-            color: #fff;
-            font-size: 17px;
-        }
-
-        .ftco-section-bottom {
-            padding-top: 0px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ asset('frontend/css/css.css') }}" />
 @endsection
 @section('script')
     <script type="text/javascript">

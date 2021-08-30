@@ -3,7 +3,7 @@
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-3 col-sm-3">
-                    <img src="{{ asset('uploads/SanPham/' . $SanPham->hinhanh) }}" style="width: 250px; height: 250px; border-radius: 5px;">
+                    <img src="{{ asset('uploads/SanPham/' . $SanPham->hinhanh) }}" style="width: 250px; border-radius: 5px;">
                 </div>
                 <div class="col-8 col-sm-8">
                     <h4><b>{{ $SanPham->tensanpham }} </b> <span>({{ $SanPham->id }})</span></h4>
