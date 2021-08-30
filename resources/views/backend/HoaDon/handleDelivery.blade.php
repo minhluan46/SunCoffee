@@ -8,7 +8,7 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
             </div>
-            <div class="serach_field-area d-flex align-items-center mb-3">
+            <div class="">
             </div>
         </div>
         {{-- content --}}
@@ -18,7 +18,7 @@
                     <div class="white_card">
                         <div class="white_card_header">
                             <div class="main-title">
-                                <h2 class="m-0">Danh Sách Hóa Đơn Cần Được Xác Nhận</h2   >
+                                <h2 class="m-0">Danh Sách Hóa Đơn Cần Được Xác Nhận</h2>
                             </div>
                         </div>
                         <div class="white_card_body">
@@ -162,19 +162,7 @@
         })
 
         function Delete(id, message) { // hủy đơn hàng.
-            /////////////////////////////////////////////////////////////////////////////// gửi email.
-            alertify.success('Đang Tiến hành');
-            $.ajax({
-                url: '/admin/hoa-don/send-email/' + id + "/" + 2,
-                method: "GET",
-                success: function(data) {
-                    alertify.success('Đã Gửi Email Thông báo');
-                },
-                errors: function(data) {
-                    alertify.error("Lỗi Gửi email");
-                }
-            });
-            /////////////////////////////////////////////////////////////////////////////// hủy đơn hàng.
+            ///////////////////////////////////// hủy đơn hàng.
             $.ajax({
                 url: 'xoa-xu-ly/' + id,
                 method: 'GET',
@@ -182,6 +170,17 @@
                     $("#" + id).html("");
                     countHoaDonCanXuLy();
                     alertify.success(message);
+                    ///////////////////////////// gửi email.
+                    $.ajax({
+                        url: '/admin/hoa-don/send-email/' + id + "/" + 2,
+                        method: "GET",
+                        success: function(data) {
+                            alertify.success('Đã Gửi Email Thông báo');
+                        },
+                        errors: function(data) {
+                            alertify.error("Lỗi Gửi email");
+                        }
+                    });
                 },
                 error: function(response) {
                     alertify.error("Lỗi Hủy Đơn Hàng");

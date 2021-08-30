@@ -9,6 +9,7 @@
             <div class="mb-3 btn-1">
                 <a onclick="Create('{{ route('loai-san-pham.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Loại Sản Phẩm</a>
                 <a class="btn btn-info" href="{{ route('san-pham.index') }}">Xem Sản Phẩm</a>
+                <a id="formfilter" class="btn btn-primary" href="javascript:(0)">Lọc & Sắp Xếp</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
@@ -127,6 +128,44 @@
             </div>
         </div>
     </div>
+    {{-- filter --}}
+    <div class="modal fade" id="ModalFilter" tabindex="-1" role="dialog" aria-labelledby="ModalFilterLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="ModalFilterLabel">Lọc & Sắp Xếp</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Trạng Thái</label>
+                                <select class="form-control" name="filtertrangthai" id="filtertrangthai">
+                                    <option value="all">Tất Cả</option>
+                                    <option value="Expiry">Sản phẩm Có Hạng Sử Dụng</option>
+                                    <option value="Today">Sản Phẩm Dùng Trong Ngày</option>
+                                    <option value="Unauthorized">Không Được Phép Thêm Sản Phẩm</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sắp Xếp</label>
+                                <select class="form-control" name="sort" id="sort">
+                                    <option value="19">Thời Gian Tạo Giảm Dần</option>
+                                    <option value="29">Thời Gian Tạo Tăng Dần</option>
+                                </select>
+                            </div>
+                            <button onclick="filter()" class="btn btn-success" style="width: 100%">Tiến Hành</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
@@ -178,7 +217,7 @@
                 method: 'GET',
                 success: function(response) {
 
-                    $('.modal-body').html(response);
+                    $('#modal-body1').html(response);
                     $("#exampleModalLabel").text("Thêm Loại Sản Phẩm");
                     $("#exampleModal").modal('show');
                     Store();
@@ -225,7 +264,7 @@
                 method: 'GET',
                 success: function(response) {
 
-                    $('.modal-body').html(response);
+                    $('#modal-body1').html(response);
                     $("#exampleModalLabel").text("Sửa Loại Sản Phẩm");
                     $("#exampleModal").modal('show');
                     Update();
@@ -311,7 +350,7 @@
                     id: id
                 },
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body1').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Sản Phẩm");
                     $("#exampleModal").modal('show');
                     StoreQC();
@@ -446,6 +485,29 @@
             if (confirm("Xóa Tất Cả Sản Phẩm Thuộc Quy Cách Này?")) {
                 DeleteQC($(this).data('url'), $(this).data('id'));
             }
+        });
+         /////////////////////////////////////////////////////////////////////////////////////////// lọc
+         function filter() {
+            $.ajax({
+                url: '/admin/loai-san-pham/filter',
+                method: 'GET',
+                data: {
+                    filtertrangthai: $('#filtertrangthai').val(),
+                    sort: $('#sort').val(),
+                },
+                success: function(response) {
+                    $("#ModalFilter").modal('hide');
+                    $('.pagination').hide();
+                    $('#dataSheet').html(response);
+                    alertify.success("Đã Lọc");
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Lọc Dữ Liệu");
+                }
+            })
+        }
+        $(document).on('click', '#formfilter', function() {
+            $('#ModalFilter').modal('show');
         });
     </script>
 @endsection

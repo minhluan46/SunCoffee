@@ -8,30 +8,19 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
                 <a onclick="Create('{{ route('khach-hang.create') }}')" class="btn btn-success" href="javascript:(0)">Thêm Khách Hàng</a>
+                <a id="formfilter" class="btn btn-primary" href="javascript:(0)">Lọc & Sắp Xếp</a>
             </div>
-            <div class="d-flex">
-                <div class="form-group">
-                    <select class="form-control" name="locdiem" id="locdiem">
-                        <option value="1">Lọc Điểm Tích Lũy</option>
-                        <option value="1">0 - 1.000</option>
-                        <option value="0">1.000 - 5.000</option>
-                        <option value="0">5.000 - 10.000</option>
-                        <option value="0">10.000 - 100.000</option>
-                    </select>
-                </div>
-                <div class="serach_field-area d-flex align-items-center mb-3">
-                    <div class="search_inner">
-                        <form method="GET">
-                            <div class="search_field">
-                                <input type="text" placeholder="Tên, sđt..." name="search">
-                            </div>
-                            <button id="form-search" data-url="{{ route('khach-hang.search') }}" type="submit">
-                                <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
-                        </form>
-                    </div>
+            <div class="serach_field-area d-flex align-items-center mb-3">
+                <div class="search_inner">
+                    <form method="GET">
+                        <div class="search_field">
+                            <input type="text" placeholder="Tên, sđt..." name="search">
+                        </div>
+                        <button id="form-search" data-url="{{ route('khach-hang.search') }}" type="submit">
+                            <img src="{{ asset('backend/img/icon/icon_search.svg') }}" alt=""></button>
+                    </form>
                 </div>
             </div>
-
         </div>
         {{-- content --}}
         <div class="container-fluid p-0">
@@ -116,15 +105,65 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
-
+                <div class="modal-body" id="modal-body">
                 </div>
                 <div class="modal-footer">
                 </div>
             </div>
         </div>
     </div>
-
+    {{-- filter --}}
+    <div class="modal fade" id="ModalFilter" tabindex="-1" role="dialog" aria-labelledby="ModalFilterLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="ModalFilterLabel">Lọc & Sắp Xếp</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Trạng Thái</label>
+                                <select class="form-control" name="filtertrangthai" id="filtertrangthai">
+                                    <option value="all">Tất Cả</option>
+                                    <option value="on">Được Dùng</option>
+                                    <option value="off">Đã Khóa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Điểm Tích Lũy</label>
+                                <select class="form-control" name="filterdiem" id="filterdiem">
+                                    <option value="0">Tất Cả</option>
+                                    <option value="1">0 - 999 Điểm</option>
+                                    <option value="2">1.000 - 4.999 Điểm</option>
+                                    <option value="3">5.000 - 9.999 Điểm</option>
+                                    <option value="4">10.000 - 99.999 Điểm</option>
+                                    <option value="5">Từ 100.000 Điểm Trở Lên</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sắp Xếp</label>
+                                <select class="form-control" name="sort" id="sort">
+                                    <option value="19">Thời Gian Tạo Giảm Dần</option>
+                                    <option value="29">Thời Gian Tạo Tăng Dần</option>
+                                    <option value="39">Trạng Thái Được dùng - Đã Khóa</option>
+                                    <option value="49">Trạng Thái Đã Khóa - Được dùng</option>
+                                    <option value="59">Điểm Tích Lũy Giảm Dần</option>
+                                    <option value="69">Điểm Tích Lũy Tăng Dần</option>
+                                </select>
+                            </div>
+                            <button onclick="filter()" class="btn btn-success" style="width: 100%">Tiến Hành</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">
@@ -162,7 +201,7 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Khách Hàng");
                     $("#exampleModal").modal('show');
                     SDT();
@@ -210,7 +249,7 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Sửa Loại Nhân Viên");
                     $("#exampleModal").modal('show');
                     Money();
@@ -253,7 +292,7 @@
                         var temp = '';
                         for (var i = valueArray.length - 1; i >= 0; i--) {
                             // kiểm tra nếu nó là số thì cộng vào.
-                            if (!isNaN(valueArray[i])) {
+                            if (!isNaN(valueArray[i]) && valueArray[i] != " ") {
                                 temp += valueArray[i];
                                 counter++
                                 if (counter == 3) {
@@ -376,6 +415,30 @@
             } else {
                 location.reload();
             }
+        });
+        /////////////////////////////////////////////////////////////////////////////////////////// lọc
+        function filter() {
+            $.ajax({
+                url: '/admin/khach-hang/filter',
+                method: 'GET',
+                data: {
+                    filtertrangthai: $('#filtertrangthai').val(),
+                    filterdiem: $('#filterdiem').val(),
+                    sort: $('#sort').val(),
+                },
+                success: function(response) {
+                    $("#ModalFilter").modal('hide');
+                    $('.pagination').hide();
+                    $('#dataSheet').html(response);
+                    alertify.success("Đã Lọc");
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Lọc Dữ Liệu");
+                }
+            })
+        }
+        $(document).on('click', '#formfilter', function() {
+            $('#ModalFilter').modal('show');
         });
     </script>
 @endsection

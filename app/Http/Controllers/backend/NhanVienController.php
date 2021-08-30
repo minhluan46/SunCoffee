@@ -24,7 +24,11 @@ class NhanVienController extends Controller
                     ['id', '!=', "NV11111111111111"] //online
                 ]
             )->orderBy('created_at', 'desc')->paginate(10),
-            'LoaiNhanVien' => LoaiNhanVien::all(),
+            'LoaiNhanVien' => LoaiNhanVien::where(
+                [
+                    ['id', '!=', "LNV00000000000000"], //admin
+                ]
+            )->get(),
         ];
         return view('backend.NhanVien.index', $viewData);
     }
@@ -184,6 +188,60 @@ class NhanVienController extends Controller
                 [['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"], ['id_loainhanvien', $idLoaiNV]]
             )->orderBy('created_at', 'desc')->get(),
             'LoaiNhanVien' => LoaiNhanVien::all(),
+        ];
+        return view('backend.NhanVien.load_NhanVien', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request) //tìm.
+    {
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'on') {
+            $filtertrangthai = 0;
+        } elseif ($request->filtertrangthai == 'off') {
+            $filtertrangthai = 1;
+        } else {
+            $filtertrangthai = 9;
+        }
+        ///////////////////////////////////////// sắp xếp.
+        if ($request->filterloai != '0') {
+            if ($request->sort == 19) {
+                $NhanVien = NhanVien::where([['id_loainhanvien', $request->filterloai], ['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($request->sort == 29) {
+                $NhanVien = NhanVien::where([['id_loainhanvien', $request->filterloai], ['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('created_at', 'asc')->get();
+            } elseif ($request->sort == 39) {
+                $NhanVien = NhanVien::where([['id_loainhanvien', $request->filterloai], ['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('trangthai', 'desc')->get();
+            } else {
+                $NhanVien = NhanVien::where([['id_loainhanvien', $request->filterloai], ['id_loainhanvien', $request->filterloai], ['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('trangthai', 'asc')->get();
+            }
+        } else {
+            if ($request->sort == 19) {
+                $NhanVien = NhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($request->sort == 29) {
+                $NhanVien = NhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('created_at', 'asc')->get();
+            } elseif ($request->sort == 39) {
+                $NhanVien = NhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('trangthai', 'desc')->get();
+            } else {
+                $NhanVien = NhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', "NV00000000000000"], ['id', '!=', "NV11111111111111"]])
+                    ->where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'KH00000000000000']])
+                    ->orderBy('trangthai', 'asc')->get();
+            }
+        }
+
+        $viewData = [
+            'NhanVien' =>  $NhanVien,
+            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->get(),
         ];
         return view('backend.NhanVien.load_NhanVien', $viewData);
     }

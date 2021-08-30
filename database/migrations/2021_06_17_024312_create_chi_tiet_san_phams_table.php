@@ -15,7 +15,7 @@ class CreateChiTietSanPhamsTable extends Migration
     {
         Schema::create('chi_tiet_san_pham', function (Blueprint $table) {
             $table->char('id', 18);
-            $table->string('kichthuoc', 18);
+            $table->char('kichthuoc', 18);
             $table->integer('soluong');
             $table->integer('giasanpham');
             $table->date('ngaysanxuat');
@@ -26,6 +26,7 @@ class CreateChiTietSanPhamsTable extends Migration
 
             $table->primary('id');
             $table->foreign('id_sanpham')->references('id')->on('san_pham');
+            $table->foreign('kichthuoc')->references('id')->on('quy_cach');
         });
     }
 

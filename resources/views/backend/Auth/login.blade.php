@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Sun Coffee</title>
+    <title>Sun Coffee - Đăng Nhập</title>
+
+    <link rel="icon" href="{{ asset('uploads/Logo/logo_sun_coffee.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap.min.css') }}" /> {{-- bootstrap --}}
     <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('frontend/alertifyjs/css/alertify.min.css') }}">

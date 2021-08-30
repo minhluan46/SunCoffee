@@ -16,7 +16,7 @@ class CreateLoaiSanPhamsTable extends Migration
         Schema::create('loai_san_pham', function (Blueprint $table) {
             $table->char('id', 18);
             $table->string('tenloaisanpham', 50);
-            $table->boolean('trangthai');
+            $table->tinyInteger('trangthai');
             $table->timestamps();
 
             $table->primary('id');

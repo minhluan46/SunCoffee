@@ -69,11 +69,7 @@ class KhuyenMaiController extends Controller
         $data['thoigianbatdau'] = $request->thoigianbatdau;
         $data['thoigianketthuc'] = $request->thoigianketthuc;
         $data['mota'] = $request->mota;
-        if ($request->trangthai == "2") {
-            $data['trangthai'] = 1;
-        } else {
-            $data['trangthai'] = 0;
-        }
+        $data['trangthai'] = $request->trangthai;
         KhuyenMai::create($data);
         return response()->json(['success' => 'Thành Công Rồi']);
     }
@@ -151,21 +147,6 @@ class KhuyenMaiController extends Controller
         $data['thoigianketthuc'] = $request->thoigianketthuc;
         $data['mota'] = $request->mota;
         $data['trangthai'] = $request->trangthai;
-
-        $OldKhuyenMai = KhuyenMai::find($id);
-        if ($OldKhuyenMai->trangthai == 0) {
-            if ($request->trangthai == "1") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        } else {
-            if ($request->trangthai == "2") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        }
         KhuyenMai::where('id', $id)->update($data);
         return response()->json(['success' => 'Thành Công Rồi']);
     }
@@ -226,6 +207,71 @@ class KhuyenMaiController extends Controller
         $viewData = [
             'KhuyenMai' => KhuyenMai::where('tenkhuyenmai', 'like', '%' . $request->search . '%')->orderBy('created_at', 'desc')->get(),
             'today' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'), // lấy ngày hiện tại.
+        ];
+        return view('backend.KhuyenMai.load_KhuyenMai', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request) //tìm.
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        ///////////////////////////////////////// sắp Xếp.
+        if ($request->sort == 19) {
+            $orderBy = 'desc';
+        } else {
+            $orderBy = 'asc';
+        }
+        ///////////////////////////////////////// ngày khuyến mãi.
+        if ($request->filterngay != null) {
+            if ($request->filtertrangthai == 'all') {
+                $KhuyenMai = KhuyenMai::where([
+                    ['thoigianbatdau', '<=', $request->filterngay],
+                    ['thoigianketthuc', '>=', $request->filterngay],
+                ])->orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'come') {
+                $KhuyenMai = KhuyenMai::where([
+                    ['thoigianbatdau', '<=', $request->filterngay],
+                    ['thoigianketthuc', '>=', $request->filterngay],
+                    ['thoigianbatdau', '>', $today],
+                    ['trangthai', 1]
+                ])->orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'apply') {
+                $KhuyenMai = KhuyenMai::where([
+                    ['thoigianbatdau', '<=', $request->filterngay],
+                    ['thoigianketthuc', '>=', $request->filterngay],
+                    ['thoigianbatdau', '>=', $today],
+                    ['thoigianketthuc', '<=', $today],
+                    ['trangthai', 1]
+                ])->orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'end') {
+                $KhuyenMai = KhuyenMai::where([
+                    ['thoigianbatdau', '<=', $request->filterngay],
+                    ['thoigianketthuc', '>=', $request->filterngay],
+                    ['thoigianketthuc', '<', $today],
+                    ['trangthai', 1]
+                ])->orderBy('created_at',  $orderBy)->get();
+            } else {
+                $KhuyenMai = KhuyenMai::where([
+                    ['thoigianbatdau', '<=', $request->filterngay],
+                    ['thoigianketthuc', '>=', $request->filterngay],
+                    ['trangthai', 0]
+                ])->orderBy('created_at',  $orderBy)->get();
+            }
+        } else {
+            if ($request->filtertrangthai == 'all') {
+                $KhuyenMai = KhuyenMai::orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'come') {
+                $KhuyenMai = KhuyenMai::where([['thoigianbatdau', '>', $today], ['trangthai', 1]])->orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'apply') {
+                $KhuyenMai = KhuyenMai::where([['thoigianbatdau', '<=', $today], ['thoigianketthuc', '>=', $today], ['trangthai', 1]])->orderBy('created_at',  $orderBy)->get();
+            } elseif ($request->filtertrangthai == 'end') {
+                $KhuyenMai = KhuyenMai::where([['thoigianketthuc', '<', $today], ['trangthai', 1]])->orderBy('created_at',  $orderBy)->get();
+            } else {
+                $KhuyenMai = KhuyenMai::where('trangthai', 0)->orderBy('created_at',  $orderBy)->get();
+            }
+        }
+        $viewData = [
+            'KhuyenMai' => $KhuyenMai,
+            'today' => $today,
         ];
         return view('backend.KhuyenMai.load_KhuyenMai', $viewData);
     }

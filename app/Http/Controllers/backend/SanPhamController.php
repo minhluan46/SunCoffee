@@ -42,9 +42,9 @@ class SanPhamController extends Controller
         $exp = explode(":", $imp);
         $imp = implode('', $exp);
         $data['id'] = $imp;
-        $data['tensanpham'] = ucwords($request->tensanpham);
+        $data['tensanpham'] = $request->tensanpham;
         $data['mota'] = $request->mota;
-        $data['the'] = ucwords($request->the);
+        $data['the'] = $request->the;
         $data['id_loaisanpham'] = $request->id_loaisanpham;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
@@ -90,9 +90,9 @@ class SanPhamController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////// update
     public function update(SanPhamRequest $request, $id) //cập nhật. (chưa ajax)
     {
-        $data['tensanpham'] = ucwords($request->tensanpham);
+        $data['tensanpham'] = $request->tensanpham;
         $data['mota'] = $request->mota;
-        $data['the'] = ucwords($request->the);
+        $data['the'] = $request->the;
         $data['id_loaisanpham'] = $request->id_loaisanpham;
         $data['trangthai'] = $request->trangthai;
         if (empty($request->trangthai)) {
@@ -295,8 +295,56 @@ class SanPhamController extends Controller
                     <i class='fas fa-edit'></i></a>
             </td>";
             return $output;
-            // return response()->json(['warning' => 'Sản Phẩm Vẫn Trong Trạng Thái Cần xử lý']);
         }
         return response()->json(['success' => 'Thành Công Rồi']);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request) //tìm.
+    {
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'on') {
+            $filtertrangthai = 0;
+        } elseif ($request->filtertrangthai == 'off') {
+            $filtertrangthai = 1;
+        } else {
+            $filtertrangthai = 9;
+        }
+        ///////////////////////////////////////// sắp xếp.
+        if ($request->sort == 19) {
+            $sort = 'desc';
+        } else {
+            $sort = 'asc';
+        }
+        ///////////////////////////////////////// loại.
+        if ($request->filterloai == 'all0') {
+            if ($request->filterthe == 0) {
+                $SanPham = SanPham::where('trangthai', '!=', $filtertrangthai)->orderBy('created_at', $sort)->get();
+            } elseif ($request->filterthe == 1) {
+                $SanPham = SanPham::where([['the', 'THƯỜNG'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+            } elseif ($request->filterthe == 2) {
+                $SanPham = SanPham::where([['the', 'MỚI'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+            } else {
+                $SanPham = SanPham::where([['the', 'BÁN CHẠY NHẤT'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+            }
+            $viewData = [
+                'SanPham' => $SanPham,
+                'LoaiSanPham' => LoaiSanPham::all(),
+            ];
+            return view('backend.SanPham.load_SanPham', $viewData);
+        }
+        if ($request->filterthe == 0) {
+            $SanPham = SanPham::where([['id_loaisanpham', $request->filterloai], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+        } elseif ($request->filterthe == 1) {
+            $SanPham = SanPham::where([['id_loaisanpham', $request->filterloai], ['the', 'THƯỜNG'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+        } elseif ($request->filterthe == 2) {
+            $SanPham = SanPham::where([['id_loaisanpham', $request->filterloai], ['the', 'MỚI'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+        } else {
+            $SanPham = SanPham::where([['id_loaisanpham', $request->filterloai], ['the', 'BÁN CHẠY NHẤT'], ['trangthai', '!=', $filtertrangthai]])->orderBy('created_at', $sort)->get();
+        }
+        $viewData = [
+            'SanPham' => $SanPham,
+            'LoaiSanPham' => LoaiSanPham::all(),
+        ];
+        return view('backend.SanPham.load_SanPham', $viewData);
     }
 }

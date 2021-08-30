@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_quanlysanpham')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         <form class="add-form" method="POST" action="{{ route('san-pham.store') }}" enctype="multipart/form-data">

@@ -6,7 +6,7 @@
                 <label>Trạng Thái<b style="color:red"> *</b></label>
                 <select class="form-control" name="trangthai">
                     <option value="1" {{ $QuyCach->trangthai == 1 ? 'selected' : '' }}>Được Phép Thêm Sản Phẩm</option>
-                    <option value="2" {{ $QuyCach->trangthai == 2 ? 'selected' : '' }}>Hiện Trên Website</option>
+                    <option value="2" {{ $QuyCach->trangthai == 2 ? 'selected' : '' }}>Hiện Đại Diện Trên Website</option>
                     <option value="0" {{ $QuyCach->trangthai == 0 ? 'selected' : '' }}>Không Được Phép Thêm Sản Phẩm</option>
                 </select>
             </div>

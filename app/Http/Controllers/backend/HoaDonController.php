@@ -14,6 +14,7 @@ use App\Cart;
 use App\Models\HoaDon;
 use App\Models\ChiTietHoaDon;
 use App\Models\KhuyenMai;
+use App\Models\LoaiSanPham;
 use App\Models\ThongKe;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,34 +24,32 @@ use Mail;
 class HoaDonController extends Controller
 {
     /////////////////////////////////////////////////////////////////////////////////////////// gửi email.
-    public function email($id, $TT)
-    {
-        $HoaDon = HoaDon::find($id);
-        $to_name = "SUN COFFEE";
-        $to_email = $HoaDon->emailkhachhang;
-        $viewData = [
-            'HoaDon' =>  $HoaDon,
-            'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
-            'KhachHang' => KhachHang::where('id', $HoaDon->id_khachhang)->first(),
+    // public function email($id, $TT)
+    // {
+    //     $HoaDon = HoaDon::find($id);
+    //     $viewData = [
+    //         'HoaDon' =>  $HoaDon,
+    //         'NhanVien' => NhanVien::where('id', $HoaDon->id_nhanvien)->first(),
+    //         'KhachHang' => KhachHang::where('id', $HoaDon->id_khachhang)->first(),
 
-            'ChiTietHoaDon' => ChiTietHoaDon::where('chi_tiet_hoa_don.id_hoadon', $id)
-                ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_hoa_don.id_chitietsanpham')
-                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
-                ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-                ->select(
-                    'chi_tiet_hoa_don.*',
-                    'chi_tiet_san_pham.giasanpham',
-                    'quy_cach.tenquycach',
-                    'san_pham.tensanpham',
-                )
-                ->get(),
-        ];
-        if ($TT == 1) {
-            return view('backend.Email.send_email', $viewData);
-        } else {
-            return view('backend.Email.send_email_cancel', $viewData);
-        }
-    }
+    //         'ChiTietHoaDon' => ChiTietHoaDon::where('chi_tiet_hoa_don.id_hoadon', $id)
+    //             ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_hoa_don.id_chitietsanpham')
+    //             ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+    //             ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+    //             ->select(
+    //                 'chi_tiet_hoa_don.*',
+    //                 'chi_tiet_san_pham.giasanpham',
+    //                 'quy_cach.tenquycach',
+    //                 'san_pham.tensanpham',
+    //             )
+    //             ->get(),
+    //     ];
+    //     if ($TT == 1) {
+    //         return view('backend.Email.send_email', $viewData);
+    //     } else {
+    //         return view('backend.Email.send_email_cancel', $viewData);
+    //     }
+    // }
     public function send_email($id, $TT)
     {
         $HoaDon = HoaDon::find($id);
@@ -93,13 +92,13 @@ class HoaDonController extends Controller
         return $pdf->stream();
         // return $pdf->download('invoice.pdf');
     }
-    public function download_bill($id) // tải file.
-    {
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($this->print_order_convert($id));
-        // return $pdf->stream();
-        return $pdf->download('invoice.pdf');
-    }
+    // public function download_bill($id) // tải file.
+    // {
+    //     $pdf = \App::make('dompdf.wrapper');
+    //     $pdf->loadHTML($this->print_order_convert($id));
+    //     // return $pdf->stream();
+    //     return $pdf->download('invoice.pdf');
+    // }
     public function print_order_convert($id) // in hóa đơn.
     {
         $HoaDon = HoaDon::find($id);
@@ -254,7 +253,7 @@ class HoaDonController extends Controller
     public function index() //danh sách hóa đơn.
     {
         $viewData = [
-            'HoaDon' => HoaDon::where('trangthai', '!=', '2')->orderBy('created_at', 'desc')->paginate(10),
+            'HoaDon' => HoaDon::where([['trangthai', '!=', '2'], ['trangthai', '!=', '3']])->orderBy('created_at', 'desc')->paginate(10),
             'NhanVien' => NhanVien::all(),
         ];
         return view('backend.HoaDon.index', $viewData);
@@ -310,14 +309,8 @@ class HoaDonController extends Controller
     }
     public function destroy($id) //xóa.
     {
-        ChiTietHoaDon::where('id_hoadon', $id)->delete();
-        HoaDon::where('id', $id)->delete();
-        $viewData = [
-            'HoaDon' => HoaDon::orderBy('created_at', 'desc')->get(),
-            'NhanVien' => NhanVien::all(),
-            'KhachHang' => KhachHang::all(),
-        ];
-        return view('backend.HoaDon.index', $viewData);
+        $data['trangthai'] = 3;
+        HoaDon::where('id', $id)->update($data);
     }
     public function search(Request $request) //tìm.
     {
@@ -329,13 +322,13 @@ class HoaDonController extends Controller
             } else {
                 $id_NhanVien = $NhanVien->id;
             }
-            $HoaDon = HoaDon::where([['trangthai', '!=', '2'], ['tenkhachhang', 'like', '%' . $request->search . '%']])
-                ->orwhere([['trangthai', '!=', '2'], ['sdtkhachhang', 'like', '%' . $request->search . '%']])
-                ->orwhere([['trangthai', '!=', '2'], ['id_nhanvien', $id_NhanVien]])
+            $HoaDon = HoaDon::where([['trangthai', '!=', '2'], ['trangthai', '!=', '3'], ['tenkhachhang', 'like', '%' . $request->search . '%']])
+                ->orwhere([['trangthai', '!=', '2'], ['trangthai', '!=', '3'], ['sdtkhachhang', 'like', '%' . $request->search . '%']])
+                ->orwhere([['trangthai', '!=', '2'], ['trangthai', '!=', '3'], ['id_nhanvien', $id_NhanVien]])
                 ->orderBy('created_at', 'desc')
                 ->get();
         } else {
-            $HoaDon = HoaDon::where([['trangthai', '!=', '2'], ['id_khachhang', 'KH00000000000000']])->orderBy('created_at', 'desc')->get();
+            $HoaDon = HoaDon::where([['trangthai', '!=', '2'], ['trangthai', '!=', '3'], ['id_khachhang', 'KH00000000000000']])->orderBy('created_at', 'desc')->get();
         }
         $output = "";
         if (Auth::user()->id_loainhanvien == 'LNV00000000000000') {
@@ -391,6 +384,7 @@ class HoaDonController extends Controller
                     'chi_tiet_san_pham.*',
                     'quy_cach.tenquycach',
                 )->get(),
+            'LoaiSanPham' => LoaiSanPham::where('trangthai', '!=', 0)->orderBy('created_at', 'desc')->get(),
         ];
         return view('backend.HoaDon.create_HoaDon', $viewData);
     }
@@ -576,9 +570,17 @@ class HoaDonController extends Controller
             $data2['tonggia'] = $item['TongGia'];
             ChiTietHoaDon::create($data2);
             /////////////////////////////////////////////////////////////////////////////////////// cập nhật lại số lượng.
-            $ChiTietSanPham = ChiTietSanPham::where('id', $item['CTSP']->id)->first(); // cập nhật số lượng còn lại.
-            $data3['soluong'] = $ChiTietSanPham->soluong - $item['SoLuong'];
-            ChiTietSanPham::where('id', $item['CTSP']->id)->update($data3);
+            $ChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', $item['CTSP']->id)
+                ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
+                ->join('loai_san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
+                ->select(
+                    'chi_tiet_san_pham.soluong',
+                    'loai_san_pham.trangthai',
+                )->first(); // cập nhật số lượng còn lại.
+            if ($ChiTietSanPham->trangthai == 1) {
+                $data3['soluong'] = $ChiTietSanPham->soluong - $item['SoLuong'];
+                ChiTietSanPham::where('id', $item['CTSP']->id)->update($data3);
+            }
         }
         /////////////////////////////////////////////////////////////////////////////////////////// tính thống kê.
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
@@ -606,11 +608,7 @@ class HoaDonController extends Controller
             ThongKe::create($data4);
         }
         $request->Session()->forget('GioHang'); //xóa session GioHang khi hoàn tất.
-        $viewData = [
-            'HoaDon' => HoaDon::where('trangthai', '!=', '2')->orderBy('created_at', 'desc')->paginate(10),
-            'NhanVien' => NhanVien::all(),
-        ];
-        return redirect()->route('hoa-don.index', $viewData)->with('success', $data['id']);
+        return redirect()->route('hoa-don.index')->with('success', $data['id']);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////// xác nhận hóa đơn.
     public function  handleDelivery() // trang xác nhận hóa đơn.
@@ -649,9 +647,11 @@ class HoaDonController extends Controller
         }
         $SLSP = 0; // dùng để tính thống kê.
         foreach ($ChiTietHoaDon as $item) {
-            $ChiTietSanPham = ChiTietSanPham::where('id', $item->id_chitietsanpham)->first(); // lấy ra số lượng củ.
-            $data3['soluong'] = $ChiTietSanPham->soluong - $item->soluong; // tính lại số lượng.
-            ChiTietSanPham::where('id', $item->id_chitietsanpham)->update($data3); // cập nhật số lượng sản phẩm.
+            $ChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', $item->id_chitietsanpham)->first(); // cập nhật số lượng còn lại.
+            if ($ChiTietSanPham->trangthai == 1) {
+                $data3['soluong'] = $ChiTietSanPham->soluong - $item->soluong;
+                ChiTietSanPham::where('id', $item->id_chitietsanpham)->update($data3);
+            }
             $SLSP += $item->soluong;
         }
         /////////////////////////////////////////////////////////////////////////////////////////// cập nhật điểm tích lũy.
@@ -711,7 +711,119 @@ class HoaDonController extends Controller
 
     public function deleteDelivery($id) //xóa xác nhận.
     {
-        ChiTietHoaDon::where('id_hoadon', $id)->delete();
-        HoaDon::where('id', $id)->delete();
+        $data['trangthai'] = 3;
+        HoaDon::where('id', $id)->update($data);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter.
+    public function filter(Request $request) //tìm.
+    {
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'on') {
+            $filtertrangthai = 0;
+        } elseif ($request->filtertrangthai == 'off') {
+            $filtertrangthai = 1;
+        } else {
+            $filtertrangthai = 9;
+        }
+        ///////////////////////////////////////// ngày.
+        if ($request->filterngay != null) {
+            if ($request->sort == 19) {
+                $HoaDon = HoaDon::where([['ngaylap', 'like',  $request->filterngay . '%'], ['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($request->sort == 29) {
+                $HoaDon = HoaDon::where([['ngaylap', 'like',  $request->filterngay . '%'], ['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('created_at', 'asc')->get();
+            } elseif ($request->sort == 39) {
+                $HoaDon = HoaDon::where([['ngaylap', 'like',  $request->filterngay . '%'], ['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('trangthai', 'desc')->get();
+            } else {
+                $HoaDon = HoaDon::where([['ngaylap', 'like',  $request->filterngay . '%'], ['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('trangthai', 'asc')->get();
+            }
+        } else {
+            if ($request->sort == 19) {
+                $HoaDon = HoaDon::where([['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('created_at', 'desc')->get();
+            } elseif ($request->sort == 29) {
+                $HoaDon = HoaDon::where([['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('created_at', 'asc')->get();
+            } elseif ($request->sort == 39) {
+                $HoaDon = HoaDon::where([['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('trangthai', 'desc')->get();
+            } else {
+                $HoaDon = HoaDon::where([['trangthai', '!=', $filtertrangthai], ['trangthai', '!=', '3'], ['trangthai', '!=', '2']])
+                    ->orderBy('trangthai', 'asc')->get();
+            }
+        }
+
+        $viewData = [
+            'HoaDon' => $HoaDon,
+            'NhanVien' => NhanVien::all(),
+        ];
+        return view('backend.HoaDon.load_HoaDon', $viewData);
+    }
+    public function  filterProduct(Request $request)
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
+        if ($request->filterloai == 'all') {
+            $SanPham =  SanPham::where('trangthai', 1)->orderBy('created_at', 'desc')->get();
+        } else {
+            $SanPham =  SanPham::where([
+                ['id_loaisanpham', $request->filterloai],
+                ['trangthai', 1],
+            ])->orderBy('created_at', 'desc')->get();
+        }
+        $viewData = [
+            'SanPham' => $SanPham,
+            'ChiTietSanPham' => ChiTietSanPham::where([['chi_tiet_san_pham.hansudung', '>=', $today], ['chi_tiet_san_pham.soluong', '>', 0], ['chi_tiet_san_pham.trangthai', 1]])
+                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
+                ->select(
+                    'chi_tiet_san_pham.*',
+                    'quy_cach.tenquycach',
+                )->get(),
+        ];
+        return view('backend.HoaDon.searchProduct_hoa_don', $viewData);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// Hóa Đơn Đã Hủy.
+    public function cancelled() // ds đã hủy
+    {
+        $viewData = [
+            'HoaDon' => HoaDon::where('trangthai', '3')->orderBy('created_at', 'desc')->paginate(10),
+            'NhanVien' => NhanVien::all(),
+        ];
+        return view('backend.HoaDon.cancelled', $viewData);
+    }
+    public function searchCancelled(Request $request) //tìm.
+    {
+        if ($request->search != "Khách Vãng Lai") {
+            // tên khách hàng, sdt người lập(chính xác), sdt khách hàng
+            $NhanVien = NhanVien::where('sdt',  $request->search)->first();
+            if ($NhanVien == null) {
+                $id_NhanVien = "1";
+            } else {
+                $id_NhanVien = $NhanVien->id;
+            }
+            $HoaDon = HoaDon::where([['trangthai', '3'], ['tenkhachhang', 'like', '%' . $request->search . '%']])
+                ->orwhere([['trangthai', '3'], ['sdtkhachhang', 'like', '%' . $request->search . '%']])
+                ->orwhere([['trangthai', '3'], ['id_nhanvien', $id_NhanVien]])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $HoaDon = HoaDon::where([['trangthai', '3'], ['id_khachhang', 'KH00000000000000']])->orderBy('created_at', 'desc')->get();
+        }
+        $output = "";
+        foreach ($HoaDon as $value) {
+            $NhanVien = NhanVien::find($value->id_nhanvien);
+            $output .= "<tr id=" . $value->id . "> 
+            <td style='text-align: left'>" . $value->ngaylap . "</td>
+            <td>" . $value->sdtkhachhang . "</td>
+            <td>" . $value->tenkhachhang . "</td>
+            <td>" . $NhanVien->tennhanvien . "</td>
+            <td><span class='badge bg-warning'>Đã Hủy</span> </td>
+            <td>
+            <a data-id='" . $value->id . "' href='javascript:(0)' class='action_btn mr_10 view-show'> <i class='fas fa-eye'></i></a>
+            </td> </tr>";
+        }
+        echo $output;
     }
 }

@@ -15,7 +15,7 @@ class LoaiNhanVienController extends Controller
     public function index() //danh sách.
     {
         $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(5),
+            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.LoaiNhanVien.index', $viewData);
     }
@@ -23,7 +23,7 @@ class LoaiNhanVienController extends Controller
     public function load() //tải lại.
     {
         $viewData = [
-            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(5),
+            'LoaiNhanVien' => LoaiNhanVien::where('id', '!=', "LNV00000000000000")->orderBy('created_at', 'desc')->paginate(10),
         ];
         return view('backend.LoaiNhanVien.load_LoaiNhanVien', $viewData);
     }
@@ -105,5 +105,35 @@ class LoaiNhanVienController extends Controller
             [['id', '!=', "LNV00000000000000"], ['id', $id]]
         )->delete();
         return response()->json(['success' => 'Thành Công Rồi']);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////// filter
+    public function filter(Request $request)
+    {
+        ///////////////////////////////////////// trạng thái.
+        if ($request->filtertrangthai == 'on') {
+            $filtertrangthai = 0;
+        } elseif ($request->filtertrangthai == 'off') {
+            $filtertrangthai = 1;
+        } else {
+            $filtertrangthai = 9;
+        }
+        ///////////////////////////////////////// sắp xếp.
+        if ($request->sort == 19) {
+            $LoaiNhanVien = LoaiNhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'LNV00000000000000']])
+                ->orderBy('created_at', 'desc')->get();
+        } elseif ($request->sort == 29) {
+            $LoaiNhanVien = LoaiNhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'LNV00000000000000']])
+                ->orderBy('created_at', 'asc')->get();
+        } elseif ($request->sort == 39) {
+            $LoaiNhanVien = LoaiNhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'LNV00000000000000']])
+                ->orderBy('trangthai', 'desc')->get();
+        } else {
+            $LoaiNhanVien = LoaiNhanVien::where([['trangthai', '!=', $filtertrangthai], ['id', '!=', 'LNV00000000000000']])
+                ->orderBy('trangthai', 'asc')->get();
+        }
+        $viewData = [
+            'LoaiNhanVien' =>  $LoaiNhanVien,
+        ];
+        return view('backend.LoaiNhanVien.load_LoaiNhanVien', $viewData);
     }
 }

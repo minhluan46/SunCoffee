@@ -47,7 +47,7 @@
                             </td>
                             <td>{{ $valuectkm->muckhuyenmai . '%' }}</td>
                             <td>
-                                <div class="d-flex">
+                                <div class="d-flex"  style="justify-content: center;">
                                     <a href="javascript:(0)" class="action_btn mr_10 view-edit-CTKM" data-idctsp="{{ $valuectkm->id_chitietsanpham }}" data-idkm="{{ $KhuyenMai->id }}">
                                         <i class="fas fa-edit"></i></a>
 

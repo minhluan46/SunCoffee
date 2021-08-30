@@ -1,4 +1,7 @@
 @extends('layouts.backend_layout')
+@section('active_quanlynhanvien')
+    class="nav-item active"
+@endsection
 @section('content')
     <div class="main_content_iner ">
         <form class="add-form" method="POST" action="{{ route('nhan-vien.update', $NhanVien->id) }}" enctype="multipart/form-data">

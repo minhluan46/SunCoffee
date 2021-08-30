@@ -79,11 +79,7 @@ class ChiTietSanPhamController extends Controller
         $data['ngaysanxuat'] = $request->ngaysanxuat;
         $data['hansudung'] = $request->hansudung;
         $data['id_sanpham'] = $request->id_sanpham;
-        if ($request->trangthai == "1") {
-            $data['trangthai'] = 0;
-        } else {
-            $data['trangthai'] = 1;
-        }
+        $data['trangthai'] = $request->trangthai;
         ChiTietSanPham::create($data);
         return response()->json(['success' => 'Thành Công Rồi']);
     }
@@ -145,20 +141,7 @@ class ChiTietSanPhamController extends Controller
         $data['ngaysanxuat'] = $request->ngaysanxuat;
         $data['hansudung'] = $request->hansudung;
         $data['id_sanpham'] = $request->id_sanpham;
-        $OldChiTietSanPham = ChiTietSanPham::find($id);
-        if ($OldChiTietSanPham->trangthai == 0) {
-            if ($request->trangthai == "1") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        } else {
-            if ($request->trangthai == "2") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        }
+        $data['trangthai'] = $request->trangthai;
         ChiTietSanPham::where('id', $id)->update($data);
         return response()->json(['success' => 'Thành Công Rồi']);
     }

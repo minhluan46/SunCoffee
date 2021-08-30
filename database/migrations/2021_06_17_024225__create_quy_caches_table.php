@@ -17,7 +17,7 @@ class CreateQuyCachesTable extends Migration
             $table->char('id', 18);
             $table->string('tenquycach', 50);
             $table->char('id_loaisanpham', 18);
-            $table->boolean('trangthai');
+            $table->tinyInteger('trangthai');
             $table->timestamps();
 
             $table->primary('id');

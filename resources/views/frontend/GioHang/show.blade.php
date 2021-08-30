@@ -5,13 +5,11 @@
             <div class="overlay"></div>
             <div class="container">
                 <div class="row slider-text justify-content-center align-items-center">
-
                     <div class="col-md-7 col-sm-12 text-center ftco-animate">
-                        <h1 class="mb-3 mt-5 bread">Checkout</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Checout</span>
+                        <h1 class="mb-3 mt-5 bread">Thanh Toán</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('Trangchu.index') }}">Trang Chủ</a></span> <span>Thanh Toán</span>
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -29,7 +27,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">Họ Tên<b style="color:red"> *</b></label>
-                                        <input type="text" name="hoten" id="hoten" class="form-control form-control-info" required>
+                                        <input autocomplete="off" type="text" name="hoten" id="hoten" class="form-control form-control-info" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -41,13 +39,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">email<b style="color:red"> *</b></label>
-                                        <input name="email" id="email" type="email" class="form-control form-control-info" required>
+                                        <input autocomplete="off" name="email" id="email" type="email" class="form-control form-control-info" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">Địa Chỉ<b style="color:red"> *</b></label>
-                                        <input type="text" name="diachi" id="diachi" class="form-control form-control-info" required>
+                                        <input autocomplete="off" type="text" name="diachi" id="diachi" class="form-control form-control-info" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -67,36 +65,20 @@
                 </div> <!-- .col-md-8 -->
                 <div class="col-xl-4 sidebar ftco-animate">
                     <div class="cart-detail ftco-bg-dark ftco-bg-dark-info ftco-bg-dark-sale p-3 p-md-4 category">
-                        <h4 class="subheading-bill">Khuyến mãi ngày hè</h4>
+                        <h4 class="subheading-bill">Sản Phẩm Khuyến mãi</h4>
                         <div class="productsale-slider-right-to-left owl-carousel">
-                            <div class="menu-entry menu-entry-slider">
-                                <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-1.jpg') }});"></a>
-                                <div class="text text-center pt-4">
-                                    <h3><a href="#">Coffee Capuccino</a></h3>
-                                    <p class="price"><span>10.000 VNĐ</span></p>
-                                </div>
-                            </div>
-                            <div class="menu-entry menu-entry-slider">
-                                <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-2.jpg') }});"></a>
-                                <div class="text text-center pt-4">
-                                    <h3><a href="#">Coffee Capuccino</a></h3>
-                                    <p class="price"><span>10.000 VNĐ</span></p>
-                                </div>
-                            </div>
-                            <div class="menu-entry menu-entry-slider">
-                                <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-3.jpg') }});"></a>
-                                <div class="text text-center pt-4">
-                                    <h3><a href="#">Coffee Capuccino</a></h3>
-                                    <p class="price"><span>10.000 VNĐ</span></p>
-                                </div>
-                            </div>
-                            <div class="menu-entry menu-entry-slider">
-                                <a href="#" class="img" style="background-image: url({{ asset('frontend/images/menu-4.jpg') }});"></a>
-                                <div class="text text-center pt-4">
-                                    <h3><a href="#">Coffee Capuccino</a></h3>
-                                    <p class="price"><span>10.000 VNĐ</span></p>
-                                </div>
-                            </div>
+                            @isset($KhuyenMai)
+                                @foreach ($KhuyenMai as $item)
+                                    <div class="menu-entry menu-entry-slider">
+                                        <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
+                                        <div class="text text-center pt-4">
+                                            <h3 class="a-name"><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham . ' ' . $item->tenquycach }}</a></h3>
+                                            <p class="price"><span>{{ number_format($item->giasanpham * (1 - $item->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ  (-' . $item->muckhuyenmai . '%)' }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endisset
                         </div>
                     </div>
                 </div>
@@ -118,7 +100,6 @@
 
         .category {
             top: 100px;
-            /* margin-top: 100px; */
             position: -webkit-sticky;
             position: sticky;
             left: 0;
@@ -157,13 +138,9 @@
 
         .menu-entry-slider .text h3 a {
             color: #fff;
-            font-size: 17px;
+            font-size: 20px;
         }
 
-        .billing-form .form-control-info {
-            border: 1px solid hsla(0, 0%, 100%, 0.50) !important;
-            color: rgb(255, 255, 255) !important;
-        }
 
         .ftco-bg-dark-bill {
             height: 345px;
@@ -180,11 +157,19 @@
         .subheading-bill {
             font-size: 30px;
             margin-bottom: 0;
-            font-family: "Great Vibes", cursive;
+            font-family: "Dancing Script", cursive;
             color: #c49b63;
             margin-top: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 20px;
             text-align: center;
+        }
+
+        .large_logo img {
+            width: 200px;
+        }
+
+        .icon2 {
+            color: rgba(255, 255, 255, 0.7) !important;
         }
 
     </style>
@@ -214,12 +199,6 @@
                 }
             })
         });
-
-        function validate() {
-            if (remember.checked == 1) {
-                alert("checked");
-            }
-        };
 
         $('#dathang').on('click', function() { // kiểm tra trước khi gửi.
             var hoten2 = $('#hoten').val();

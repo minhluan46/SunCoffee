@@ -126,7 +126,7 @@
                         var temp = '';
                         for (var i = valueArray.length - 1; i >= 0; i--) {
                             // kiểm tra nếu nó là số thì cộng vào.
-                            if (!isNaN(valueArray[i])) {
+                            if (!isNaN(valueArray[i]) && valueArray[i] != " ") {
                                 temp += valueArray[i];
                                 counter++
                                 if (counter == 3) {

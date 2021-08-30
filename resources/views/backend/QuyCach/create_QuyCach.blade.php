@@ -6,7 +6,7 @@
                 <label>Trạng Thái<b style="color:red"> *</b></label>
                 <select class="form-control" name="trangthai">
                     <option value="1">Được Phép Thêm Sản Phẩm</option>
-                    <option value="2">Hiện Trên Website</option>
+                    <option value="2">Hiện Đại Diện Trên Website</option>
                     <option value="0">Không Được Phép Thêm Sản Phẩm</option>
                 </select>
             </div>

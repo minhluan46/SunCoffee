@@ -98,7 +98,6 @@
 			}
 			});
 			$('.productsale-slider-right-to-left').owlCarousel({
-				rtl:true,
 				loop:true,
 				autoplay: true,
 				autoplayTimeout:2500,

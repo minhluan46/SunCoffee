@@ -9,12 +9,13 @@
             <div class="mb-3 btn-1">
                 <a class="btn btn-success" href="{{ route('san-pham.create') }}">Thêm Sản Phẩm</a>
                 <a class="btn btn-info" href="{{ route('loai-san-pham.index') }}">Xem Loại Sản Phẩm</a>
-                <a class="btn btn-danger" href="{{ route('san-pham.expiredProduct') }}">Sản Phẩm Hết Hạn Sử Dụng
+                <a class="btn btn-danger" href="{{ route('san-pham.expiredProduct') }}">SP Hết Hạn Sử Dụng
                     <span class="badge bg-warning text-dark countSanPhamHetHanSuDung"></span>
                 </a>
-                <a class="btn btn-warning" href="{{ route('san-pham.outOfProduct') }}">Sản Phẩm Hết Hàng
+                <a class="btn btn-warning" href="{{ route('san-pham.outOfProduct') }}">SP Hết Hàng
                     <span class="badge bg-danger countSanPhamHetHang"></span>
                 </a>
+                <a id="formfilter" class="btn btn-primary" href="javascript:(0)">Lọc & Sắp Xếp</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">
                 <div class="search_inner">
@@ -51,7 +52,7 @@
                                             {{-- <th scope="col" style="text-align: left">#</th> --}}
                                             <th scope="col" style="text-align: left">Hình Ảnh</th>
                                             <th scope="col">Tên Sản Phẩm</th>
-                                            <th scope="col">thẻ</th>
+                                            <th scope="col">Thẻ</th>
                                             <th scope="col">Loại Sản Phẩm</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
@@ -80,7 +81,7 @@
                                                             {{ $value->trangthai == 1 ? 'Đang Bán' : 'Ngừng Bán' }}</span>
                                                     </td>
                                                     <td>
-                                                        <div class="d-flex">
+                                                        {{-- <div class="d-flex"> --}}
                                                             <a href="javascript:(0)" class="action_btn mr_10 view-add" data-url="{{ route('chi-tiet-san-pham.create', $value->id) }}"
                                                                 data-id="{{ $value->id }}"><i class="fas fa-plus-square"></i></a>
 
@@ -93,7 +94,7 @@
                                                             <a href="javascript:(0)" class="action_btn mr_10 form-delete" data-url="{{ route('san-pham.destroy', $value->id) }}"
                                                                 data-id="{{ $value->id }}">
                                                                 <i class="fas fa-trash-alt"></i></a>
-                                                        </div>
+                                                        {{-- </div> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -125,7 +126,7 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body">
 
                 </div>
                 <div class="modal-footer">
@@ -143,8 +144,65 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body-2">
 
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- filter --}}
+    <div class="modal fade" id="ModalFilter" tabindex="-1" role="dialog" aria-labelledby="ModalFilterLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="ModalFilterLabel">Lọc & Sắp Xếp</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Trạng Thái</label>
+                                <select class="form-control" name="filtertrangthai" id="filtertrangthai">
+                                    <option value="all">Tất Cả</option>
+                                    <option value="on">Đang Bán</option>
+                                    <option value="off">Ngừng Bán</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Thẻ</label>
+                                <select class="form-control" name="filterthe" id="filterthe">
+                                    <option value="0">Tất Cả</option>
+                                    <option value="1">THƯỜNG</option>
+                                    <option value="2">MỚI</option>
+                                    <option value="3">BÁN CHẠY NHẤT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Loại Sản Phẩm</label>
+                                <select class="form-control" name="filterloai" id="filterloai">
+                                    <option value="all0">Tất Cả</option>
+                                    @if (isset($LoaiSanPham))
+                                        @foreach ($LoaiSanPham as $valuelsp)
+                                            <option value="{{ $valuelsp->id }}">{{ $valuelsp->tenloaisanpham }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sắp Xếp</label>
+                                <select class="form-control" name="sort" id="sort">
+                                    <option value="19">Thời Gian Tạo Giảm Dần</option>
+                                    <option value="29">Thời Gian Tạo Tăng Dần</option>
+                                </select>
+                            </div>
+                            <button onclick="filter()" class="btn btn-success" style="width: 100%">Tiến Hành</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                 </div>
@@ -165,7 +223,7 @@
             }
         };
 
-        function countSanPhamHetHanSuDung() { 
+        function countSanPhamHetHanSuDung() {
             $.ajax({
                 url: '/admin/san-pham/so-luong-het-han-su-dung',
                 method: 'GET',
@@ -227,7 +285,7 @@
                         var temp = '';
                         for (var i = valueArray.length - 1; i >= 0; i--) {
                             // kiểm tra nếu nó là số thì cộng vào.
-                            if (!isNaN(valueArray[i])) {
+                            if (!isNaN(valueArray[i]) && valueArray[i] != " ") {
                                 temp += valueArray[i];
                                 counter++
                                 if (counter == 3) {
@@ -305,7 +363,7 @@
                     id: id
                 },
                 success: function(response) {
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Thêm Chi Tiết Sản Phẩm");
                     $("#exampleModal").modal('show');
                     Money();
@@ -328,7 +386,7 @@
                 data: {},
                 success: function(response) {
 
-                    $('.modal-body').html(response);
+                    $('#modal-body-2').html(response);
                     $("#exampleModalLabel2").text("Chi Tiết Sản Phẩm");
                     $("#exampleModal2").modal('show');
                 },
@@ -432,7 +490,7 @@
                 method: 'GET',
                 success: function(response) {
 
-                    $('.modal-body').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Sửa Chi Tiết Sản Phẩm");
                     $("#exampleModal").modal('show');
                     Money();
@@ -474,6 +532,31 @@
             if (confirm("Đồng Ý Để Xóa?")) {
                 DeleteCTSP($(this).data('url'), $(this).data('idsp'));
             }
+        });
+        /////////////////////////////////////////////////////////////////////////////////////////// lọc
+        function filter() {
+            $.ajax({
+                url: '/admin/san-pham/filter',
+                method: 'GET',
+                data: {
+                    filtertrangthai: $('#filtertrangthai').val(),
+                    filterthe: $('#filterthe').val(),
+                    filterloai: $('#filterloai').val(),
+                    sort: $('#sort').val(),
+                },
+                success: function(response) {
+                    $("#ModalFilter").modal('hide');
+                    $('.pagination').hide();
+                    $('#dataSheet').html(response);
+                    alertify.success("Đã Lọc");
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Lọc Dữ Liệu");
+                }
+            })
+        }
+        $(document).on('click', '#formfilter', function() {
+            $('#ModalFilter').modal('show');
         });
     </script>
 @endsection

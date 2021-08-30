@@ -46,12 +46,13 @@
                                                 </td>
                                                 <td>
                                                     @if ($item['GiamGia'] > 0)
-                                                        {{  number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
+                                                        {{ number_format($item['GiamGia'], 0, ',', '.') }} VNĐ
                                                     @else
 
                                                     @endif
                                                 </td>
-                                                <td style="width: 70px;padding-left: 30px;"><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}" type="number" class="form-control" value="{{ $item['SoLuong'] }}">
+                                                <td style="width: 70px;padding-left: 30px;"><input id="SoLuongSanPham" data-id="{{ $item['CTSP']->id }}" type="number" class="form-control"
+                                                        value="{{ $item['SoLuong'] }}">
                                                 </td>
                                                 <td>{{ number_format($item['TongGia'], 0, ',', '.') }} VNĐ</td>
                                                 <td style="text-align: center">
@@ -102,7 +103,7 @@
                                 <tr>
                                     <td class="payment-title">Giảm Giá Thành Viên</td>
                                     <td id="DiscountMemberCart">
-                                        {{  number_format(Session::get('GioHang')->DiscountMember, 0, ',', '.') . ' VNĐ' }}
+                                        {{ number_format(Session::get('GioHang')->DiscountMember, 0, ',', '.') . ' VNĐ' }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -169,7 +170,18 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="row">
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <select class="form-control" name="filterloai" id="filterloai">
+                                                <option value="all">Tất Cả Loại Sản Phẩm</option>
+                                                @if (isset($LoaiSanPham))
+                                                    @foreach ($LoaiSanPham as $valuelsp)
+                                                        <option value="{{ $valuelsp->id }}">{{ $valuelsp->tenloaisanpham }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="serach_field-area d-flex align-items-center mb-3">
@@ -600,6 +612,29 @@
                 return true;
             }
             return false;
-        })
+        });
+
+        /////////////////////////////////////////////////////////////////////////////////////////// lọc
+        function filter() {
+            $.ajax({
+                url: '/admin/hoa-don/filter-product',
+                method: 'GET',
+                data: {
+                    filterloai: $('#filterloai').val(),
+                },
+                success: function(response) {
+                    // $("#ModalFilter").modal('hide');
+                    // $('.pagination').hide();
+                    $('#listProduct').html(response);
+                    alertify.success("Đã Lọc");
+                },
+                error: function(response) {
+                    alertify.error("Lỗi Lọc Dữ Liệu");
+                }
+            })
+        }
+        $(document).on('change', '#filterloai', function() {
+            filter();
+        });
     </script>
 @endsection
