@@ -5,6 +5,10 @@
     <title>Sun Coffee - nội dung</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {{-- demo pay pal --}}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Ensures optimal rendering on mobile devices. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- Optimal Internet Explorer compatibility -->
 
     <link rel="icon" href="{{ asset('uploads/Logo/logo_sun_coffee.png') }}" type="image/png"> {{-- LOGO --}}
 
@@ -32,17 +36,23 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('Trangchu.index') }}">Sun<small>coffee</small></a>
             {{-- ? --}}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
             {{-- /? --}}
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}" class="nav-link">Trang Chủ</a></li>
-                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}" class="nav-link">Sản Phẩm</a></li>
-                    <li @yield('active_menu') class="nav-item"><a href="{{ route('Menu.index') }}" class="nav-link">Menu</a></li>
-                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}" class="nav-link">Về Chúng Tôi</a></li>
-                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}" class="nav-link">Liên Lạc</a></li>
+                    <li @yield('active_trangchu') class="nav-item"><a href="{{ route('Trangchu.index') }}"
+                            class="nav-link">Trang Chủ</a></li>
+                    <li @yield('active_sanpham') class="nav-item"><a href="{{ route('SanPham.index') }}"
+                            class="nav-link">Sản Phẩm</a></li>
+                    <li @yield('active_menu') class="nav-item"><a href="{{ route('Menu.index') }}"
+                            class="nav-link">Menu</a></li>
+                    <li @yield('active_vechungtoi') class="nav-item"><a href="{{ route('VeChungToi.index') }}"
+                            class="nav-link">Về Chúng Tôi</a></li>
+                    <li @yield('active_lienlac') class="nav-item"><a href="{{ route('LienLac.index') }}"
+                            class="nav-link">Liên Lạc</a></li>
                     <li class="nav-item cart">
                         <a href="{{ route('GioHang.index') }}" class="nav-link">
                             <span class="icon icon-shopping_cart"></span>
@@ -65,26 +75,30 @@
 
     @yield('content')
 
-    <button style="width: fit-content; height: fit-content;" id="myBtn" title="Lên đầu trang">
-        <img style="border-radius: 25%" src='{{ asset('frontend/images/back_to_top.png') }}' title='lên đầu trang' width='50px' /></button>
+
     <footer class="ftco-footer ftco-section img">
         <div class="container">
             <div class="row mt-5 mb-5">
                 <div class="col-lg-3 col-md-6">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2"><a class="large_logo" href="{{ route('Trangchu.index') }}"><img src="{{ asset('uploads/Logo/logo.png') }}" alt=""></a></h2>
+                        <h2 class="ftco-heading-2"><a class="large_logo"
+                                href="{{ route('Trangchu.index') }}"><img
+                                    src="{{ asset('uploads/Logo/logo.png') }}" alt=""></a></h2>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2"><a class="text-white" href="{{ route('VeChungToi.index') }}">Về chúng tôi</a></h2>
-                        <a class="mtop-5" href="{{ route('VeChungToi.index') }}">Sun Coffee là chuỗi cà phê được thành lập vào năm 2020 nhưng với tư duy sáng tạo và phong cách mới mẻ đã đem đến
+                        <h2 class="ftco-heading-2"><a class="text-white"
+                                href="{{ route('VeChungToi.index') }}">Về chúng tôi</a></h2>
+                        <a class="mtop-5" href="{{ route('VeChungToi.index') }}">Sun Coffee là chuỗi cà phê
+                            được thành lập vào năm 2020 nhưng với tư duy sáng tạo và phong cách mới mẻ đã đem đến
                             những hương vị mới về cà phê.</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2"><a class="text-white" href="{{ route('VeChungToi.index') }}">Dịch vụ</a> </h2>
+                        <h2 class="ftco-heading-2"><a class="text-white"
+                                href="{{ route('VeChungToi.index') }}">Dịch vụ</a> </h2>
                         <ul class="list-unstyled">
                             <li><a href="{{ route('VeChungToi.index') }}">Mua hàng dễ dàng</a></li>
                             <li><a href="{{ route('VeChungToi.index') }}">Dịch vụ chu đáo, nhanh chóng</a></li>
@@ -94,13 +108,17 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2"><a class="text-white" href="{{ route('LienLac.index') }}">Liên hệ với chúng tôi</a> </h2>
+                        <h2 class="ftco-heading-2"><a class="text-white" href="{{ route('LienLac.index') }}">Liên
+                                hệ với chúng tôi</a> </h2>
                         <div class="block-23 mb-3">
                             <ul>
-                                <li><span class="icon icon2 icon-map-marker"></span><span class="text"><a href="{{ route('LienLac.index') }}">137/3C, khu phố 2, phường
+                                <li><span class="icon icon2 icon-map-marker"></span><span class="text"><a
+                                            href="{{ route('LienLac.index') }}">137/3C, khu phố 2, phường
                                             An Phú, thành phố Thuận An, tỉnh Bình Dương</a></span></li>
-                                <li><span class="icon icon2 icon-phone"></span><span class="text"><a href="tel://0916 105 406">+84 916 105 406</a> </span></li>
-                                <li><span class="icon icon2 icon-envelope"></span><span class="text"><a href="mailto:SunCoffee137@gmail.com">SunCoffee137@gmail.com</a> </span></li>
+                                <li><span class="icon icon2 icon-phone"></span><span class="text"><a
+                                            href="tel://0916 105 406">+84 916 105 406</a> </span></li>
+                                <li><span class="icon icon2 icon-envelope"></span><span class="text"><a
+                                            href="mailto:SunCoffee137@gmail.com">SunCoffee137@gmail.com</a> </span></li>
                             </ul>
                         </div>
                     </div>
@@ -158,8 +176,9 @@
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         <script>
                             // document.write(new Date().getFullYear());
-                        </script> Sun Coffee được thành lập bởi <i class="icon-heart" aria-hidden="true"></i> <a href="{{ route('Trangchu.index') }}" target="_blank">Lê Minh Luân và
-                           Phạm Lê Hoàng Tuấn</a>
+                        </script> Sun Coffee được thành lập bởi <i class="icon-heart" aria-hidden="true"></i>
+                        <a href="{{ route('Trangchu.index') }}" target="_blank">Lê Minh Luân và
+                            Phạm Lê Hoàng Tuấn</a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
@@ -167,18 +186,21 @@
         </div>
 
 
-        <div id="back-to-top" class="back-to-top" data-toggle="tooltip" data-placement="left" title="Trở lên đầu trang">
-            <span class="glyphicon glyphicon-circle-arrow-up text-primary"></span>
-        </div>
 
     </footer>
+
+    {{-- Nút quay về đầu trang --}}
+    <button style="width: fit-content;
+        height: fit-content;" id="myBtn" title="Lên đầu trang"><i style="font-size: 50px "
+            class="icon-arrow-circle-up"></i></button>
 
 
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen">
         <svg class="circular" width="48px" height="48px">
             <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00" />
         </svg>
     </div>
     @yield('modal')
@@ -199,7 +221,8 @@
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     @yield('script')
     {{-- Zalo chat --}}
-    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!" data-autopopup="600" data-width="350" data-height="420"></div>
+    <div class="zalo-chat-widget" data-oaid="2447460426002912278" data-welcome-message="Rất vui khi được hỗ trợ bạn!"
+        data-autopopup="600" data-width="350" data-height="420"></div>
 
     <script src="https://sp.zalo.me/plugins/sdk.js"></script>
 

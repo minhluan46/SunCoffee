@@ -50,6 +50,8 @@ Route::group(['namespace' => 'frontend'], function () {
     Route::post('/cap-nhat-so-luong', 'GioHangController@updateQuantityOnline')->name('GioHang.updateQuantityOnline'); // cập nhật số lượng. (Chư sử lý thông báo khi số lượng lớn hơn)
     Route::post('/dat-hang', 'GioHangController@orderOnline')->name('GioHang.orderOnline'); // tìm giảm giá thành viên.
     Route::get('/xem-gio-hang', 'GioHangController@viewCart')->name('GioHang.viewCart'); // xem giỏ hàng.
+    Route::post('/dat-pay-pal', 'GioHangController@checkOutPayPal')->name('GioHang.checkOutPayPal'); // thanh toán pay pal.
+    Route::get('/ket-qua-pay-pal','GioHangController@resultCheckOut')->name('GioHang.viewAfterCheckOut'); // trả về trang chủ sau khi thânh toán.
 });
 
 
