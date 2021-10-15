@@ -278,16 +278,38 @@ class HoaDonController extends Controller
         $HoaDon = HoaDon::find($id);
         $KhachHang = KhachHang::find($HoaDon->id_khachhang);
         $NhanVien = NhanVien::find($HoaDon->id_nhanvien);
+        // if ($HoaDon->trangthai == 1) {
+        //     $data['trangthai'] = 0;
+        // } elseif ($HoaDon->trangthai == 2) {
+        //     $data['trangthai'] = 1;
+        // } else {
+        //     $data['trangthai'] = 1;
+        // }
         if ($HoaDon->trangthai == 1) {
             $data['trangthai'] = 0;
-        } elseif ($HoaDon->trangthai == 2) {
+        } else if ($HoaDon->trangthai == 2) {
             $data['trangthai'] = 1;
+        }else if($HoaDon->trangthai == 4){
+            $data['trangthai'] = 5;// Trang thái hoàn thành (đã thành toán)
+        }else if($HoaDon->trangthai == 5){
+            $data['trangthai'] = 6;// Trang thái đóng (đã thành toán)
+        }else if($HoaDon->trangthai == 6){
+            $data['trangthai'] = 5;// Trang thái hoàn thành (đã thành toán)
         } else {
             $data['trangthai'] = 1;
         }
         HoaDon::where('id', $id)->update($data);
+        // if ($data['trangthai'] == 1) {
+        //     $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
+        // } else {
+        //     $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
+        // }
         if ($data['trangthai'] == 1) {
             $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
+        }elseif($data['trangthai'] == 5){ // Trang thái hoàn thành (đã thành toán)
+            $trangthai =  "<span class='badge bg-success'>Hoàn Thành (đã thanh toán)</span>";
+        }elseif($data['trangthai'] == 6) { // Trang thái đóng (đã thành toán)
+            $trangthai ="<span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>";
         } else {
             $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
@@ -612,7 +634,9 @@ class HoaDonController extends Controller
     public function  handleDelivery() // trang xác nhận hóa đơn.
     {
         $viewData = [
-            'HoaDon' => HoaDon::where('trangthai', 2)->orderBy('created_at', 'asc')->paginate(10),
+            // 'HoaDon' => HoaDon::where('trangthai', 2)->orderBy('created_at', 'asc')->paginate(10),
+            'HoaDon' => HoaDon::where('trangthai', 2)->orWhere('trangthai', 4)->orderBy('created_at', 'asc')->paginate(10),
+
             'KhachHang' => KhachHang::all(),
         ];
         return view('backend.HoaDon.handleDelivery', $viewData);
@@ -620,7 +644,9 @@ class HoaDonController extends Controller
 
     public function countHandleDelivery() // lấy số lượng hóa đơn cần được xác nhận.
     {
-        $HoaDon = HoaDon::where('trangthai', 2)->count();
+        // $HoaDon = HoaDon::where('trangthai', 2)->count();
+        $HoaDon = HoaDon::where('trangthai', 2)->orWhere('trangthai', 4)->count();
+
         echo $HoaDon;
     }
 
@@ -682,16 +708,36 @@ class HoaDonController extends Controller
             ThongKe::create($data4);
         }
         /////////////////////////////////////////////////////////////////////////////////////////// cập nhật trạng thái.
+        // if ($HoaDon->trangthai == 1) {
+        //     $data['trangthai'] = 0;
+        // } elseif ($HoaDon->trangthai == 2) {
+        //     $data['trangthai'] = 1;
+        // } else {
+        //     $data['trangthai'] = 1;
+        // }
+        // HoaDon::where('id', $id)->update($data);
+        // if ($data['trangthai'] == 1) {
+        //     $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
+        // } else {
+        //     $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
+        // }
         if ($HoaDon->trangthai == 1) {
             $data['trangthai'] = 0;
         } elseif ($HoaDon->trangthai == 2) {
             $data['trangthai'] = 1;
+
+        } elseif ($HoaDon->trangthai == 4){
+            $data['trangthai'] = 5;
         } else {
             $data['trangthai'] = 1;
         }
         HoaDon::where('id', $id)->update($data);
         if ($data['trangthai'] == 1) {
             $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
+        }elseif($data['trangthai'] == 5){
+            $trangthai =  "<span class='badge bg-success'>Hoàn Thành (đã thanh toán)</span>";
+        }elseif($data['trangthai'] == 6){
+            $trangthai =  "<span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>";
         } else {
             $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
