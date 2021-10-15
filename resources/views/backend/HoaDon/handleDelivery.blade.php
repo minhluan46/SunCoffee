@@ -8,7 +8,7 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
             </div>
-            <div class="">
+            <div class="___class_+?4___">
             </div>
         </div>
         {{-- content --}}
@@ -39,26 +39,40 @@
                                             @foreach ($HoaDon as $value)
                                                 <tr id="{{ $value->id }}">
                                                     {{-- <td style="text-align: left">{{ $value->id }}</td> --}}
-                                                    <td style="text-align: left">{{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}</td>
+                                                    <td style="text-align: left">
+                                                        {{ Date_format(Date_create($value->ngaylap), 'd/m/Y H:i:s') }}
+                                                    </td>
                                                     <td>{{ $value->sdtkhachhang }}</td>
                                                     <td>
                                                         {{ $value->tenkhachhang }}
                                                     </td>
                                                     <td>
-                                                        @if ($value->trangthai == 2)
+                                                        {{-- @if ($value->trangthai == 2)
                                                             <span class='badge bg-primary'>Cần Xác Nhận</span>
                                                         @else
                                                             <span class='badge bg-danger'>Đã Đống</span>
+                                                        @endif --}}
+                                                        @if ($value->trangthai == 2)
+                                                            <span class='badge bg-primary'>Cần Xác Nhận</span>
+                                                        @elseif($value->trangthai == 4)
+                                                            <span class='badge bg-info'>Cần Xác Nhận ( đã thanh toán)</span>
+                                                        @elseif($value->trang == 5)
+                                                            <span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>
+                                                        @else
+                                                            <span class='badge bg-danger'>Đã Đóng</span>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 view-show">
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
+                                                            class="action_btn mr_10 view-show">
                                                             <i class="fas fa-eye"></i></a>
 
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 form-updatestatus-xl">
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
+                                                            class="action_btn mr_10 form-updatestatus-xl">
                                                             <i class="fas fa-truck "></i></a>
 
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn form-delete-xl">
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
+                                                            class="action_btn form-delete-xl">
                                                             <i class="fas fa-window-close"></i></a>
                                                     </td>
                                                 </tr>
@@ -81,7 +95,8 @@
     </div>
 @endsection
 @section('modal')
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
