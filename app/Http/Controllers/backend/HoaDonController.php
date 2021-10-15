@@ -126,7 +126,6 @@ class HoaDonController extends Controller
         .table th,.table td {text-align: right;}
         .table tbody tr th {font-size: 20px;}
         .table th,.table td {text-align: right;}
-        td.discount {text-decoration: line-through;}
         .total {width: 100%;}
         .total td {text-align: right;font-size: 21px;}
         .money td {font-weight: bolder;}
@@ -171,19 +170,18 @@ class HoaDonController extends Controller
             <thead>
                 <tr>
                     <th>SL</th>
-                    <th colspan='2'>Giá bán</th>
-                    <th>T.Tiền</th>
+                    <th>Giảm Giá</th>
+                    <th>Giá bán</th>
+                    <th>Thành Tiền</th>
                 </tr>
             </thead>
             <tbody>";
         foreach ($ChiTietHoaDon as $HD) {
 
             if ($HD->giamgia != 0) { // nếu có giảm giá.
-                $CG = number_format($HD->giasanpham, 0, ',', '.');
-                $KCG = number_format($HD->giasanpham - $HD->giamgia, 0, ',', '.');
+                $GG = number_format(($HD->giamgia), 0, ',', '.');
             } else { // không có giảm giá.
-                $CG =  "";
-                $KCG = number_format($HD->giasanpham, 0, ',', '.');
+                $GG =  "";
             }
 
             $output .= "<tr>
@@ -191,8 +189,8 @@ class HoaDonController extends Controller
                     </tr>
                     <tr>
                         <td>" . number_format($HD->soluong, 0, ',', '.') . "</td>
-                        <td class='discount '>" . $CG . "</td>
-                        <td>" . $KCG . "</td>
+                        <td>" . $GG . "</td>
+                        <td>" . number_format($HD->giasanpham, 0, ',', '.') . "</td>
                         <td>" . number_format($HD->tonggia, 0, ',', '.') . "</td>
                     </tr>";
         }

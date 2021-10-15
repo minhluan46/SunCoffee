@@ -35,13 +35,13 @@
 @endif
 <hr>
 @if (isset($ChiTietHoaDon))
-    <table class="table" style="text-align: center">
+    <table class="table" style="text-align: right">
         <thead>
             <tr>
                 <th scope="col" style="text-align: left">Mặt Hàng</th>
                 <th scope="col">Đơn Giá</th>
                 <th scope="col">Giảm Giá</th>
-                <th scope="col">Số Lượng</th>
+                <th scope="col" style="text-align: center">Số Lượng</th>
                 <th scope="col">Tổng Tiền</th>
             </tr>
         </thead>
@@ -67,7 +67,7 @@
                         @endforeach
                     </td>
                     <td>{{ number_format($item->giamgia, 0, ',', '.') }} VNĐ</td>
-                    <td>{{ number_format($item->soluong, 0, ',', '.') }}</td>
+                    <td style="text-align: center">{{ number_format($item->soluong, 0, ',', '.') }}</td>
                     <td>{{ number_format($item->tonggia, 0, ',', '.') }} VNĐ</td>
                 </tr>
             @endforeach

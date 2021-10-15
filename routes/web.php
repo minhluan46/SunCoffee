@@ -97,6 +97,7 @@ Route::group(['namespace' => 'interactive'], function () {
             Route::get('/{id}/destroy', 'DanhGiaController@destroy')->name('danh-gia.destroy'); // Xóa đánh gia.
             Route::get('/search', 'DanhGiaController@search')->name('danh-gia.search'); // tìm.
             Route::get('/filter', 'DanhGiaController@filter')->name('danh-gia.filter'); // lọc & sắp xếp. 
+            Route::get('/review-email/{id}/{TT}', 'DanhGiaController@creviewEmail')->name('binh-luan.reviewEmail'); // gửi email phản hồi.
         });
 
         Route::post('/gui', 'DanhGiaController@create')->name('danh-gia.create'); // gửi.

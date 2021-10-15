@@ -133,6 +133,7 @@ samp.tag_khuyen_mai {
 }
 .large_logo img {
     width: 200px;
+    margin-top: -15px;
 }
 .icon2 {
     color: rgba(255, 255, 255, 0.7) !important;

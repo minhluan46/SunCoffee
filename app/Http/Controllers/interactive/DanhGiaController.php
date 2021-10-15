@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DanhGia;
 use App\Models\SanPham;
 use Carbon\Carbon;
+use Mail;
 
 class DanhGiaController extends Controller
 {
@@ -50,7 +51,7 @@ class DanhGiaController extends Controller
         $data['thoigian'] = Carbon::now('Asia/Ho_Chi_Minh');
         $data['trangthai'] = 0;
         DanhGia::create($data);
-        if ($request->pagreview == 'review') {
+        if ($request->pagreview == 'review') { // xác định xem sẽ trả về trang nào.
             return redirect()->route('SanPham.review', $data['id_sanpham'])->with('success', 'Chúng tôi sẽ sớm xét duyệt yêu cầu của bạn');
         }
         return redirect()->route('SanPham.show', $data['id_sanpham'])->with('success', 'Chúng tôi sẽ sớm xét duyệt yêu cầu của bạn');
@@ -86,20 +87,57 @@ class DanhGiaController extends Controller
     ///////////////////////////////////////////// duyệt đánh giá.
     public function approval($id)
     {
-        // cập nhật trạng thái duyệt đánh giá.
-        $data['trangthai'] = 1;
-        DanhGia::where('id', $id)->update($data);
-        // cập nhật số sao cho sản phẩm.
         $DanhGia = DanhGia::find($id);
+        $Check = DanhGia::where([['email', $DanhGia->email], ['id_sanpham', $DanhGia->id_sanpham]])->count();
+        // cập nhật trạng thái duyệt đánh giá.
+        if ($Check > 1) { // xóa đánh giá củ đi , cập nhật trạng thái.
+            DanhGia::where([['email', $DanhGia->email], ['id_sanpham', $DanhGia->id_sanpham], ['id', '!=', $id]])->delete();
+            $data['trangthai'] = 1;
+            DanhGia::where('id', $id)->update($data);
+        } else { // cập nhật trạng thái
+            $data['trangthai'] = 1;
+            DanhGia::where('id', $id)->update($data);
+        }
+        // cập nhật số sao cho sản phẩm.
         $AVGsao['sosao'] = DanhGia::where([['id_sanpham', $DanhGia->id_sanpham], ['trangthai', '1']])->avg('sosao');
         $AVGsao['sosao'] = round($AVGsao['sosao'], 1, PHP_ROUND_HALF_UP);
         SanPham::where('id', $DanhGia->id_sanpham)->update($AVGsao);
-        $SanPham = SanPham::where('id', $DanhGia->id_sanpham)->first();
+        // $SanPham = SanPham::where('id', $DanhGia->id_sanpham)->first();
+        //Gửi email phản hồi.
+        $viewData = [
+            'DanhGia' => $DanhGia,
+            'SanPham' => SanPham::where('id', $DanhGia->id_sanpham)->first(),
+        ];
+        $to_name = "SUN COFFEE";
+        $to_email = $DanhGia->email;
+        Mail::send('backend.Email.review_email', $viewData, function ($message) use ($to_name, $to_email) {
+            $message->to($to_email)->subject('Thông Báo Đã Duyệt Đánh Giá');
+            $message->from($to_email, $to_name);
+        });
+        return response()->json(['success' => 'Đã Gửi Email Thông báo']);
     }
     ///////////////////////////////////////////// xóa đánh giá.
     public function destroy($id)
     {
+        //gửi email thông báo.
+        $DanhGia = DanhGia::find($id);
+        $viewData = [
+            'DanhGia' => $DanhGia,
+            'SanPham' => SanPham::where('id', $DanhGia->id_sanpham)->first(),
+        ];
+        $to_name = "SUN COFFEE";
+        $to_email = $DanhGia->email;
+        Mail::send('backend.Email.review_email_cancel', $viewData, function ($message) use ($to_name, $to_email) {
+            $message->to($to_email)->subject('Thông Báo Vi Phạm Quy Định Đăng Đánh Giá');
+            $message->from($to_email, $to_name);
+        });
+        // xóa đánh giá.
         DanhGia::where('id', $id)->delete();
+        // cập nhật số sao cho sản phẩm.
+        $AVGsao['sosao'] = DanhGia::where([['id_sanpham', $DanhGia->id_sanpham], ['trangthai', '1']])->avg('sosao');
+        $AVGsao['sosao'] = round($AVGsao['sosao'], 1, PHP_ROUND_HALF_UP);
+        SanPham::where('id', $DanhGia->id_sanpham)->update($AVGsao);
+        return response()->json(['success' => 'Đã Gửi Email Thông báo']);
     }
     ///////////////////////////////////////////// locj & sắp xếp.
     public function filter(Request $request)
