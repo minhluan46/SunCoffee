@@ -19,13 +19,6 @@ Route::group(['namespace' => 'frontend'], function () {
     Route::get('/hien-san-pham/{id}', 'SanPhamController@showProduct')->name('SanPham.showProduct'); // hiện sản phẩm để thêm vào giỏ hàng.
     Route::get('/binh-luan-san-pham/{id}', 'SanPhamController@comment')->name('SanPham.comment');
     Route::get('/danh-gia-san-pham/{id}', 'SanPhamController@review')->name('SanPham.review');
-
-
-    Route::get('/san-pham-km', 'SanPhamController@showStatus')->name('SanPham.status'); // Sản phẩm khuyến mãi
-    Route::get('/san-pham-the/{the}', 'SanPhamController@showThe')->name('SanPham.the'); // Sản phẩm theo thẻ
-    Route::get('/san-pham-lsp/{lsp}', 'SanPhamController@showLsp')->name('SanPham.lsp'); // Sản phẩm theo loại sản phẩm
-    Route::get('/dialog_detail/{id}', 'SanPhamController@dialogDetail')->name('SanPham.dialog_detail'); // Sản phẩm theo loại sản phẩm
-    Route::post('/search-san-pham', 'SanPhamController@searchSanPham')->name('SanPham.search_sanpham'); // Sản phẩm theo loại sản phẩm
     // Dịch Vụ
 
     Route::get('/dich-vu', 'DichVuController@index')->name('DichVu.index');
@@ -99,6 +92,7 @@ Route::group(['namespace' => 'interactive'], function () {
             Route::get('/{id}/destroy', 'DanhGiaController@destroy')->name('danh-gia.destroy'); // Xóa đánh gia.
             Route::get('/search', 'DanhGiaController@search')->name('danh-gia.search'); // tìm.
             Route::get('/filter', 'DanhGiaController@filter')->name('danh-gia.filter'); // lọc & sắp xếp. 
+            Route::get('/review-email/{id}/{TT}', 'DanhGiaController@creviewEmail')->name('binh-luan.reviewEmail'); // gửi email phản hồi.
         });
 
         Route::post('/gui', 'DanhGiaController@create')->name('danh-gia.create'); // gửi.

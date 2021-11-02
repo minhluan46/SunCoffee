@@ -2,7 +2,7 @@
 <html lang="vi">
 
 <head>
-    <title>Sun Coffee - nội dung</title>
+    <title>Sun Coffee - Chuyên Cung Cấp Các Loại Cà Phê Đóng Gói</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {{-- demo pay pal --}}

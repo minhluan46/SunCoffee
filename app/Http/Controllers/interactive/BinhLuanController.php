@@ -249,9 +249,9 @@ class BinhLuanController extends Controller
                 'san_pham.tensanpham',
                 'san_pham.hinhanh',
             )->first();
-        if ($TimBinhLuan->email == 'SunCoffee137@gmail.com') {
-            return response()->json(['success' => 'Tự phản hồi']);
-        }
+        // if ($TimBinhLuan->email == 'SunCoffee137@gmail.com') {
+        //     return response()->json(['success' => 'Tự phản hồi']);
+        // }
         if ($TimBinhLuan->matraloi != null) {
             $viewData = [
                 'TimBinhLuan' => BinhLuan::where('binh_luan.id', '=', $id)

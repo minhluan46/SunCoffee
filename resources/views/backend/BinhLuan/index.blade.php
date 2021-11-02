@@ -220,20 +220,32 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////// Xóa bình luận góc.
         function Delete(url, id) { //hiển thị chi tiết hóa đơn.
+            alertify.success("Thành Công"); // thông báo xóa thành công trước.
+            $("#" + id).html("");
+            $("#exampleModal").modal('hide');
+            // gửi email phản hồi.
             $.ajax({
-                url: url,
-                method: 'GET',
+                url: '/binh-luan/comment-email/' + id + "/" + 2,
+                method: "GET",
                 success: function(response) {
-                    countBinhLuanCanXuLy();
-                    $("#" + id).html("");
-                    $("#exampleModal").modal('hide');
                     alertify.success(response.success);
-                    ///////////////////////// gửi email phản hồi.
+                    // xóa bình luận,
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            countBinhLuanCanXuLy();
+                        },
+                        errors: function(response) {
+                            alertify.error("Lỗi Xóa");
+                        }
+                    })
                 },
                 errors: function(response) {
-                    alertify.error("Lỗi Tải Trang");
+                    alertify.error("Lỗi Gửi email");
                 }
-            })
+            });
+
         };
         $(document).on('click', '.form-delete', function() {
             if (confirm('Xóa Bình Luận Này')) {
@@ -242,20 +254,31 @@
         });
         /////////////////////////////////////////////////////////////////////////////////////////// Xóa trả lời.
         function DeleteReply(url, id) {
+            alertify.success("Thành Công"); // thông báo xóa thành công trước.
+            $("#" + id).html("");
+            $("#exampleModal").modal('hide');
+            // gửi email phản hồi.
             $.ajax({
-                url: url,
-                method: 'GET',
+                url: '/binh-luan/comment-email/' + id + "/" + 2,
+                method: "GET",
                 success: function(response) {
-                    $("#Reply" + id).html("");
-                    $("#" + id).html("");
-                    $("#form-comment").hide();
                     alertify.success(response.success);
-                    ///////////////////////// gửi email phản hồi.
+                    // xóa bình luận,
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            countBinhLuanCanXuLy();
+                        },
+                        errors: function(response) {
+                            alertify.error("Lỗi Xóa");
+                        }
+                    })
                 },
                 errors: function(response) {
-                    alertify.error("Lỗi Tải Trang");
+                    alertify.error("Lỗi Gửi email");
                 }
-            })
+            });
         };
         $(document).on('click', '.delete-reply', function() {
             if (confirm('Xóa Trả Lời Bình Luận')) {

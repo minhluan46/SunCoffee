@@ -30,6 +30,7 @@
                                             <th scope="col" style="text-align: left">Thời Gian Đặt Hàng</th>
                                             <th scope="col">SĐT Khách Hàng</th>
                                             <th scope="col">Tên Khách Hàng</th>
+                                            <th scope="col">Thanh Toán</th>
                                             <th scope="col">Trạng Thái</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
@@ -47,32 +48,27 @@
                                                         {{ $value->tenkhachhang }}
                                                     </td>
                                                     <td>
-                                                        {{-- @if ($value->trangthai == 2)
-                                                            <span class='badge bg-primary'>Cần Xác Nhận</span>
+                                                        @if ($value->hinhthucthanhtoan != null)
+                                                            <span class='badge bg-success'> Qua {{ $value->hinhthucthanhtoan }}</span>
                                                         @else
-                                                            <span class='badge bg-danger'>Đã Đống</span>
-                                                        @endif --}}
-                                                        @if ($value->trangthai == 2)
-                                                            <span class='badge bg-primary'>Cần Xác Nhận</span>
-                                                        @elseif($value->trangthai == 4)
-                                                            <span class='badge bg-info'>Cần Xác Nhận ( đã thanh toán)</span>
-                                                        @elseif($value->trang == 5)
-                                                            <span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>
-                                                        @else
-                                                            <span class='badge bg-danger'>Đã Đóng</span>
+                                                            <span class='badge bg-warning'>Khi Nhận Hàng</span>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn mr_10 view-show">
+                                                        @if ($value->trangthai == 2)
+                                                            <span class='badge bg-primary'>Cần Xác Nhận</span>
+                                                        @else
+                                                            <span class='badge bg-danger'>Đã Đống</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 view-show">
                                                             <i class="fas fa-eye"></i></a>
 
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn mr_10 form-updatestatus-xl">
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn mr_10 form-updatestatus-xl">
                                                             <i class="fas fa-truck "></i></a>
 
-                                                        <a data-id="{{ $value->id }}" href="javascript:(0)"
-                                                            class="action_btn form-delete-xl">
+                                                        <a data-id="{{ $value->id }}" href="javascript:(0)" class="action_btn form-delete-xl">
                                                             <i class="fas fa-window-close"></i></a>
                                                     </td>
                                                 </tr>
@@ -95,8 +91,7 @@
     </div>
 @endsection
 @section('modal')
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">

@@ -85,8 +85,8 @@ class SanPhamController extends Controller
                 ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
                 ->where([ // kiểm tra chi tiết sản phảm.
                     ['chi_tiet_san_pham.trangthai', '=', 1],
-                    ['chi_tiet_san_pham.hansudung', '>=', $today],
-                    ['chi_tiet_san_pham.soluong', '>', 0],
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today],
+                    // ['chi_tiet_san_pham.soluong', '>', 0],
                 ])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->where('quy_cach.trangthai', 2)
@@ -116,7 +116,7 @@ class SanPhamController extends Controller
         ])->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
             ->select('chi_tiet_san_pham.*')
             ->orderBy('quy_cach.trangthai', 'desc')->get(); // lấy CTKM-> id SP,HSD, TT=1, SL>0 và sắp xếp giá giảm dần
-        if ($CTSP != null) {
+        if (count($CTSP) > 0) {
             foreach ($CTSP as $key => $item) { // sử dụng từng CTSP để lấy khuyến mãi được tạo trước và đang áp dụng.
                 $COKM = ChiTietSanPham::where('chi_tiet_san_pham.id', $item->id)
                     ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
@@ -150,6 +150,9 @@ class SanPhamController extends Controller
                 }
             }
         }
+        else{
+            $ArrayCTSP[] =  null;
+        } 
         $SanPham = SanPham::find($id);
         $viewData = [
             'ChiTietSanPham' => $ArrayCTSP,
@@ -250,8 +253,8 @@ class SanPhamController extends Controller
                 ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
                 ->where([ // kiểm tra chi tiết sản phảm.
                     ['chi_tiet_san_pham.trangthai', '=', 1],
-                    ['chi_tiet_san_pham.hansudung', '>=', $today],
-                    ['chi_tiet_san_pham.soluong', '>', 0],
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today],
+                    // ['chi_tiet_san_pham.soluong', '>', 0],
                 ])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->where('quy_cach.trangthai', 2)
@@ -335,8 +338,8 @@ class SanPhamController extends Controller
                 ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
                 ->where([ // kiểm tra chi tiết sản phảm.
                     ['chi_tiet_san_pham.trangthai', '=', 1],
-                    ['chi_tiet_san_pham.hansudung', '>=', $today],
-                    ['chi_tiet_san_pham.soluong', '>', 0],
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today],
+                    // ['chi_tiet_san_pham.soluong', '>', 0],
                 ])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->where('quy_cach.trangthai', 2)
@@ -419,8 +422,8 @@ class SanPhamController extends Controller
                 ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
                 ->where([ // kiểm tra chi tiết sản phảm.
                     ['chi_tiet_san_pham.trangthai', '=', 1],
-                    ['chi_tiet_san_pham.hansudung', '>=', $today],
-                    ['chi_tiet_san_pham.soluong', '>', 0],
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today],
+                    // ['chi_tiet_san_pham.soluong', '>', 0],
                 ])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->where('quy_cach.trangthai', 2)
@@ -510,8 +513,8 @@ class SanPhamController extends Controller
                 ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
                 ->where([ // kiểm tra chi tiết sản phảm.
                     ['chi_tiet_san_pham.trangthai', '=', 1],
-                    ['chi_tiet_san_pham.hansudung', '>=', $today],
-                    ['chi_tiet_san_pham.soluong', '>', 0],
+                    // ['chi_tiet_san_pham.hansudung', '>=', $today],
+                    // ['chi_tiet_san_pham.soluong', '>', 0],
                 ])
                 ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
                 ->where('quy_cach.trangthai', 2)
@@ -565,7 +568,7 @@ class SanPhamController extends Controller
         ])->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
             ->select('chi_tiet_san_pham.*')
             ->orderBy('quy_cach.trangthai', 'desc')->get(); // lấy CTKM-> id SP,HSD, TT=1, SL>0 và sắp xếp giá giảm dần
-        if ($CTSP != null) {
+        if (count($CTSP) > 0) {
             foreach ($CTSP as $key => $item) { // sử dụng từng CTSP để lấy khuyến mãi được tạo trước và đang áp dụng.
                 $COKM = ChiTietSanPham::where('chi_tiet_san_pham.id', $item->id)
                     ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
@@ -598,6 +601,8 @@ class SanPhamController extends Controller
                     $ArrayCTSP[] =  $KOKM;
                 }
             }
+        }else{
+            $ArrayCTSP[] =  null;
         }
         $SanPham = SanPham::find($id);
         $viewData = [
@@ -773,198 +778,5 @@ class SanPhamController extends Controller
             'DanhGia' => DanhGia::where([['id_sanpham', $SanPham->id], ['trangthai', '=', 1]])->orderBy('thoigian', 'desc')->paginate(10),
         ];
         return view('frontend.SanPham.review', $viewData);
-    }
-
-    // public function sale()
-    // {
-    //     $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-    //     $KhuyenMai = KhuyenMai::where([ // lấy tất cả km đang áp dụng.
-    //         ['khuyen_mai.trangthai', '!=', '0'],
-    //         ['khuyen_mai.thoigianketthuc', '>=', $today],
-    //         ['khuyen_mai.thoigianbatdau', '<=', $today],
-    //     ])
-    //         ->select(
-    //             'khuyen_mai.id',
-    //             'khuyen_mai.tenkhuyenmai',
-    //             'khuyen_mai.thoigianbatdau',
-    //             'khuyen_mai.thoigianketthuc',
-    //             'khuyen_mai.mota',
-    //         )
-    //         ->orderBy('created_at', 'asc')->get();
-    //     foreach ($KhuyenMai as $key => $item) { // tạo mảng id để sử dụng where in.
-    //         $IDKhuyenMai[] = $item->id;
-    //     }
-    //     $LoaiSanPham = LoaiSanPham::where('loai_san_pham.trangthai', '!=', 0)
-    //         ->join('san_pham', 'san_pham.id_loaisanpham', '=', 'loai_san_pham.id')
-    //         ->where('san_pham.trangthai', 1)
-    //         ->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-    //         ->where([
-    //             ['chi_tiet_san_pham.trangthai', '=', 1],
-    //             ['chi_tiet_san_pham.hansudung', '>=', $today],
-    //             ['chi_tiet_san_pham.soluong', '>', 0],
-    //         ])
-    //         ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
-    //         ->where('quy_cach.trangthai', 2)
-    //         ->select('loai_san_pham.id', 'loai_san_pham.tenloaisanpham')
-    //         ->groupBy('loai_san_pham.id', 'loai_san_pham.tenloaisanpham')
-    //         ->get();
-    //     $viewData = [
-    //         'KhuyenMai' =>  $KhuyenMai,
-    //         'LoaiSanPham' => $LoaiSanPham,
-    //         'Sale' => ChiTietKhuyenMai::whereIn('chi_tiet_khuyen_mai.id_khuyenmai', $IDKhuyenMai) // lấy thông tin sản phẩm được khuyến mãi.
-    //             ->join('chi_tiet_san_pham', 'chi_tiet_khuyen_mai.id_chitietsanpham', '=', 'chi_tiet_san_pham.id')
-    //             ->where([ // kiểm tra chi tiết sản phảm.
-    //                 ['chi_tiet_san_pham.trangthai', '=', 1],
-    //                 ['chi_tiet_san_pham.hansudung', '>=', $today],
-    //                 ['chi_tiet_san_pham.soluong', '>', 0],
-    //             ])
-    //             ->join('san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-    //             ->where('san_pham.trangthai', 1) // kiểm tra sản phẩm.
-    //             ->join('loai_san_pham', 'loai_san_pham.id', '=', 'san_pham.id_loaisanpham')
-    //             ->where('loai_san_pham.trangthai', '!=', 0) // kiểm tra loại sản phẩm.
-    //             ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')
-    //             ->select(
-    //                 'san_pham.id',
-    //                 'chi_tiet_san_pham.giasanpham',
-    //                 'quy_cach.tenquycach',
-    //                 'chi_tiet_khuyen_mai.id_chitietsanpham',
-    //                 'chi_tiet_khuyen_mai.id_khuyenmai',
-    //                 'chi_tiet_khuyen_mai.muckhuyenmai',
-    //                 'san_pham.tensanpham',
-    //                 'san_pham.hinhanh',
-    //                 'san_pham.the',
-    //             )
-    //             ->get(),
-
-    //     ];
-    //     // dd($viewData);
-    //     return view('frontend.sanpham.index', $viewData);
-    // }
-
-
-
-    public function showStatus()
-    {
-        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-
-        $viewData = [
-            'LoaiSP' => LoaiSanPham::where('trangthai', '!=', 0)->get(),
-            // 'KM' => KhuyenMai::where('thoigianketthuc','>=',$today)->get(),
-            'KM' => KhuyenMai::where([['khuyen_mai.trangthai', 1], ['khuyen_mai.thoigianbatdau', '<=', $today],])
-                ->join('chi_tiet_khuyen_mai', 'chi_tiet_khuyen_mai.id_khuyenmai', '=', 'khuyen_mai.id')
-                ->join('chi_tiet_san_pham', 'chi_tiet_san_pham.id', '=', 'chi_tiet_khuyen_mai.id_chitietsanpham')
-                ->join('quy_cach', 'quy_cach.id', '=', 'chi_tiet_san_pham.kichthuoc')->where('quy_cach.trangthai', 2)
-                ->select('khuyen_mai.id', 'khuyen_mai.tenkhuyenmai', 'khuyen_mai.thoigianbatdau', 'khuyen_mai.thoigianketthuc', 'khuyen_mai.mota', 'quy_cach.trangthai')
-                ->groupBy('khuyen_mai.id', 'khuyen_mai.tenkhuyenmai', 'khuyen_mai.thoigianbatdau', 'khuyen_mai.thoigianketthuc', 'khuyen_mai.mota', 'quy_cach.trangthai')
-                ->having('trangthai', 2)->get(),
-            // 'CaPheKM' => SanPham::where('san_pham.trangthai',1)->join('chi_tiet_san_pham','san_pham.id','=','chi_tiet_san_pham.id_sanpham')->where(
-            //     'chi_tiet_san_pham.hansudung', '>=', $today // kiểm tra còn hạng sử dụng hay không.
-            // )->join('quy_cach','chi_tiet_san_pham.kichthuoc','=','quy_cach.id')->join('chi_tiet_khuyen_mai','chi_tiet_san_pham.id','=','chi_tiet_khuyen_mai.id_chitietsanpham')->join('khuyen_mai','chi_tiet_khuyen_mai.id_khuyenmai','=','khuyen_mai.id')->where('khuyen_mai.thoigianketthuc','>=',$today)->get(),
-            'CaPheKM' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')
-                ->where('chi_tiet_san_pham.hansudung', '>=', $today) // kiểm tra còn hạng sử dụng hay không.
-                ->join('quy_cach', 'chi_tiet_san_pham.kichthuoc', '=', 'quy_cach.id')
-                ->where('quy_cach.trangthai', 2)
-                ->join('chi_tiet_khuyen_mai', 'chi_tiet_san_pham.id', '=', 'chi_tiet_khuyen_mai.id_chitietsanpham')
-                ->join('khuyen_mai', 'chi_tiet_khuyen_mai.id_khuyenmai', '=', 'khuyen_mai.id')
-                ->where([
-                    ['khuyen_mai.trangthai', '!=', '0'],
-                    ['khuyen_mai.thoigianketthuc', '>=', $today],
-                    ['khuyen_mai.thoigianbatdau', '<=', $today],
-                ])->get(),
-
-        ];
-
-
-        return view('frontend.sanpham.sp_km', $viewData);
-    }
-
-    public function showThe($the)
-    {
-        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-
-        $viewData = [
-            'LoaiSP' => LoaiSanPham::where('trangthai', '!=', 0)->get(),
-            'the' => $the,
-            'SPQC' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')->where(
-                'chi_tiet_san_pham.hansudung',
-                '>=',
-                $today // kiểm tra còn hạng sử dụng hay không.
-            )->join('quy_cach', 'chi_tiet_san_pham.kichthuoc', '=', 'quy_cach.id')->select(
-                'chi_tiet_san_pham.*',
-                'quy_cach.tenquycach',
-            )->orderBy('giasanpham', 'desc')->get(),
-
-            'sp_the' => SanPham::where('trangthai', 1)->where('the', $the)->get(),
-            'KM' => KhuyenMai::where('thoigianketthuc', '>=', $today)->get(),
-            'CaPheKM' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')->where(
-                'chi_tiet_san_pham.hansudung',
-                '>=',
-                $today // kiểm tra còn hạng sử dụng hay không.
-            )->join('chi_tiet_khuyen_mai', 'chi_tiet_san_pham.id', '=', 'chi_tiet_khuyen_mai.id_chitietsanpham')->join('khuyen_mai', 'chi_tiet_khuyen_mai.id_khuyenmai', '=', 'khuyen_mai.id')->where('khuyen_mai.thoigianketthuc', '>=', $today)->get(),
-
-        ];
-
-
-        return view('frontend.sanpham.sp_the', $viewData);
-    }
-
-    public function searchSanPham(Request $request)
-    {
-        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-
-        $keyword = $request->keyword;
-        $s = SanPham::where([
-            ['tensanpham', 'like', '%' . $keyword . '%'],
-            ['trangthai', 1],
-        ])->orderBy('created_at', 'desc')->get();
-        $c = ChiTietSanPham::where([['soluong', '>', 0], ['trangthai', 1]])->get();
-        $viewData = [
-            'LoaiSP' => LoaiSanPham::where('trangthai', '!=', 0)->get(),
-            'Search' => SanPham::where([
-                ['tensanpham', 'like', '%' . $keyword . '%'],
-                ['trangthai', 1],
-            ])->orderBy('created_at', 'desc')->get(),
-            'keyword' => $keyword,
-            'SPQC' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')->where(
-                'chi_tiet_san_pham.hansudung',
-                '>=',
-                $today // kiểm tra còn hạng sử dụng hay không.
-            )->join('quy_cach', 'chi_tiet_san_pham.kichthuoc', '=', 'quy_cach.id')->select(
-                'chi_tiet_san_pham.*',
-                'quy_cach.tenquycach',
-            )->orderBy('giasanpham', 'desc')->get(),
-        ];
-        return view('frontend.SanPham.sp_search', $viewData);
-    }
-
-    public function showLsp($lsp)
-    {
-        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d'); // lấy ngày hiện tại.
-        $cate = SanPham::where('trangthai', 1)->where('id_loaisanpham', $lsp)->get();
-        $the = LoaiSanPham::where('id', $lsp)->first();
-        $viewData = [
-
-            'LoaiSP' => LoaiSanPham::where('trangthai', '!=', 0)->get(),
-            'the' => $the,
-            'sp_loai' => $cate,
-            'SPQC' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')->where(
-                'chi_tiet_san_pham.hansudung',
-                '>=',
-                $today // kiểm tra còn hạng sử dụng hay không.
-            )->join('quy_cach', 'chi_tiet_san_pham.kichthuoc', '=', 'quy_cach.id')->select(
-                'chi_tiet_san_pham.*',
-                'quy_cach.tenquycach',
-            )->orderBy('giasanpham', 'desc')->get(),
-            'KM' => KhuyenMai::where('thoigianketthuc', '>=', $today)->get(),
-            'CaPheKM' => SanPham::where('san_pham.trangthai', 1)->join('chi_tiet_san_pham', 'san_pham.id', '=', 'chi_tiet_san_pham.id_sanpham')->where(
-                'chi_tiet_san_pham.hansudung',
-                '>=',
-                $today // kiểm tra còn hạng sử dụng hay không.
-            )->join('chi_tiet_khuyen_mai', 'chi_tiet_san_pham.id', '=', 'chi_tiet_khuyen_mai.id_chitietsanpham')->join('khuyen_mai', 'chi_tiet_khuyen_mai.id_khuyenmai', '=', 'khuyen_mai.id')->where('khuyen_mai.thoigianketthuc', '>=', $today)->get(),
-
-        ];
-
-
-        return view('frontend.sanpham.sp_lsp', $viewData);
     }
 }

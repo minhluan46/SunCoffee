@@ -57,9 +57,7 @@ class ThongKeController extends Controller
 
     public function statsForThisMonth() //thống kê trong khoản thời gian.
     {
-        $form30daysago = Carbon::now('Asia/Ho_Chi_Minh')->subDays(9)->toDateString();
-        $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
-        $ThongKe = ThongKe::whereBetween('thoigian', [$form30daysago, $now])->orderBy('thoigian', 'asc')->get();
+        $ThongKe = ThongKe::orderBy('thoigian', 'desc')->take(6)->get();
         foreach ($ThongKe as $key => $value) {
             $date = date_create($value->thoigian);
             $chart_data[] = array(

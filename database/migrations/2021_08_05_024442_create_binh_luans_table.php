@@ -19,7 +19,6 @@ class CreateBinhLuansTable extends Migration
             $table->boolean('gioitinh');
             $table->text('noidung');
             $table->char('email', 100);
-            $table->char('sdt', 10)->nullable();
             $table->char('id_sanpham', 18);
             $table->dateTime('thoigian');
             $table->char('matraloi', 18)->nullable();

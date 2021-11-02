@@ -126,7 +126,6 @@ class HoaDonController extends Controller
         .table th,.table td {text-align: right;}
         .table tbody tr th {font-size: 20px;}
         .table th,.table td {text-align: right;}
-        td.discount {text-decoration: line-through;}
         .total {width: 100%;}
         .total td {text-align: right;font-size: 21px;}
         .money td {font-weight: bolder;}
@@ -171,19 +170,18 @@ class HoaDonController extends Controller
             <thead>
                 <tr>
                     <th>SL</th>
-                    <th colspan='2'>Giá bán</th>
-                    <th>T.Tiền</th>
+                    <th>Giảm Giá</th>
+                    <th>Giá bán</th>
+                    <th>Thành Tiền</th>
                 </tr>
             </thead>
             <tbody>";
         foreach ($ChiTietHoaDon as $HD) {
 
             if ($HD->giamgia != 0) { // nếu có giảm giá.
-                $CG = number_format($HD->giasanpham, 0, ',', '.');
-                $KCG = number_format($HD->giasanpham - $HD->giamgia, 0, ',', '.');
+                $GG = number_format(($HD->giamgia), 0, ',', '.');
             } else { // không có giảm giá.
-                $CG =  "";
-                $KCG = number_format($HD->giasanpham, 0, ',', '.');
+                $GG =  "";
             }
 
             $output .= "<tr>
@@ -191,8 +189,8 @@ class HoaDonController extends Controller
                     </tr>
                     <tr>
                         <td>" . number_format($HD->soluong, 0, ',', '.') . "</td>
-                        <td class='discount '>" . $CG . "</td>
-                        <td>" . $KCG . "</td>
+                        <td>" . $GG . "</td>
+                        <td>" . number_format($HD->giasanpham, 0, ',', '.') . "</td>
                         <td>" . number_format($HD->tonggia, 0, ',', '.') . "</td>
                     </tr>";
         }
@@ -276,42 +274,19 @@ class HoaDonController extends Controller
     }
     public function updateStatus(Request $request, $id)
     {
-
         $HoaDon = HoaDon::find($id);
         $KhachHang = KhachHang::find($HoaDon->id_khachhang);
         $NhanVien = NhanVien::find($HoaDon->id_nhanvien);
-        // if ($HoaDon->trangthai == 1) {
-        //     $data['trangthai'] = 0;
-        // } elseif ($HoaDon->trangthai == 2) {
-        //     $data['trangthai'] = 1;
-        // } else {
-        //     $data['trangthai'] = 1;
-        // }
         if ($HoaDon->trangthai == 1) {
             $data['trangthai'] = 0;
-        } else if ($HoaDon->trangthai == 2) {
+        } elseif ($HoaDon->trangthai == 2) {
             $data['trangthai'] = 1;
-        }else if($HoaDon->trangthai == 4){
-            $data['trangthai'] = 5;// Trang thái hoàn thành (đã thành toán)
-        }else if($HoaDon->trangthai == 5){
-            $data['trangthai'] = 6;// Trang thái đóng (đã thành toán)
-        }else if($HoaDon->trangthai == 6){
-            $data['trangthai'] = 5;// Trang thái hoàn thành (đã thành toán)
         } else {
             $data['trangthai'] = 1;
         }
         HoaDon::where('id', $id)->update($data);
-        // if ($data['trangthai'] == 1) {
-        //     $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
-        // } else {
-        //     $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
-        // }
         if ($data['trangthai'] == 1) {
             $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
-        }elseif($data['trangthai'] == 5){ // Trang thái hoàn thành (đã thành toán)
-            $trangthai =  "<span class='badge bg-success'>Hoàn Thành (đã thanh toán)</span>";
-        }elseif($data['trangthai'] == 6) { // Trang thái đóng (đã thành toán)
-            $trangthai ="<span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>";
         } else {
             $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
@@ -636,9 +611,7 @@ class HoaDonController extends Controller
     public function  handleDelivery() // trang xác nhận hóa đơn.
     {
         $viewData = [
-            // 'HoaDon' => HoaDon::where('trangthai', 2)->orderBy('created_at', 'asc')->paginate(10),
-            'HoaDon' => HoaDon::where('trangthai', 2)->orWhere('trangthai', 4)->orderBy('created_at', 'asc')->paginate(10),
-
+            'HoaDon' => HoaDon::where('trangthai', 2)->orderBy('created_at', 'asc')->paginate(10),
             'KhachHang' => KhachHang::all(),
         ];
         return view('backend.HoaDon.handleDelivery', $viewData);
@@ -646,9 +619,7 @@ class HoaDonController extends Controller
 
     public function countHandleDelivery() // lấy số lượng hóa đơn cần được xác nhận.
     {
-        // $HoaDon = HoaDon::where('trangthai', 2)->count();
-        $HoaDon = HoaDon::where('trangthai', 2)->orWhere('trangthai', 4)->count();
-
+        $HoaDon = HoaDon::where('trangthai', 2)->count();
         echo $HoaDon;
     }
 
@@ -710,43 +681,29 @@ class HoaDonController extends Controller
             ThongKe::create($data4);
         }
         /////////////////////////////////////////////////////////////////////////////////////////// cập nhật trạng thái.
-        // if ($HoaDon->trangthai == 1) {
-        //     $data['trangthai'] = 0;
-        // } elseif ($HoaDon->trangthai == 2) {
-        //     $data['trangthai'] = 1;
-        // } else {
-        //     $data['trangthai'] = 1;
-        // }
-        // HoaDon::where('id', $id)->update($data);
-        // if ($data['trangthai'] == 1) {
-        //     $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
-        // } else {
-        //     $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
-        // }
         if ($HoaDon->trangthai == 1) {
             $data['trangthai'] = 0;
         } elseif ($HoaDon->trangthai == 2) {
             $data['trangthai'] = 1;
-
-        } elseif ($HoaDon->trangthai == 4){
-            $data['trangthai'] = 5;
         } else {
             $data['trangthai'] = 1;
         }
         HoaDon::where('id', $id)->update($data);
         if ($data['trangthai'] == 1) {
             $trangthai =  "<span class='badge bg-success'>Hoàn Thành</span>";
-        }elseif($data['trangthai'] == 5){
-            $trangthai =  "<span class='badge bg-success'>Hoàn Thành (đã thanh toán)</span>";
-        }elseif($data['trangthai'] == 6){
-            $trangthai =  "<span class='badge bg-danger'>Đã Đóng (đã thanh toán)</span>";
         } else {
             $trangthai =  "<span class='badge bg-danger'>Đã Đóng</span>";
         }
+        if ($HoaDon->hinhthucthanhtoan != null) {
+            $hinhthucthanhtoan =  "<span class='badge bg-success'> Qua " . $HoaDon->hinhthucthanhtoan . "</span>";
+        } else {
+            $hinhthucthanhtoan =  "<span class='badge bg-warning'>Khi Nhận Hàng</span>";
+        }
         $output = "
-            <td style='text-align: left'>" . $HoaDon->ngaylap . "</td>
+            <td style='text-align: left'>" . Date_format(Date_create($HoaDon->thoigian), 'd/m/Y H:i:s')  . "</td>
             <td>" . $HoaDon->sdtkhachhang . "</td>
-            <td>" . $KhachHang->tenkhachhang . "</td>
+            <td>" . $HoaDon->tenkhachhang . "</td>
+            <td>" . $hinhthucthanhtoan . "</td>
             <td>" . $trangthai . "
             </td>
             <td>

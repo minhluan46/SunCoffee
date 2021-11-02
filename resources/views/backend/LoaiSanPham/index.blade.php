@@ -351,7 +351,7 @@
                 },
                 success: function(response) {
                     $('#modal-body1').html(response);
-                    $("#exampleModalLabel").text("Thêm Chi Tiết Sản Phẩm");
+                    $("#exampleModalLabel").text("Thêm Quy Cách");
                     $("#exampleModal").modal('show');
                     StoreQC();
                 },

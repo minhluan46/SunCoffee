@@ -29,7 +29,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">Họ Tên<b style="color:red"> *</b></label>
-                                        <input autocomplete="off" type="text" name="hoten" id="hoten"
+                                        <input type="text" name="hoten" id="hoten"
                                             class="form-control form-control-info" required>
                                     </div>
                                 </div>
@@ -43,14 +43,14 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">email<b style="color:red"> *</b></label>
-                                        <input autocomplete="off" name="email" id="email" type="email"
+                                        <input name="email" id="email" type="email"
                                             class="form-control form-control-info" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="firstname">Địa Chỉ<b style="color:red"> *</b></label>
-                                        <input autocomplete="off" type="text" name="diachi" id="diachi"
+                                        <input type="text" name="diachi" id="diachi"
                                             class="form-control form-control-info" required>
                                     </div>
                                 </div>

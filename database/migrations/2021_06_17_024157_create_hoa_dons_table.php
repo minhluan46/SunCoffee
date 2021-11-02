@@ -27,6 +27,7 @@ class CreateHoaDonsTable extends Migration
             $table->text('ghichukhachhang')->nullable();
             $table->char('id_khachhang', 18);
             $table->char('id_nhanvien', 18);
+            $table->char('hinhthucthanhtoan', 10)->nullable();
             $table->tinyInteger('trangthai');
             $table->timestamps();
 

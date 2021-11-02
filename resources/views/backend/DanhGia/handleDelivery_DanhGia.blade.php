@@ -117,13 +117,14 @@
         });
         ///////////////////////////////////////// duyệt đánh giá.
         function approval(url, id) {
+            alertify.success("Đã duyệt");
+            $('#' + id).html('');
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function(response) {
                     countDanhGiaCanXuLy();
-                    $('#' + id).html('');
-                    alertify.success("Đã duyệt");
+                    alertify.success(response.success);
                 },
                 errors: function(response) {
                     alertify.error("Lỗi Duyệt Đánh Giá");
@@ -137,13 +138,14 @@
         });
         ///////////////////////////////////////// Xóa đánh giá.
         function Delete(url, id) {
+            alertify.success("Đã Xóa Đánh Giá");
+            $("#" + id).html("");
             $.ajax({
                 url: url,
                 method: 'GET',
                 success: function(response) {
                     countDanhGiaCanXuLy();
-                    $("#" + id).html("");
-                    alertify.success("Đã Xóa Đánh Giá");
+                    alertify.success(response.success);
                 },
                 errors: function(response) {
                     alertify.error("Lỗi Xóa Đánh Giá");
