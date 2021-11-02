@@ -389,6 +389,7 @@
             $('#update-all').on('click', function() { // cập nhật số lượng sản phẩm.
                 if (confirm("Cập Nhật Số Lượng")) {
                     var lists = [];
+                    var test = 1;
                     $('#value-update-all tr td').each(function() {
                         $(this).find('input').each(function() {
                             var element = {
@@ -396,22 +397,30 @@
                                 sl: $(this).val()
                             };
                             lists.push(element);
+                            if ($(this).val() < 1) {
+                                test = 0;
+                            }
                         });
                     });
-                    $.ajax({
-                        url: "quantityChange",
-                        method: "GET",
-                        data: {
-                            data: lists,
-                        },
-                        success: function(response) {
-                            LoadTotal(response);
-                            alertify.success("Đã Cập Nhật Giỏ Hàng");
-                        },
-                        error: function(response) {
-                            alertify.error("Không Thể Cập Nhật");
-                        }
-                    });
+                    if (test == 0) {
+                        alertify.error('Số lượng không được nhỏ hơn 1');
+                    }
+                    if (test == 1) {
+                        $.ajax({
+                            url: "quantityChange",
+                            method: "GET",
+                            data: {
+                                data: lists,
+                            },
+                            success: function(response) {
+                                LoadTotal(response);
+                                alertify.success("Đã Cập Nhật Giỏ Hàng");
+                            },
+                            error: function(response) {
+                                alertify.error("Không Thể Cập Nhật");
+                            }
+                        });
+                    }
                 }
             });
         }

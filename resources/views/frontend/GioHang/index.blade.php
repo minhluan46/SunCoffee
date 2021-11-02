@@ -170,6 +170,7 @@
         $('.update-all').on('click', function() { // cập nhật số lượng sản phẩm.
             if (confirm("Cập Nhật Số Lượng")) {
                 var lists = [];
+                var test = 1;
                 $('table tbody tr td').each(function() {
                     $(this).find('input').each(function() {
                         var element = {
@@ -177,19 +178,27 @@
                             sl: $(this).val()
                         };
                         lists.push(element);
+                        if ($(this).val() < 1) {
+                            test = 0;
+                        }
                     });
                 });
-                $.ajax({
-                    url: "/cap-nhat-so-luong",
-                    method: "POST",
-                    data: {
-                        _token: $("input[name='_token']").val(),
-                        data: lists,
-                    },
-                    success: function(response) {
-                        location.reload();
-                    }
-                });
+                if (test == 0) {
+                    alertify.error('Số lượng không được nhỏ hơn 1');
+                }
+                if (test == 1) {
+                    $.ajax({
+                        url: "/cap-nhat-so-luong",
+                        method: "POST",
+                        data: {
+                            _token: $("input[name='_token']").val(),
+                            data: lists,
+                        },
+                        success: function(response) {
+                            location.reload();
+                        }
+                    });
+                }
             }
         });
     </script>

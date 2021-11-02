@@ -110,7 +110,8 @@
                                                 @elseif($item->the == 'MỚI')
                                                     <samp class="tag_moi">{{ $item->the }}</samp>
                                                 @endif
-                                                <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
+                                                <a href="{{ route('SanPham.show', $item->id) }}" class="img"
+                                                    style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
                                                 <div class="text text-center pt-2">
                                                     <h3 class="a-name"><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                                     <p class="price">
@@ -151,7 +152,8 @@
                                                 @elseif($item->the == 'MỚI')
                                                     <samp class="tag_moi">{{ $item->the }}</samp>
                                                 @endif
-                                                <a href="{{ route('SanPham.show', $item->id) }}" class="img" style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
+                                                <a href="{{ route('SanPham.show', $item->id) }}" class="img"
+                                                    style="background-image: url({{ asset('uploads/SanPham/' . $item->hinhanh) }});"></a>
                                                 <div class="text text-center pt-2">
                                                     <h3 class="a-name"><a href="{{ route('SanPham.show', $item->id) }}">{{ $item->tensanpham }}</a></h3>
                                                     <p class="price">
@@ -356,25 +358,31 @@
             $('#themvao').on('click', function(e) {
                 $("#exampleModal").modal('hide');
                 e.preventDefault(); // dừng  sự kiện submit.
-                $.ajax({
-                    url: '/them-vao-gio',
-                    method: 'POST',
-                    data: {
-                        _token: $("input[name='_token']").val(),
-                        quantity: $("input[name='quantity']").val(),
-                        id_product_details: $("input[name='id_product_details']").val(),
-                    },
-                    // cart-quantity
-                    success: function(response) {
-                        $("#dataproduct").html(response);
-                        $('#cart-quantity').text($('#soluongsanpham').val());
-                        alertify.message($('#noidungthongbao').val());
-                    },
-                    error: function(response) {
-                        alertify.error("Lỗi Thêm Vào Giỏ Hàng");
-                    }
-                })
-            })
+                var quantity = $("input[name='quantity']").val();
+                if (quantity < 1) {
+                    alertify.error("Số lượng không được nhỏ hơn 1");
+                };
+                if (quantity > 0) {
+                    $.ajax({
+                        url: '/them-vao-gio',
+                        method: 'POST',
+                        data: {
+                            _token: $("input[name='_token']").val(),
+                            quantity: $("input[name='quantity']").val(),
+                            id_product_details: $("input[name='id_product_details']").val(),
+                        },
+                        // cart-quantity
+                        success: function(response) {
+                            $("#dataproduct").html(response);
+                            $('#cart-quantity').text($('#soluongsanpham').val());
+                            alertify.message($('#noidungthongbao').val());
+                        },
+                        error: function(response) {
+                            alertify.error("Lỗi Thêm Vào Giỏ Hàng");
+                        }
+                    });
+                };
+            });
         }
     </script>
 @endsection
