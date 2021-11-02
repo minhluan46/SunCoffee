@@ -27,54 +27,60 @@
                     </div>
                     <div class="col-lg-6 product-details product-details-2 pl-md-5 ftco-animate">
                         <h3>{{ $SanPham->tensanpham }}</h3>
-                        <p class="price"><span>
-                                @isset($ChiTietSanPham)
-                                    @if ($ChiTietSanPham[0]->muckhuyenmai != null)
-                                        <span
-                                            style="text-decoration: line-through;">{{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>{{ ' - ' . $ChiTietSanPham[0]->tenquycach }}<br>
-                                        {{ number_format($ChiTietSanPham[0]->giasanpham * (1 - $ChiTietSanPham[0]->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ  (-' . $ChiTietSanPham[0]->muckhuyenmai . '%)' }}
-                                    @else
-                                        {{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ - ' . $ChiTietSanPham[0]->tenquycach }}
-                                    @endif
-                                @endisset
-                            </span></p>
-                        <p>{{ $SanPham->mota }}</p>
-                        <div class="row mt-4">
-                            <div class="row row-left">
-                                @isset($ChiTietSanPham)
-                                    @foreach ($ChiTietSanPham as $stt => $item)
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class="radio">
-                                                    <label><input type="radio" class="optradio" name="optradio" class="mr-2" {{ $stt == 0 ? 'checked' : '' }} value="{{ $item->id }}">
-                                                        {{-- {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ  (' . $item->tenquycach . ')' }} --}}
-                                                        @if ($item->muckhuyenmai != null)
-                                                            {{ number_format($item->giasanpham * (1 - $item->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ - ' . $item->tenquycach . ' (-' . $item->muckhuyenmai . '%)' }}
-                                                        @else
-                                                            {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ - ' . $item->tenquycach }}
-                                                        @endif
-                                                    </label>
+                        @if ($ChiTietSanPham[0] == null)
+                            <p>{{ $SanPham->mota }}</p>
+                            <h2 style="color: red">Sản phẩm này đã bán hết</h2>
+                        @else
+                            <p class="price"><span>
+                                    @isset($ChiTietSanPham)
+                                        @if ($ChiTietSanPham[0]->muckhuyenmai != null)
+                                            <span
+                                                style="text-decoration: line-through;">{{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ' }}</span>{{ ' - ' . $ChiTietSanPham[0]->tenquycach }}<br>
+                                            {{ number_format($ChiTietSanPham[0]->giasanpham * (1 - $ChiTietSanPham[0]->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ  (-' . $ChiTietSanPham[0]->muckhuyenmai . '%)' }}
+                                        @else
+                                            {{ number_format($ChiTietSanPham[0]->giasanpham, 0, ',', '.') . ' VNĐ - ' . $ChiTietSanPham[0]->tenquycach }}
+                                        @endif
+                                    @endisset
+                                </span></p>
+                            <p>{{ $SanPham->mota }}</p>
+                            <div class="row mt-4">
+                                <div class="row row-left">
+                                    @isset($ChiTietSanPham)
+                                        @foreach ($ChiTietSanPham as $stt => $item)
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="radio">
+                                                        <label><input type="radio" class="optradio" name="optradio" class="mr-2" {{ $stt == 0 ? 'checked' : '' }} value="{{ $item->id }}">
+                                                            {{-- {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ  (' . $item->tenquycach . ')' }} --}}
+                                                            @if ($item->muckhuyenmai != null)
+                                                                {{ number_format($item->giasanpham * (1 - $item->muckhuyenmai / 100), 0, ',', '.') . ' VNĐ - ' . $item->tenquycach . ' (-' . $item->muckhuyenmai . '%)' }}
+                                                            @else
+                                                                {{ number_format($item->giasanpham, 0, ',', '.') . ' VNĐ - ' . $item->tenquycach }}
+                                                            @endif
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                @endisset
-                            </div>
-                            {{--  --}}
-                            <div class="w-100"></div>
-                            <form method="POST" action="{{ route('GioHang.addCartOnline') }}">
-                                @csrf
-                                <div class="col-md-6 d-flex mb-3">
-                                    <input type="number" id="quantity" name="quantity" class="form-control input-number input240w " value="1" min="1">
-                                </div>
-                                <div class="col-md-6 d-flex mb-3">
-                                    @isset($ChiTietSanPham)
-                                        <input type="text" name="id_product_details" id="id_product_details" value="{{ $ChiTietSanPham[0]->id }}" hidden>
-                                        <input type="submit" value="Thêm Vào Giỏ Hàng" class="btn btn-primary py-3 px-5">
+                                        @endforeach
                                     @endisset
                                 </div>
-                            </form>
-                        </div>
+                                {{--  --}}
+                                <div class="w-100"></div>
+                                <form method="POST" action="{{ route('GioHang.addCartOnline') }}">
+                                    @csrf
+                                    <div class="col-md-6 d-flex mb-3">
+                                        <input type="number" id="quantity" name="quantity" class="form-control input-number input240w " value="1" min="1">
+                                    </div>
+                                    <div class="col-md-6 d-flex mb-3">
+                                        @isset($ChiTietSanPham)
+                                            <input type="text" name="id_product_details" id="id_product_details" value="{{ $ChiTietSanPham[0]->id }}" hidden>
+                                            <input type="submit" value="Thêm Vào Giỏ Hàng" class="btn btn-primary py-3 px-5">
+                                        @endisset
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+
                     </div>
                 @endisset
             </div>
@@ -95,8 +101,8 @@
                             <div class="list-star">
                                 @for ($i = 0; $i < 5; $i++)
                                     @if ($SanPham->sosao - $i >= 1) <i class="fas fa-star"></i>
-                                @elseif (($SanPham->sosao - $i) >= 0.5)<i class="fas fa-star-half-alt"></i>
-                                @else <i class="far fa-star"></i> @endif
+                                    @elseif (($SanPham->sosao - $i) >= 0.5)<i class="fas fa-star-half-alt"></i>
+                                    @else <i class="far fa-star"></i> @endif
                                 @endfor
                             </div>
                         @endisset
@@ -117,7 +123,7 @@
                                     <div class="review-star">
                                         @for ($i = 0; $i < 5; $i++)
                                             @if ($DanhGia[0]->sosao - $i >= 1) <i class="fas fa-star"></i>
-                                        @else <i class="far fa-star"></i> @endif
+                                            @else <i class="far fa-star"></i> @endif
                                         @endfor
                                         <samp class="review-time">{{ date_format(date_create($DanhGia[0]->thoigian), 'd/m/Y H:i:s') }}</samp>
                                     </div>
@@ -133,7 +139,7 @@
                                     <div class="review-star">
                                         @for ($i = 0; $i < 5; $i++)
                                             @if ($DanhGia[1]->sosao - $i >= 1) <i class="fas fa-star"></i>
-                                        @else <i class="far fa-star"></i> @endif
+                                            @else <i class="far fa-star"></i> @endif
                                         @endfor
                                         <samp class="review-time">{{ date_format(date_create($DanhGia[1]->thoigian), 'd/m/Y H:i:s') }}</samp>
                                     </div>
@@ -159,7 +165,7 @@
                 <div class="col-md-7 heading-section ftco-animate text-center">
                     <span class="subheading">Khám Phá</span>
                     <h2 class="mb-4">Những sản phẩm liên quan</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p>Cà phê là thức uống quen thuộc mỗi buổi sáng giúp tôi có thể cảm nhận được cả thế giới chuyển động trong cơ thể.</p>
                 </div>
             </div>
             <div class="productnew-slider owl-carousel">

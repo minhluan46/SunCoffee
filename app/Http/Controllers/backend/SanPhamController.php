@@ -252,20 +252,7 @@ class SanPhamController extends Controller
         $data['ngaysanxuat'] = $request->ngaysanxuat;
         $data['hansudung'] = $request->hansudung;
         $data['id_sanpham'] = $request->id_sanpham;
-        $OldChiTietSanPham = ChiTietSanPham::find($id);
-        if ($OldChiTietSanPham->trangthai == 0) {
-            if ($request->trangthai == "1") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        } else {
-            if ($request->trangthai == "2") {
-                $data['trangthai'] = 1;
-            } else {
-                $data['trangthai'] = 0;
-            }
-        }
+        $data['trangthai'] = $request->trangthai;
         ChiTietSanPham::where('id', $id)->update($data);
         $KTChiTietSanPham = ChiTietSanPham::where('chi_tiet_san_pham.id', $id)
             ->join('san_pham', 'san_pham.id', 'chi_tiet_san_pham.id_sanpham')

@@ -150,7 +150,7 @@
                 <div class="col-md-7 heading-section ftco-animate text-center">
                     <span class="subheading">Khám Phá</span>
                     <h2 class="mb-4">Những sản phẩm liên quan</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p>Cà phê là thức uống quen thuộc mỗi buổi sáng giúp tôi có thể cảm nhận được cả thế giới chuyển động trong cơ thể.</p>
                 </div>
             </div>
             <div class="productnew-slider owl-carousel">

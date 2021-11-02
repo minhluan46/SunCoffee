@@ -85,6 +85,7 @@
     @endif
 
     <p style="margin: 15px 0px 35px 0px;">Thành tiền: {{ number_format($HoaDon->thanhtien, 0, ',', '.') }} VNĐ</p>
+    <p style="margin: 7px 0px;">@if ($HoaDon->hinhthucthanhtoan != null)Đã thanh toán qua {{$HoaDon->hinhthucthanhtoan}}@endif</p>
     <p style="margin: 7px 0px;">Chân thành xin lỗi,</p>
     <p style="margin: 7px 0px;">Sun Coffee.</p>
 </body>

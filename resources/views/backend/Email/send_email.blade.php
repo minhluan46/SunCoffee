@@ -78,6 +78,7 @@
         </p>
     @endif
     <p style="margin: 7px 0px;">Thành tiền: {{ number_format($HoaDon->thanhtien, 0, ',', '.') }} VNĐ</p>
+    <p style="margin: 7px 0px;">@if ($HoaDon->hinhthucthanhtoan != null)Đã thanh toán qua {{$HoaDon->hinhthucthanhtoan}}@endif</p>
     @if ($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien != 0)
         <p style="margin: 15px 0px 35px 0px;">Với hóa đơn này bạn được cộng {{ number_format($HoaDon->diemtichluy, 0, ',', '.') }} điểm tích lũy.
             Tổng điểm tích lũy của bạn là {{ number_format($KhachHang->diemtichluy, 0, ',', '.') }} điểm

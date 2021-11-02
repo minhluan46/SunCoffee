@@ -1,6 +1,6 @@
 @if (isset($HoaDon))
     <div class="row">
-        <div class="col-4 col-sm-4">
+        <div class="col-5 col-sm-5">
             <h4><b>Mã: </b> <span>({{ $HoaDon->id }})</span></h4>
             <h4><b>Ngày Lập: </b> <span>{{ Date_format(Date_create($HoaDon->ngaylap), 'd/m/Y H:i:s') }}</span></h4>
             <h4><b>Người Lập: </b> <span>{{ $NhanVien->tennhanvien }}</span></h4>
@@ -8,12 +8,26 @@
             <h4><b>Giảm Giá: </b> <span>{{ number_format($HoaDon->giamgia, 0, ',', '.') }} VNĐ</span></h4>
             @if ($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien != 0)
                 <h4><b>Giảm Giá Thành Viên: </b>
-                    <span>{{ number_format($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien, 0, ',', '.') }}
-                        VNĐ</span></h4>
+                    <span>{{ number_format($HoaDon->tongtienhoadon - $HoaDon->giamgia - $HoaDon->thanhtien, 0, ',', '.') }} VNĐ</span>
+                </h4>
             @endif
             <h4><b>Thành Tiền: </b> <span>{{ number_format($HoaDon->thanhtien, 0, ',', '.') }} VNĐ</span></h4>
+            <h4><b>Hình Thức Thanh Toán: </b> <span>
+                    @if ($HoaDon->hinhthucthanhtoan != null)
+                        Qua {{ $HoaDon->hinhthucthanhtoan }}
+                    @else
+                        Trực Tiếp
+                    @endif
+                </span></h4>
+        </div>
+        <div class="col-7 col-sm-7">
+            <h4><b>Khách Hàng: </b> <span>{{ $HoaDon->tenkhachhang }}</span></h4>
+            <h4><b>Email: </b> <span>{{ $HoaDon->emailkhachhang }}</span></h4>
+            <h4><b>SĐT Khách Hàng: </b> <span>{{ $HoaDon->sdtkhachhang }}</span></h4>
+            <h4><b>Địa Chỉ Khách Hàng: </b> <span>{{ $HoaDon->diachikhachhang }}</span></h4>
+            <h4><b>Điểm Tích Lũy: </b> <span>{{ number_format($HoaDon->diemtichluy, 0, ',', '.') }} Điểm</span></h4>
             <h4><b>Trạng Thái: </b>
-                {{-- @if ($HoaDon->trangthai == 3)
+                @if ($HoaDon->trangthai == 3)
                     <span>Đã Hủy</span>
                 @elseif($HoaDon->trangthai == 2)
                     <span>Cần Xác Nhận</span>
@@ -21,29 +35,8 @@
                     <span>Hoàn Thành</span>
                 @else
                     <span>Đã Đống</span>
-                @endif --}}
-                @if ($HoaDon->trangthai == 2)
-                    <span>Cần Xác Nhận</span>
-                @elseif($HoaDon->trangthai == 1)
-                    <span>Hoàn Thành</span>
-                @elseif($HoaDon->trangthai == 4)
-                    <span>Cần Xác Nhận ( đã thanh toán)</span>
-                @elseif($HoaDon->trangthai == 5)
-                    <span>Hoàn Thành ( đã thanh toán)</span>
-                @elseif($HoaDon->trangthai == 6)
-                    <span>Đã Đóng ( đã thanh toán)</span>
-                @else
-                    <span>Đã Đóng</span>
                 @endif
-                </span>
             </h4>
-        </div>
-        <div class="col-8 col-sm-8">
-            <h4><b>Khách Hàng: </b> <span>{{ $HoaDon->tenkhachhang }}</span></h4>
-            <h4><b>Email: </b> <span>{{ $HoaDon->emailkhachhang }}</span></h4>
-            <h4><b>SĐT Khách Hàng: </b> <span>{{ $HoaDon->sdtkhachhang }}</span></h4>
-            <h4><b>Địa Chỉ Khách Hàng: </b> <span>{{ $HoaDon->diachikhachhang }}</span></h4>
-            <h4><b>Điểm Tích Lũy: </b> <span>{{ number_format($HoaDon->diemtichluy, 0, ',', '.') }} Điểm</span></h4>
             <h4><b>Khách Hàng Ghi Chú: </b> <span>{{ $HoaDon->ghichukhachhang }}</span></h4>
         </div>
     </div>
@@ -88,6 +81,5 @@
             @endforeach
         </tbody>
     </table>
-    <a target="_blank" style="float: right;" class="btn btn-info"
-        href="{{ route('hoa-don.print_bill', $HoaDon->id) }}">In Hóa Đơn</a>
+    <a target="_blank" style="float: right;" class="btn btn-info" href="{{ route('hoa-don.print_bill', $HoaDon->id) }}">In Hóa Đơn</a>
 @endif
