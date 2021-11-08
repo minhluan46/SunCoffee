@@ -8,7 +8,6 @@
             <h4><b>Họ Tên: </b> <span>{{ $BinhLuan->hoten }}</span></h4>
             <h4><b>Giới Tính: </b> <span>{{ $BinhLuan->gioitinh == 1 ? 'Nam' : 'Nữ' }}</span></h4>
             <h4><b>Email: </b> <span>{{ $BinhLuan->email }}</span></h4>
-            <h4><b>Số Điện Thoại: </b> <span>{{ $BinhLuan->sdt }}</span></h4>
             <h4><b>Sản Phẩm: </b> <span>{{ $BinhLuan->tensanpham }}</span></h4>
         </div>
     </div>

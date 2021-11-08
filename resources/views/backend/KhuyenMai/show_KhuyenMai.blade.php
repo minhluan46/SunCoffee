@@ -27,7 +27,7 @@
                 <thead>
                     <tr>
                         <th scope="col" style="text-align: left">Sản Phẩm</th>
-                        <th scope="col">Kích Thước</th>
+                        <th scope="col">Quy cách</th>
                         <th scope="col">Loại</th>
                         <th scope="col">Mức Khuyến Mãi</th>
                         <th scope="col">Thao Tác</th>
@@ -65,7 +65,7 @@
                 <thead>
                     <tr>
                         <th scope="col" style="text-align: left">Sản Phẩm</th>
-                        <th scope="col">Kích Thước</th>
+                        <th scope="col">Quy Cách</th>
                         <th scope="col">Loại</th>
                         <th scope="col">Mức Khuyến Mãi</th>
                     </tr>

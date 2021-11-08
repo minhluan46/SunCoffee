@@ -27,7 +27,7 @@ class DangNhapController extends Controller
             ['sdt' => 'required', 'password' => 'required',]
         );
         if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
-            return redirect()->route('DangNhap.index')->with('errors', "Bạn Cần Nhập Đầu Đủ Thông Tin Đăng Nhập");
+            return redirect()->route('DangNhap.index')->with('errors', "Bạn Cần Nhập Đầy Đủ Thông Tin Đăng Nhập");
         }
         $data = [
             'sdt' => $request->sdt,

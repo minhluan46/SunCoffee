@@ -34,7 +34,7 @@ class ChiTietSanPhamRequest extends FormRequest
     public function messages()
     {
         return [
-            'kichthuoc.required' => 'Kích Thước Không Được Để Trống',
+            'kichthuoc.required' => 'Quy Cách Không Được Để Trống',
 
             'soluong.required' => 'Số Lượng Không Được Để Trống',
             'soluong.integer' => 'Số Lượng Phải Nằm Trong Khoảng 0 Đến 1.000.000.000',

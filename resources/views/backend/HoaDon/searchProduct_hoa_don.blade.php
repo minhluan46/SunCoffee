@@ -6,7 +6,7 @@
             </td>
             <td>
                 <select onchange="kichthuoc(this,'{{ $item->id }}')" data-ia="{{ $item->id }}" class="form-control">
-                    <option value="0">Chọn Kích Thước</option>
+                    <option value="0">Chọn Quy Cách</option>
                     @if (isset($ChiTietSanPham))
                         @foreach ($ChiTietSanPham as $itemCTHD)
                             @if ($itemCTHD->id_sanpham == $item->id)

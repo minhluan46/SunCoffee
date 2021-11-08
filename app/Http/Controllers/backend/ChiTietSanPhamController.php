@@ -38,7 +38,7 @@ class ChiTietSanPhamController extends Controller
                 'hansudung' => 'required|date|after:ngaysanxuat',
             ],
             [
-                'kichthuoc.required' => 'Kích Thước Không Được Để Trống',
+                'kichthuoc.required' => 'Quy Cách Không Được Để Trống',
 
                 'soluong.required' => 'Số Lượng Không Được Để Trống',
 
@@ -109,7 +109,7 @@ class ChiTietSanPhamController extends Controller
                 'hansudung' => 'required|date|after:ngaysanxuat',
             ],
             [
-                'kichthuoc.required' => 'Kích Thước Không Được Để Trống',
+                'kichthuoc.required' => 'Quy Cách Không Được Để Trống',
 
                 'soluong.required' => 'Số Lượng Không Được Để Trống',
 
