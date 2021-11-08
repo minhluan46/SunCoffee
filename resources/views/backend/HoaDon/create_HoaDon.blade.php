@@ -202,7 +202,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Sản Phẩm</th>
-                                <th scope="col" style="text-align: center">Kích Thước</th>
+                                <th scope="col" style="text-align: center">Quy Cách</th>
                                 <th scope="col" style="text-align: center">Giá Bán</th>
                                 <th scope="col" style="text-align: center">Giảm Giá</th>
                                 <th scope="col" style="text-align: center">Thao Tác</th>
@@ -217,7 +217,7 @@
                                         </td>
                                         <td>
                                             <select onchange="kichthuoc(this,'{{ $item->id }}')" data-ia="{{ $item->id }}" class="form-control">
-                                                <option value="0">Chọn Kích Thước</option>
+                                                <option value="0">Chọn Quy Cách</option>
                                                 @if (isset($ChiTietSanPham))
                                                     @foreach ($ChiTietSanPham as $itemCTHD)
                                                         @if ($itemCTHD->id_sanpham == $item->id)
@@ -414,7 +414,7 @@
                             },
                             success: function(response) {
                                 LoadTotal(response);
-                                alertify.success("Đã Cập Nhật Giỏ Hàng");
+                                alertify.success("Đã Cập Nhật Số Lượng");
                             },
                             error: function(response) {
                                 alertify.error("Không Thể Cập Nhật");
@@ -437,7 +437,7 @@
                         },
                         success: function(response) {
                             LoadTotal(response);
-                            alertify.success("Đã Xóa Giỏ Hàng");
+                            alertify.success("Đã Xóa Tất Cả");
                         },
                         error: function(response) {
                             alertify.error("Không Thể Xóa");
@@ -455,7 +455,7 @@
                     method: "GET",
                     success: function(data) {
                         LoadTotal(data);
-                        alertify.success('Đã Bỏ San Phẩm');
+                        alertify.success('Đã Bỏ Sản Phẩm');
                     },
                     errors: function(data) {
                         alertify.error("Lỗi Bỏ Sản Phẩm");

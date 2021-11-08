@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Kích Thước<b style="color:red"> *</b></label>
+                        <label>Quy Cách<b style="color:red"> *</b></label>
                         <select class="form-control" name="kichthuoc">
                             @isset($QuyCach)
                                 @foreach ($QuyCach as $itemQC)
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Kích Thước<b style="color:red"> *</b></label>
+                        <label>Quy Cách<b style="color:red"> *</b></label>
                         <select class="form-control" name="kichthuoc">
                             @isset($QuyCach)
                                 @foreach ($QuyCach as $itemQC)

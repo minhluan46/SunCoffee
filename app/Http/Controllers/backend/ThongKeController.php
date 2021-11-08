@@ -38,7 +38,7 @@ class ThongKeController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         if ($fromdate > $todate) {
-            return Response()->json(['errors' => 'Ngày Bắt Đầu Phải Nhỏ Hơn Ngày Kết Thúc']);
+            return Response()->json(['errors' => 'Ngày Bắt Đầu Không Được Nhỏ Hơn Ngày Kết Thúc']);
         }
         $ThongKe = ThongKe::whereBetween('thoigian', [$fromdate, $todate])->orderBy('thoigian', 'asc')->get();
 

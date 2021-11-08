@@ -27,7 +27,7 @@
                 <table class="table" style="text-align: center">
                     <thead>
                         <tr>
-                            <th scope="col" style="text-align: left">Khối lượng</th>
+                            <th scope="col" style="text-align: left">Quy Cách</th>
                             <th scope="col">Số Lượng</th>
                             <th scope="col">Giá Bán</th>
                             <th scope="col">Ngày Sản Xuất</th>
@@ -74,7 +74,7 @@
                 <table class="table" style="text-align: center">
                     <thead>
                         <tr>
-                            <th scope="col" style="text-align: left">Kích Cở</th>
+                            <th scope="col" style="text-align: left">Quy Cách</th>
                             <th scope="col">Giá Bán</th>
                             <th scope="col">Trạng Thái</th>
                             <th scope="col">Thao Tác</th>

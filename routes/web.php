@@ -313,3 +313,12 @@ Route::group(['namespace' => 'backend', 'prefix' => 'admin', 'middleware' => 'au
         Route::get('/filter-product', 'HoaDonController@filterProduct')->name('hoa-don.filterProduct'); // lọc & sắp xếp. 
     });
 });
+
+Route::get('/config-cache', function() {
+    Artisan::call('config:cache');
+    return "Config cache cleared";
+});
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return 'Application cache cleared';
+});

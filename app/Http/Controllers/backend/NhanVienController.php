@@ -56,9 +56,9 @@ class NhanVienController extends Controller
         $exp = explode(":", $imp);
         $imp = implode('', $exp);
         $data['id'] = $imp;
-        $data['tennhanvien'] = ucwords($request->tennhanvien);
+        $data['tennhanvien'] = $request->tennhanvien;
         $data['sdt'] = $request->sdt;
-        $data['diachi'] = ucwords($request->diachi);
+        $data['diachi'] = $request->diachi;
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
         $data['luong'] = $luong;
@@ -118,9 +118,9 @@ class NhanVienController extends Controller
             return Response()->json(['errors' => 'Lương Phải Nằm Trong Khoảng 0 Đến 2.000.000.000']);
         }
 
-        $data['tennhanvien'] = ucwords($request->tennhanvien);
+        $data['tennhanvien'] = $request->tennhanvien;
         $data['sdt'] = $request->sdt;
-        $data['diachi'] = ucwords($request->diachi);
+        $data['diachi'] = $request->diachi;
         $data['ngaysinh'] = $request->ngaysinh;
         $data['gioitinh'] = $request->gioitinh;
         $data['email'] = $request->email;

@@ -34,6 +34,23 @@ class SanPhamController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////// store
     public function store(SanPhamRequest $request) // thêm. (chưa ajax)
     {
+        // //Validation
+        // $request->validate(
+        //     [
+        //         'tensanpham' => 'required',
+        //         'hinhanh' => 'image|max:2048',
+        //         'id_loaisanpham' => 'required',
+        //     ],
+        //     [
+        //         'tensanpham.required' => 'Tên Sản Phẩm Không Được Để Trống',
+
+        //         'hinhanh.image' => 'Hãy Chọn Một Tệp Hình Ảnh',
+        //         'hinhanh.max' => 'Tệp Hình Ảnh Không Được Lớn Hơn 2MB',
+
+        //         'id_loaisanpham.required' => 'Mã Sản Phẩm Không Được Để Trống',
+        //     ]
+        // );
+
         $iddate = "SP" . Carbon::now('Asia/Ho_Chi_Minh'); //chuỗi thời gian.
         $exp = explode("-", $iddate); //cắt chuỗi.
         $imp = implode('', $exp); //nối chuỗi
@@ -220,7 +237,7 @@ class SanPhamController extends Controller
                 'hansudung' => 'required|date|after:ngaysanxuat',
             ],
             [
-                'kichthuoc.required' => 'Kích Thước Không Được Để Trống',
+                'kichthuoc.required' => 'Quy Cách Không Được Để Trống',
 
                 'soluong.required' => 'Số Lượng Không Được Để Trống',
 
