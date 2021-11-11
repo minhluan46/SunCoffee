@@ -27,7 +27,7 @@
                         <td>
                             <span>{{ $item['SoLuong'] }}</span>
                         </td>
-                        <td><span>{{ number_format($item['TongGia'] - $item['GiamGia'] * $item['SoLuong'], 0, ',', '.') . ' VNĐ' }}</span></td>
+                        <td><span>{{ number_format($item['TongGia'], 0, ',', '.') . ' VNĐ' }}</span></td>
                     </tr><!-- END TR-->
                 @endforeach
             </tbody>

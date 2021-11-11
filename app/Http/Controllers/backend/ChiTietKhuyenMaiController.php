@@ -51,7 +51,7 @@ class ChiTietKhuyenMaiController extends Controller
             return Response()->json(['errors' => $validator->errors()->all()]);
         }
         if ($request->muckhuyenmai > 100) { // kiểm tra mức khuyến mãi.
-            return response()->json(['errors' => 'Mức Khuyến Mãi Phải Nhỏ Hơn 100']);
+            return response()->json(['errors' => 'Mức Khuyến Mãi Phải Nhỏ Hơn Hoặc Bằng 100']);
         }
 
         $OldChiTietKhuyenMai = ChiTietKhuyenMai::where([

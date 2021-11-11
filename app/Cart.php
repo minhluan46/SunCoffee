@@ -69,7 +69,7 @@ class Cart
         }
         $newProduct['SoLuong'] += $sl; // cộng thêm số lượng mới.
         $newProduct['GiamGia'] = $CTSP->giasanpham * ($KM / 100); // (tiền đã giảm giá của 1 SP = giá gốc - $newProduct['GiamGia'])
-        $newProduct['TongGia'] = $newProduct['SoLuong'] *  $CTSP->giasanpham; // (tổng tiền đã giảm giá của 1 SP = $newProduct['TongGia'] -(tiền đã giảm giá của 1 SP * $newProduct['SoLuong']))
+        $newProduct['TongGia'] = ($CTSP->giasanpham - $newProduct['GiamGia']) * $newProduct['SoLuong']; // (tổng tiền đã giảm giá của 1 SP = $newProduct['TongGia'] -(tiền đã giảm giá của 1 SP * $newProduct['SoLuong']))
         $this->products[$id] = $newProduct;
         $this->totalDiscount += ($CTSP->giasanpham * ($KM / 100)) * $sl;
         $this->totalPrice += $CTSP->giasanpham * $sl;

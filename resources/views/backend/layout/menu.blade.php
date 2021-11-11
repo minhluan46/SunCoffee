@@ -13,7 +13,7 @@
                         <img src="{{ asset('backend/img/menu-icon/dashboard.svg') }}" alt="">
                     </div>
                     <div @yield('active_thongke') class="nav_title">
-                        <span>Thông Kê</span>
+                        <span>Thống Kê</span>
                     </div>
                 </a>
             </li>
