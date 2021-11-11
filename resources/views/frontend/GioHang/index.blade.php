@@ -58,7 +58,7 @@
                                                         data-id="{{ $item['CTSP']->id }}">
                                                 </div>
                                             </td>
-                                            <td class="total">{{ number_format($item['TongGia'] - $item['GiamGia'] * $item['SoLuong'], 0, ',', '.') . ' VNĐ' }}</td>
+                                            <td class="total">{{ number_format($item['TongGia'] , 0, ',', '.') . ' VNĐ' }}</td>
                                         </tr><!-- END TR-->
                                     @endforeach
                                 </tbody>

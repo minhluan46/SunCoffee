@@ -12,7 +12,7 @@
         <div class="btn-pm d-flex justify-content-between">
             <div class="mb-3 btn-1">
                 {{-- <a class="btn btn-success" href="{{ route('hoa-don.create') }}">Thêm Hóa Đơn Mới</a> --}}
-                <a class="btn btn-info" href="{{ route('hoa-don.cancelled') }}">Hóa Đơn Bị Hủy</a>
+                <a class="btn btn-info" href="{{ route('hoa-don.cancelled') }}">Hóa Đơn Đã Hủy</a>
                 <a id="formfilter" class="btn btn-primary" href="javascript:(0)">Lọc & Sắp Xếp</a>
             </div>
             <div class="serach_field-area d-flex align-items-center mb-3">

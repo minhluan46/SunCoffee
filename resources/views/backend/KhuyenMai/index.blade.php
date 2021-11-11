@@ -311,7 +311,6 @@
                 url: url,
                 method: 'GET',
                 success: function(response) {
-
                     $('#modal-body-2').html(response);
                     $("#exampleModalLabel2").text("Chi Tiết Khuyến Mãi");
                     $("#exampleModal2").modal('show');
@@ -441,7 +440,7 @@
                 url: 'chi-tiet-khuyen-mai/' + idctsp + '/' + idkm + '/edit',
                 method: 'GET',
                 success: function(response) {
-                    $('#modal-body-2').html(response);
+                    $('#modal-body').html(response);
                     $("#exampleModalLabel").text("Cập Nhật Chi Tiết Khuyến Mãi");
                     $("#exampleModal2").modal('hide');
                     $("#exampleModal").modal('show');
