@@ -31,7 +31,7 @@
                                             <th scope="col">Quy Cách</th>
                                             <th scope="col">Số Lượng</th>
                                             <th scope="col">Ngày Sản Xuất</th>
-                                            <th scope="col">Ngày Hết Hạng</th>
+                                            <th scope="col">Ngày Hết Hạn</th>
                                             <th scope="col">Thao Tác</th>
                                         </tr>
                                     </thead>

@@ -33,7 +33,7 @@
                         <input type="date" class='form-control' name="ngaysanxuat">
                     </div>
                     <div class="form-group">
-                        <label>Hạng Sử Dụng<b style="color:red"> *</b></label>
+                        <label>Hạn Sử Dụng<b style="color:red"> *</b></label>
                         <input type="date" class='form-control' name="hansudung">
                     </div>
                     <button id="form-create" data-url="{{ route('chi-tiet-san-pham.store') }}" type="submit" class="btn btn-success" style="width: 100%">Thêm</button>

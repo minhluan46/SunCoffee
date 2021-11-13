@@ -53,7 +53,7 @@
                                                     <td style="text-align: left">{{ $value->tenloaisanpham }}</td>
                                                     <td>
                                                         @if ($value->trangthai == 1)
-                                                            <span class="badge bg-primary">Sản phẩm Có Hạng Sử Dụng</span>
+                                                            <span class="badge bg-primary">Sản phẩm Có Hạn Sử Dụng</span>
                                                         @elseif($value->trangthai == 2)
                                                             <span class="badge bg-success">Sản Phẩm Dùng Trong Ngày</span>
                                                         @else
@@ -145,7 +145,7 @@
                                 <label>Trạng Thái</label>
                                 <select class="form-control" name="filtertrangthai" id="filtertrangthai">
                                     <option value="all">Tất Cả</option>
-                                    <option value="Expiry">Sản phẩm Có Hạng Sử Dụng</option>
+                                    <option value="Expiry">Sản phẩm Có Hạn Sử Dụng</option>
                                     <option value="Today">Sản Phẩm Dùng Trong Ngày</option>
                                     <option value="Unauthorized">Không Được Phép Thêm Sản Phẩm</option>
                                 </select>
