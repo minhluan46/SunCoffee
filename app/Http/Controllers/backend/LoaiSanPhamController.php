@@ -95,7 +95,7 @@ class LoaiSanPhamController extends Controller
     {
         $LoaiSanPham = LoaiSanPham::find($id);
         if ($LoaiSanPham->trangthai == 1) {
-            $trangthai = "<span class='badge bg-primary'>Sản phẩm Có Hạng Sử Dụng</span>";
+            $trangthai = "<span class='badge bg-primary'>Sản phẩm Có Hạn Sử Dụng</span>";
         } elseif ($LoaiSanPham->trangthai == 2) {
             $trangthai = "<span class='badge bg-success'>Sản Phẩm Dùng Trong Ngày</span>";
         } else {

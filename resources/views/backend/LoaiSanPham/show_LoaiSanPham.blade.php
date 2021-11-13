@@ -5,7 +5,7 @@
             <h4><b>Trạng Thái: </b>
                 <span>
                     @if ($LoaiSanPham->trangthai == 1)
-                        <span>Sản phẩm Có Hạng Sử Dụng</span>
+                        <span>Sản phẩm Có Hạn Sử Dụng</span>
                     @elseif($LoaiSanPham->trangthai == 2)
                         <span>Sản Phẩm Dùng Trong Ngày</span>
                     @else

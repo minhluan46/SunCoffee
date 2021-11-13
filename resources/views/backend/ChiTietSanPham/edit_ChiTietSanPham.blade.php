@@ -33,7 +33,7 @@
                         <input type="date" class='form-control' name="ngaysanxuat" value="{{ $ChiTietSanPham->ngaysanxuat }}">
                     </div>
                     <div class="form-group">
-                        <label>Hạng Sử Dụng<b style="color:red"> *</b></label>
+                        <label>Hạn Sử Dụng<b style="color:red"> *</b></label>
                         <input type="date" class='form-control' name="hansudung" value="{{ $ChiTietSanPham->hansudung }}">
                     </div>
                     <button id="form-edit-CTSP" data-url="{{ route('chi-tiet-san-pham.update', $ChiTietSanPham->id) }}" type="submit" class="btn btn-success" style="width: 100%">Cập Nhật</button>

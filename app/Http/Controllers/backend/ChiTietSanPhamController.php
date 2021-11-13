@@ -47,9 +47,9 @@ class ChiTietSanPhamController extends Controller
                 'ngaysanxuat.required' => 'Ngày Sản Xuất Không Được Để Trống',
                 'ngaysanxuat.date' => 'Ngày Sản Xuất Không Đúng Định Dạng Ngày',
 
-                'hansudung.required' => 'Hạng Sử Dụng Không Được Để Trống',
-                'hansudung.date' => 'Hạng Sử Dụng Không Đúng Định Dạng Ngày',
-                'hansudung.after' => 'Hạng Sử Dụng Phải Sau Ngày Sản Xuất',
+                'hansudung.required' => 'Hạn Sử Dụng Không Được Để Trống',
+                'hansudung.date' => 'Hạn Sử Dụng Không Đúng Định Dạng Ngày',
+                'hansudung.after' => 'Hạn Sử Dụng Phải Sau Ngày Sản Xuất',
             ]
         );
         if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
@@ -118,9 +118,9 @@ class ChiTietSanPhamController extends Controller
                 'ngaysanxuat.required' => 'Ngày Sản Xuất Không Được Để Trống',
                 'ngaysanxuat.date' => 'Ngày Sản Xuất Không Đúng Định Dạng Ngày',
 
-                'hansudung.required' => 'Hạng Sử Dụng Không Được Để Trống',
-                'hansudung.date' => 'Hạng Sử Dụng Không Đúng Định Dạng Ngày',
-                'hansudung.after' => 'Hạng Sử Dụng Phải Sau Ngày Sản Xuất',
+                'hansudung.required' => 'Hạn Sử Dụng Không Được Để Trống',
+                'hansudung.date' => 'Hạn Sử Dụng Không Đúng Định Dạng Ngày',
+                'hansudung.after' => 'Hạn Sử Dụng Phải Sau Ngày Sản Xuất',
             ]
         );
         if ($validator->fails()) { // trả về nếu có lỗi nhập liệu.
